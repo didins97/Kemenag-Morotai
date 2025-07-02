@@ -1,0 +1,152 @@
+/* Animasi untuk indikator aktif */
+.pulse {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+
+    70% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+}
+
+/* Animasi panah scroll horizontal */
+.animate-bounce.horizontal {
+    animation: bounceHorizontal 2s infinite;
+}
+
+@keyframes bounceHorizontal {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+}
+
+/* Hide scrollbar */
+.overflow-x-auto {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+    display: none;
+}
+
+/* Modern Editorial Style */
+.editorial-news {
+    --primary: #059669;
+    --primary-light: #10b981;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+}
+
+.featured-article {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+}
+
+.article-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
+}
+
+.news-tag {
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.news-tag::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--primary);
+}
+
+.hover-zoom {
+    transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.hover-zoom:hover {
+    transform: scale(1.03);
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.floating-element {
+    animation: float 6s ease-in-out infinite;
+}
+
+.prayer-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.prayer-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #10b981, #059669);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.prayer-card:hover::after {
+    transform: scaleX(1);
+}
+
+.prayer-card:hover {
+    transform: translateY(-3px);
+}
+
+.service-card:hover h3 {
+    color: #059669;
+    /* Change to your preferred hover color */
+}
+
+@media (max-width: 640px) {
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 400px) {
+    .grid-cols-2 {
+        grid-template-columns: 1fr;
+    }
+}
