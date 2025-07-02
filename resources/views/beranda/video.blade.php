@@ -1,4 +1,4 @@
-<section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white">
+<section class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white">
     <!-- Modern Elegant Header -->
     <div class="text-center mb-12">
         <div class="inline-flex flex-col items-center">
@@ -77,3 +77,5 @@
         </div>
     </div>
 </section>
+
+<div class="h-0 sm:h-4 bg-white"></div>

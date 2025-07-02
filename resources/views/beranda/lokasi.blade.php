@@ -1,4 +1,4 @@
-<section class="py-5 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-gray-50">
+<section class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white">
     <div class="text-center mb-12">
             <div class="inline-flex flex-col items-center">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 relative pb-1">
@@ -27,3 +27,4 @@
         </iframe>
     </div>
 </section>
+<div class="h-0 sm:h-4 bg-white"></div>

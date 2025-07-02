@@ -1,8 +1,30 @@
 @extends('app')
 
 @section('css')
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/beranda.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <style>
+        #thumbnail-container {
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-columns: repeat(auto-fill, minmax(calc(50% - 0.5rem), 1fr));
+            grid-template-rows: repeat(auto-fill, minmax(0, 1fr));
+        }
+
+        .thumbnail-item {
+            transition: all 0.2s ease;
+        }
+
+        .thumbnail-item:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (min-width: 640px) {
+            #thumbnail-container {
+                grid-template-columns: repeat(auto-fill, minmax(calc(100% - 0.75rem), 1fr));
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -14,7 +36,7 @@
 
     @include('beranda.galeri')
 
-    @include('beranda.video')
+    {{-- @include('beranda.video') --}}
 
     @include('beranda.layanan')
 
@@ -22,6 +44,7 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <!-- Initialize Swiper JS -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -56,39 +79,7 @@
                 }
             });
         });
-    </script>
-    <!-- Initialize Swiper with Coverflow Effect -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const galleryCoverflow = new Swiper('.gallery-coverflow', {
-                effect: "cube", // efek kubus
-                grabCursor: true,
-                cubeEffect: {
-                    shadow: true,
-                    slideShadows: true,
-                    shadowOffset: 20,
-                    shadowScale: 0.94,
-                },
-                slidesPerView: 1,
-                centeredSlides: true,
-                loop: true,
-                autoplay: {
-                    delay: 3000, // Ganti slide setiap 5 detik (5000 ms)
-                    disableOnInteraction: false, // tetap jalan walau diinteraksi
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    dynamicBullets: true,
-                },
-                navigation: {
-                    nextEl: '.gallery-coverflow-next',
-                    prevEl: '.gallery-coverflow-prev',
-                }
-            });
-        });
-    </script>
-    <script>
+
         document.addEventListener('DOMContentLoaded', function() {
             const servicesSlider = new Swiper('.services-slider', {
                 loop: true,
@@ -124,20 +115,8 @@
                 }
             });
         });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Update real-time clock
-            function updateClock() {
-                const now = new Date();
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                // const seconds = String(now.getSeconds()).padStart(2, '0');
-                document.getElementById('real-time-clock').textContent = `${hours}:${minutes} JAM SEKARANG`;
-            }
-            setInterval(updateClock, 60000);
-            updateClock();
 
+        document.addEventListener('DOMContentLoaded', function() {
             // Get prayer times from the page (assuming they're in 24-hour format)
             const prayerTimes = {
                 subuh: "{{ $jadwalSholat['jadwal']['subuh'] }}",
@@ -228,5 +207,43 @@
             setInterval(updateCountdown, 1000);
             updateCountdown();
         });
+    </script>
+
+    <script>
+        // Inisialisasi Swiper untuk thumbnail
+        const thumbnailsSwiper = new Swiper('.gallery-thumbnails', {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'fraction',
+            },
+            navigation: {
+                nextEl: '.gallery-thumbnails-next',
+                prevEl: '.gallery-thumbnails-prev',
+            },
+        });
+
+        // Fungsi untuk menampilkan gambar yang dipilih di bagian utama
+        function showFeaturedImage(index) {
+            const galeries = @json($galeries);
+            if (galeries[index]) {
+                document.getElementById('featured-image').src = '{{ asset('storage') }}/' + galeries[index].gambar;
+                document.getElementById('featured-image').alt = galeries[index].judul;
+                document.getElementById('featured-title').textContent = galeries[index].judul;
+                document.getElementById('featured-caption').textContent = galeries[index].caption;
+
+                // Update active thumbnail
+                document.querySelectorAll('.thumbnail-item').forEach(item => {
+                    item.classList.remove('ring-2', 'ring-green-500');
+                });
+                document.querySelector(`.thumbnail-item[data-index="${index}"]`).classList.add('ring-2', 'ring-green-500');
+            }
+        }
+
+        // Jika tidak ada gambar, sembunyikan thumbnail slider
+        if (@json(count($galeries)) === 0) {
+            document.querySelector('.gallery-thumbnails').style.display = 'none';
+        }
     </script>
 @endpush
