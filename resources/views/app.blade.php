@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>KANTOR KEMENAG KABUPATEN PULAU MOROTAI</title>
     <meta name="description" content="Kantor Kementerian Agama Kabupaten Pulau Morotai - Website Resmi" />
 
@@ -12,16 +12,15 @@
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('assets/img/logokemenag.png') }}" type="image/x-icon" />
 
-    <!-- Preconnect & Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet" />
+    <!-- Preload Resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap" as="style" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" />
 
-    <!-- Font Awesome (Lightweight) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-pap7l2MGN97UozrRUtG4N5fRIdvw9mGv5qXB7ep5hoZUy0bMEZ2aO4EwDCLF8WIM8HgDb4YZDcYlm6VRJjP6nA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!-- AOS Animation -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
@@ -91,6 +90,10 @@
 
 <body class="font-poppins bg-gray-50 antialiased text-gray-800 flex flex-col min-h-screen">
 
+    <div id="page-loader">
+        <div class="loader"></div>
+    </div>
+
     {{-- Floating Sambutan --}}
     @include('toggel-sambutan')
 
@@ -98,8 +101,7 @@
     @include('header')
 
     <!-- Main Content -->
-    {{-- <main class="flex-grow"> --}}
-    <div class="container mx-auto px-4 sm:px-6 py-8 md:py-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 flex-grow">
         @yield('content')
     </div>
 
@@ -107,26 +109,73 @@
     @include('footer')
 
     <!-- Scripts -->
-    <script defer>
-        const toggleButton = document.getElementById('toggleSambutan');
-        const closeButton = document.getElementById('closeSambutan');
-        const overlay = document.getElementById('sambutanOverlay');
-        const panel = document.getElementById('sambutanPanel');
-
-        toggleButton?.addEventListener('click', () => {
-            overlay?.classList.remove('hidden');
-            setTimeout(() => overlay?.classList.remove('opacity-0'), 10);
-            panel?.classList.remove('-translate-x-full');
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 600,
+            once: true
         });
 
-        function closePanel() {
-            panel?.classList.add('-translate-x-full');
-            overlay?.classList.add('opacity-0');
-            setTimeout(() => overlay?.classList.add('hidden'), 300);
-        }
+        // Page Loader
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('page-loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 300);
+            }, 500);
+        });
 
-        closeButton?.addEventListener('click', closePanel);
-        overlay?.addEventListener('click', closePanel);
+        // Floating Panel Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.getElementById('toggleSambutan');
+            const closeButton = document.getElementById('closeSambutan');
+            const overlay = document.getElementById('sambutanOverlay');
+            const panel = document.getElementById('sambutanPanel');
+
+            if (toggleButton && closeButton && overlay && panel) {
+                function togglePanel() {
+                    if (panel.classList.contains('-translate-x-full')) {
+                        overlay.classList.remove('hidden');
+                        void overlay.offsetWidth; // Trigger reflow
+                        overlay.classList.remove('opacity-0');
+                        panel.classList.remove('-translate-x-full');
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        closePanel();
+                    }
+                }
+
+                function closePanel() {
+                    panel.classList.add('-translate-x-full');
+                    overlay.classList.add('opacity-0');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        document.body.style.overflow = '';
+                    }, 300);
+                }
+
+                toggleButton.addEventListener('click', togglePanel);
+                closeButton.addEventListener('click', closePanel);
+                overlay.addEventListener('click', closePanel);
+            }
+
+            // Date Display
+            function updateCurrentDate() {
+                const options = { weekday: 'short', month: 'short', day: 'numeric' };
+                const now = new Date();
+                const dateElement = document.getElementById('current-date');
+                if (dateElement) {
+                    dateElement.textContent = now.toLocaleDateString('en-US', options);
+                }
+            }
+            updateCurrentDate();
+        });
     </script>
-    {{-- </body> --}}
+
+    @yield('scripts')
+</body>
+
 </html>

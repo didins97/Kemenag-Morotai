@@ -5,8 +5,7 @@
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 relative pb-1">
                 <span class="relative">
                     Video Kegiatan
-                    <span
-                        class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-10 h-1 bg-green-500 rounded-full"></span>
+                    <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-10 h-1 bg-green-500 rounded-full"></span>
                 </span>
             </h2>
             <p class="text-base text-gray-600 max-w-xl mx-auto">
@@ -19,20 +18,16 @@
     <div class="relative">
         <!-- Slider Navigation -->
         <div class="absolute inset-y-0 left-0 flex items-center z-10">
-            <button
-                class="video-prev bg-white/90 hover:bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg ml-2 transition-all hover:scale-110">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
+            <button class="video-prev bg-white/90 hover:bg-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-lg ml-2 transition-all hover:scale-110">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
         </div>
 
         <div class="absolute inset-y-0 right-0 flex items-center z-10">
-            <button
-                class="video-next bg-white/90 hover:bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg mr-2 transition-all hover:scale-110">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
+            <button class="video-next bg-white/90 hover:bg-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-lg mr-2 transition-all hover:scale-110">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
@@ -42,33 +37,45 @@
         <div class="swiper video-slider">
             <div class="swiper-wrapper pb-12">
                 @foreach ($playLists as $playList)
-                    <div class="swiper-slide px-2">
-                        <div
-                            class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
-                            <div class="aspect-video w-full relative">
-                                <iframe class="w-full h-full"
-                                    src="https://www.youtube.com/embed/{{ $playList->youtube_id }}?autoplay=0"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen></iframe>
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                    <h3 class="text-white font-medium text-sm truncate">{{ $playList->title }}</h3>
+                <div class="swiper-slide px-2">
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
+                        <!-- Thumbnail Container with Play Button -->
+                        <div class="aspect-video w-full relative cursor-pointer video-thumbnail"
+                             data-video-id="{{ $playList->youtube_id }}"
+                             onclick="loadYouTubeIframe(this)">
+                            <!-- YouTube Thumbnail (lazy loaded) -->
+                            <img src="https://img.youtube.com/vi/{{ $playList->youtube_id }}/maxresdefault.jpg"
+                                 alt="{{ $playList->title }}"
+                                 class="w-full h-full object-cover lazy"
+                                 loading="lazy">
+
+                            <!-- Play Button Overlay -->
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
+                                <div class="w-12 h-12 sm:w-16 sm:h-16 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition-all group-hover:scale-110">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-red-600" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
                                 </div>
                             </div>
-                            <div class="p-4">
-                                <h3 class="font-semibold text-gray-800 mb-1 truncate">{{ $playList->title }}</h3>
-                                <div class="flex items-center text-xs text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>{{ $playList->created_at->diffForHumans() }}</span>
-                                </div>
+
+                            <!-- Video Duration -->
+                            <div class="absolute bottom-2 right-2 bg-black/75 text-white text-xs px-1.5 py-1 rounded">
+                                5:30 <!-- You may need to fetch this from YouTube API -->
+                            </div>
+                        </div>
+
+                        <!-- Video Info -->
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-1 line-clamp-2">{{ $playList->title }}</h3>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>{{ $playList->created_at->diffForHumans() }}</span>
                             </div>
                         </div>
                     </div>
+                </div>
                 @endforeach
             </div>
 
@@ -77,5 +84,3 @@
         </div>
     </div>
 </section>
-
-<div class="h-0 sm:h-4 bg-white"></div>

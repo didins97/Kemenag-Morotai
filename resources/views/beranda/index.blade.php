@@ -19,9 +19,71 @@
             transform: translateY(-2px);
         }
 
+        /* Pastikan container parent menggunakan flex dan items stretch */
+        .flex-col.lg\:flex-row {
+            align-items: stretch;
+        }
+
+        /* Atur tinggi Main Featured dan Sidebar agar sama */
+        .w-full.lg\:w-2\/3,
+        .w-full.lg\:w-1\/3 {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Atur tinggi gambar utama dan sidebar */
+        .lg\:w-2\/3 .relative,
+        .lg\:w-1\/3 .bg-white {
+            flex: 1;
+            min-height: 0;
+            /* Penting untuk mencegah overflow */
+        }
+
+        /* Pastikan gambar utama memenuhi container */
+        .aspect-\[4\/3\].sm\:aspect-\[16\/9\] {
+            height: 100%;
+        }
+
+        /* Atur tinggi thumbnail container */
+        .gallery-thumbnails {
+            height: calc(100% - 48px);
+            /* 48px adalah tinggi header */
+        }
+
         @media (min-width: 640px) {
             #thumbnail-container {
                 grid-template-columns: repeat(auto-fill, minmax(calc(100% - 0.75rem), 1fr));
+            }
+        }
+    </style>
+
+    <style>
+        /* Custom styles for the slider */
+        .swiper-pagination-bullet {
+            @apply w-2 h-2 bg-gray-300 opacity-100 transition-all;
+        }
+
+        .swiper-pagination-bullet-active {
+            @apply w-6 bg-green-500 rounded-full;
+        }
+
+        /* Ensure proper aspect ratio for thumbnails */
+        .aspect-video {
+            aspect-ratio: 16/9;
+        }
+
+        /* Fallback for browsers that don't support aspect-ratio */
+        @supports not (aspect-ratio: 16/9) {
+            .aspect-video::before {
+                float: left;
+                padding-top: 56.25%;
+                content: "";
+            }
+
+            .aspect-video::after {
+                display: block;
+                content: "";
+                clear: both;
             }
         }
     </style>
@@ -36,7 +98,7 @@
 
     @include('beranda.galeri')
 
-    {{-- @include('beranda.video') --}}
+    @include('beranda.video')
 
     @include('beranda.layanan')
 
@@ -47,39 +109,6 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <!-- Initialize Swiper JS -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const videoSlider = new Swiper('.video-slider', {
-                effect: 'coverflow',
-                loop: true,
-                slidesPerView: 1,
-                spaceBetween: 20,
-                centeredSlides: true,
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-                },
-                navigation: {
-                    nextEl: '.video-next',
-                    prevEl: '.video-prev',
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                breakpoints: {
-                    640: {
-                        slidesPerView: 1,
-                    },
-                    768: {
-                        slidesPerView: 2,
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                    }
-                }
-            });
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
             const servicesSlider = new Swiper('.services-slider', {
                 loop: true,
@@ -213,6 +242,10 @@
         // Inisialisasi Swiper untuk thumbnail
         const thumbnailsSwiper = new Swiper('.gallery-thumbnails', {
             slidesPerView: 1,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
             spaceBetween: 10,
             pagination: {
                 el: '.swiper-pagination',
@@ -245,5 +278,75 @@
         if (@json(count($galeries)) === 0) {
             document.querySelector('.gallery-thumbnails').style.display = 'none';
         }
+    </script>
+
+    <!-- Script for YouTube Video Loading -->
+    <script>
+        // Initialize Swiper
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoSlider = new Swiper('.video-slider', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                centeredSlides: false,
+                navigation: {
+                    nextEl: '.video-next',
+                    prevEl: '.video-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    },
+                    1280: {
+                        slidesPerView: 4,
+                    }
+                }
+            });
+        });
+
+        // Function to load YouTube iframe when thumbnail is clicked
+        function loadYouTubeIframe(element) {
+            const videoId = element.getAttribute('data-video-id');
+            const iframeHtml = `
+            <iframe class="w-full h-full"
+                    src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        `;
+            element.innerHTML = iframeHtml;
+            element.classList.remove('video-thumbnail');
+        }
+
+        // Lazy loading for images
+        document.addEventListener("DOMContentLoaded", function() {
+            const lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.src;
+                            lazyImage.classList.remove("lazy");
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            }
+        });
     </script>
 @endpush

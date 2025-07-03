@@ -42,7 +42,7 @@
         </div>
 
         <!-- Gallery Thumbnail Sidebar (1/3 width on desktop) -->
-        <div class="w-full lg:w-1/3">
+        <div class="w-full lg:w-1/3 pl-0 lg:pl-4">
             <div class="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all h-full">
                 <!-- Gallery Thumbnail Header -->
                 <div class="px-4 sm:px-5 py-3 border-b border-gray-100 bg-gray-50/50">
@@ -101,3 +101,5 @@
         </div>
     </div>
 </section>
+
+<div class="h-0 sm:h-4 bg-white"></div>

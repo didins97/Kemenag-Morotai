@@ -1,102 +1,152 @@
 @extends('app')
 
+@section('head')
+    <!-- Open Graph untuk WhatsApp / Facebook -->
+    <meta property="og:title" content="{{ $berita->judul }}" />
+    <meta property="og:description" content="{{ Str::limit(strip_tags($berita->isi), 150) }}" />
+    <meta property="og:image" content="{{ asset('storage/' . $berita->gambar) }}" />
+    <meta property="og:url" content="{{ url()->current() }}" />
+    <meta property="og:type" content="article" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $berita->judul }}">
+    <meta name="twitter:description" content="{{ Str::limit(strip_tags($berita->isi), 150) }}">
+    <meta name="twitter:image" content="{{ asset('storage/' . $berita->gambar) }}">
+@endsection
+
 @section('css')
     <style>
+        /* Base Styles */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        /* Container */
+        .container-news {
+            max-width: 1200px;
+        }
+
         /* Prose Styles */
         .prose {
-            line-height: 1.75;
             max-width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            color: #4b5563;
         }
 
         .prose p {
             margin-bottom: 1.25em;
-            font-size: 1.05rem;
-            color: #4b5563;
+            font-size: 1rem;
+            line-height: 1.7;
+            text-align: justify;
         }
 
         .prose ul,
         .prose ol {
             margin-bottom: 1.25em;
-            padding-left: 1.625em;
+            padding-left: 1.5em;
+        }
+
+        .prose ul {
+            list-style-type: disc;
+        }
+
+        .prose ol {
+            list-style-type: decimal;
+        }
+
+        .prose li {
+            margin-bottom: 0.5em;
+            color: #4b5563;
         }
 
         .prose img {
             border-radius: 0.5rem;
             margin: 1.5em 0;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
         }
 
         .prose h2 {
-            font-size: 1.5rem;
+            font-size: 1.375rem;
             font-weight: 600;
             margin: 1.5em 0 0.75em;
             color: #111827;
+            line-height: 1.3;
         }
 
         .prose h3 {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 600;
             margin: 1.25em 0 0.5em;
             color: #111827;
+            line-height: 1.4;
         }
 
-        /* Comment Section Styles */
-        .comment-form input,
-        .comment-form textarea {
-            transition: all 0.3s ease;
-        }
-
-        .comment-form input:focus,
-        .comment-form textarea:focus {
-            border-color: #059669;
-            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
-        }
-
-        .comment-item {
-            transition: all 0.3s ease;
-        }
-
-        .reply-item {
-            position: relative;
-        }
-
-        .reply-item:before {
-            content: "";
-            position: absolute;
-            left: -2px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: #e5e7eb;
+        .prose blockquote {
+            border-left: 3px solid #10b981;
+            padding-left: 1em;
+            margin: 1.25em 0;
+            font-style: italic;
+            color: #4b5563;
         }
 
         /* News Detail Header */
         .news-header {
             border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 1.5rem;
-            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         /* Featured Image */
         .featured-image {
-            border-radius: 0.75rem;
+            border-radius: 0.5rem;
             overflow: hidden;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         /* Tags */
         .tag {
-            transition: all 0.2s ease;
+            display: inline-block;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #374151;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
         }
 
         .tag:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: #d1fae5;
+            color: #065f46;
         }
 
         /* Share Buttons */
         .share-btn {
-            transition: transform 0.2s ease;
+            width: 2rem;
+            height: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            font-size: 0.875rem;
+            transition: transform 0.2s;
+            margin-right: 0.5rem;
         }
 
         .share-btn:hover {
@@ -105,125 +155,227 @@
 
         /* Related News */
         .related-news {
-            background-color: #f9fafb;
-            border-radius: 0.75rem;
-            padding: 2rem;
-            margin-top: 4rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
         }
 
         .related-news-title {
-            position: relative;
-            padding-bottom: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .related-news-title:after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 50px;
-            height: 3px;
-            background-color: #10b981;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 1rem;
         }
 
         .news-card {
-            transition: all 0.3s ease;
+            margin-bottom: 1rem;
             border-radius: 0.5rem;
             overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
         }
 
         .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .news-card-img-container {
+            height: 120px;
+            overflow: hidden;
         }
 
         .news-card-img {
-            height: 180px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.5s;
         }
 
         .news-card:hover .news-card-img {
             transform: scale(1.05);
         }
 
-        .news-card-date {
+        .news-card-body {
+            padding: 0.75rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            font-size: 0.875rem;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0.5rem 0;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item:not(:last-child):after {
+            content: "/";
+            margin: 0 0.5rem;
+            color: #9ca3af;
+        }
+
+        .breadcrumb-link {
+            color: #6b7280;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb-link:hover {
+            color: #10b981;
+        }
+
+        .breadcrumb-active {
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        /* News title */
+        .news-title {
+            font-size: 1.5rem;
+            line-height: 1.3;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Meta info */
+        .meta-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
             font-size: 0.875rem;
             color: #6b7280;
         }
 
-        .news-card-title {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        .meta-item {
+            display: flex;
+            align-items: center;
         }
 
-        /* Author Box */
-        .author-box {
-            background-color: #f3f4f6;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-top: 3rem;
+        .meta-icon {
+            margin-right: 0.25rem;
+            color: #10b981;
+        }
+
+        /* Share section */
+        .share-section {
+            margin: 1.5rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .share-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-right: 0.75rem;
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 640px) {
+            .prose p {
+                font-size: 1.05rem;
+            }
+
+            .news-title {
+                font-size: 1.75rem;
+            }
+
+            .news-card-img-container {
+                height: 140px;
+            }
+
+            .related-news-title {
+                font-size: 1.375rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .news-title {
+                font-size: 2rem;
+            }
+
+            .prose h2 {
+                font-size: 1.5rem;
+            }
+
+            .prose h3 {
+                font-size: 1.25rem;
+            }
+
+            .news-card-img-container {
+                height: 150px;
+            }
+
+            .related-news {
+                margin-top: 3rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .news-title {
+                font-size: 2.25rem;
+            }
+
+            .prose {
+                font-size: 1.05rem;
+            }
+
+            .news-card-img-container {
+                height: 160px;
+            }
         }
     </style>
 @endsection
 
 @section('content')
     <!-- Detail Berita Section -->
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-4 max-w-6xl">
-            <div class="flex flex-col lg:flex-row gap-8">
+    <section class="py-8 bg-white">
+        <div class="container container-news mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
                 <!-- Main Content -->
                 <main class="w-full lg:w-2/3">
                     <!-- Breadcrumb -->
-                    <nav class="mb-6" aria-label="Breadcrumb">
-                        <ol class="flex items-center space-x-2 text-sm">
-                            <li>
-                                <a href="{{ route('beranda') }}"
-                                    class="text-gray-600 hover:text-green-600 transition-colors">
-                                    <i class="fas fa-home mr-1"></i> Beranda
-                                </a>
-                            </li>
-                            <li>
-                                <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
-                            </li>
-                            <li>
-                                <a href="{{ route('berita.index') }}"
-                                    class="text-gray-600 hover:text-green-600 transition-colors">Berita</a>
-                            </li>
-                            <li>
-                                <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
-                            </li>
-                            <li>
-                                <span class="text-green-600 font-medium">Detail</span>
-                            </li>
-                        </ol>
+                    <nav class="breadcrumb" aria-label="Breadcrumb">
+                        <div class="breadcrumb-item">
+                            <a href="{{ route('beranda') }}" class="breadcrumb-link">
+                                <i class="fas fa-home mr-1"></i> Beranda
+                            </a>
+                        </div>
+                        <div class="breadcrumb-item">
+                            <a href="{{ route('berita.index') }}" class="breadcrumb-link">Berita</a>
+                        </div>
+                        <div class="breadcrumb-item">
+                            <span class="breadcrumb-active">Detail</span>
+                        </div>
                     </nav>
 
                     <!-- News Header -->
                     <div class="news-header">
                         <!-- Judul -->
-                        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">{{ $berita->judul }}
-                        </h1>
+                        <h1 class="news-title">{{ $berita->judul }}</h1>
 
                         <!-- Meta Info -->
-                        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-                            <span class="flex items-center">
-                                <i class="far fa-calendar-alt mr-2 text-green-600"></i>
+                        <div class="meta-info">
+                            <span class="meta-item">
+                                <i class="far fa-calendar-alt meta-icon"></i>
                                 {{ \Carbon\Carbon::parse($berita->tanggal)->translatedFormat('d F Y') }}
                             </span>
-                            <span class="flex items-center">
-                                <i class="far fa-user mr-2 text-green-600"></i>
+                            <span class="meta-item">
+                                <i class="far fa-user meta-icon"></i>
                                 {{ $berita->user->name ?? 'Admin' }}
                             </span>
-                            <span class="flex items-center">
-                                <i class="far fa-eye mr-2 text-green-600"></i>
+                            <span class="meta-item">
+                                <i class="far fa-eye meta-icon"></i>
                                 {{ number_format($berita->views, 0, ',', '.') }} Dilihat
                             </span>
-                            <span class="flex items-center">
-                                <i class="far fa-clock mr-2 text-green-600"></i>
+                            <span class="meta-item">
+                                <i class="far fa-clock meta-icon"></i>
                                 {{ $berita->reading_time }} menit baca
                             </span>
                         </div>
@@ -231,9 +383,7 @@
 
                     <!-- Featured Image -->
                     <figure class="featured-image">
-                        <img src="{{ Storage::url($berita->gambar) }}" alt="{{ $berita->judul }}"
-                            class="w-full h-auto object-cover">
-                        <figcaption class="text-xs text-gray-500 mt-2 px-1">Foto: {{ $berita->judul }}</figcaption>
+                        <img src="{{ asset('storage/' . $berita->gambar) }}" alt="{{ $berita->judul }}" class="w-full">
                     </figure>
 
                     <!-- Article Content -->
@@ -242,38 +392,42 @@
                     </article>
 
                     <!-- Tags & Share -->
-                    <div class="mt-12 pt-8 border-t border-gray-200">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-                            <div>
-                                <span class="text-sm font-medium text-gray-700 mr-3">Tags:</span>
+                    <div class="share-section">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                            <div class="mb-3 sm:mb-0">
+                                <span class="share-label">Tags:</span>
                                 @foreach ($berita->tags as $tag)
-                                    <a href="#"
-                                        class="tag inline-block bg-gray-100 hover:bg-green-100 hover:text-green-800 rounded-full px-4 py-1 text-sm font-medium text-gray-700 mr-2 mb-2 transition-all">
+                                    <a href="#" class="tag">
                                         #{{ $tag->nama }}
                                     </a>
                                 @endforeach
                             </div>
+
                             <div class="flex items-center">
-                                <span class="text-sm font-medium text-gray-700 mr-3">Bagikan:</span>
-                                <div class="flex space-x-3">
+                                <span class="share-label">Bagikan:</span>
+                                <div class="flex">
+                                    <!-- Facebook -->
                                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
                                         target="_blank" rel="noopener noreferrer"
-                                        class="share-btn w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700">
-                                        <i class="fab fa-facebook-f text-sm"></i>
+                                        class="share-btn bg-blue-600 hover:bg-blue-700"
+                                        aria-label="Bagikan ke Facebook">
+                                        <i class="fab fa-facebook-f"></i>
                                     </a>
+
+                                    <!-- Twitter -->
                                     <a href="https://twitter.com/intent/tweet?text={{ urlencode($berita->judul) }}&url={{ urlencode(url()->current()) }}"
                                         target="_blank" rel="noopener noreferrer"
-                                        class="share-btn w-9 h-9 rounded-full bg-blue-400 text-white flex items-center justify-center hover:bg-blue-500">
-                                        <i class="fab fa-twitter text-sm"></i>
+                                        class="share-btn bg-blue-400 hover:bg-blue-500"
+                                        aria-label="Bagikan ke Twitter">
+                                        <i class="fab fa-twitter"></i>
                                     </a>
+
+                                    <!-- WhatsApp -->
                                     <a href="https://wa.me/?text={{ urlencode($berita->judul . ' ' . url()->current()) }}"
                                         target="_blank" rel="noopener noreferrer"
-                                        class="share-btn w-9 h-9 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600">
-                                        <i class="fab fa-whatsapp text-sm"></i>
-                                    </a>
-                                    <a href="mailto:?subject={{ rawurlencode($berita->judul) }}&body={{ rawurlencode('Baca selengkapnya: ' . url()->current()) }}"
-                                        class="share-btn w-9 h-9 rounded-full bg-gray-600 text-white flex items-center justify-center hover:bg-gray-700">
-                                        <i class="far fa-envelope text-sm"></i>
+                                        class="share-btn bg-green-500 hover:bg-green-600"
+                                        aria-label="Bagikan ke WhatsApp">
+                                        <i class="fab fa-whatsapp"></i>
                                     </a>
                                 </div>
                             </div>
@@ -282,25 +436,21 @@
 
                     <!-- Related News - Max 3 Items -->
                     @if ($beritaTerkait->count() > 0)
-                        <div class="mt-16 pt-8 border-t border-gray-200">
-                            <h3 class="text-2xl font-bold text-gray-800 mb-6">Berita Terkait</h3>
+                        <div class="related-news">
+                            <h3 class="related-news-title">Berita Terkait</h3>
 
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 @foreach ($beritaTerkait->take(3) as $related)
-                                    <div
-                                        class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100">
+                                    <div class="news-card">
                                         <a href="{{ route('berita.detail', $related->slug) }}" class="block h-full">
-                                            <div class="relative aspect-video overflow-hidden">
+                                            <div class="news-card-img-container">
                                                 <img src="{{ asset('storage/' . $related->gambar) ?? asset('/assets/img/bg1.jpeg') }}"
                                                     alt="{{ $related->judul }}"
-                                                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
-                                                <div
-                                                    class="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent">
-                                                </div>
+                                                    class="news-card-img">
                                             </div>
-                                            <div class="p-5">
-                                                <div class="flex items-center text-xs text-gray-500 mb-2">
-                                                    <span class="inline-flex items-center mr-3">
+                                            <div class="news-card-body">
+                                                <div class="flex items-center text-xs text-gray-500 mb-1">
+                                                    <span class="inline-flex items-center mr-2">
                                                         <i class="far fa-calendar-alt mr-1 text-green-500"></i>
                                                         {{ \Carbon\Carbon::parse($related->tanggal)->translatedFormat('d M Y') }}
                                                     </span>
@@ -309,14 +459,11 @@
                                                         {{ number_format($related->views, 0, ',', '.') }}
                                                     </span>
                                                 </div>
-                                                <h4
-                                                    class="font-semibold text-gray-900 mb-3 line-clamp-2 hover:text-green-600 transition-colors">
+                                                <h4 class="font-semibold text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 hover:text-green-600 transition-colors">
                                                     {{ $related->judul }}
                                                 </h4>
-                                                <div class="mt-4">
-                                                    <span
-                                                        class="inline-block px-3 py-1 text-xs font-semibold rounded-full
-                                    bg-green-100 text-green-800">
+                                                <div class="mt-2">
+                                                    <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                                                         {{ $related->kategori->nama ?? 'Berita' }}
                                                     </span>
                                                 </div>
@@ -327,10 +474,9 @@
                             </div>
 
                             @if ($beritaTerkait->count() > 3)
-                                <div class="text-center mt-8">
+                                <div class="text-center mt-4">
                                     <a href="{{ route('berita.index') }}"
-                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-green-600
-                  hover:text-green-800 transition-colors">
+                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors">
                                         Lihat Lebih Banyak Berita
                                         <i class="fas fa-chevron-right ml-2 text-xs"></i>
                                     </a>
