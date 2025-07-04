@@ -6,6 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>KANTOR KEMENAG KABUPATEN PULAU MOROTAI</title>
     <meta name="description" content="Kantor Kementerian Agama Kabupaten Pulau Morotai - Website Resmi" />
+    <meta name="google-site-verification" content="89pyKcrUDFS1uNCqrx_7DZi22r2MV41cPjA1q9qC3NU" />
+    <meta itemprop="image" content="https://kemenagmorotai.id/assets/img/logokemenag.png" />
+
+    {{-- 🔍 Structured Data for Google --}}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Kementerian Agama Kabupaten Pulau Morotai",
+      "url": "https://kemenagmorotai.id",
+      "logo": "https://kemenagmorotai.id/assets/img/logokemenag.png"
+    }
+    </script>
 
     @yield('head')
 
@@ -13,11 +26,15 @@
     <link rel="icon" href="{{ asset('assets/img/logokemenag.png') }}" type="image/x-icon" />
 
     <!-- Preload Resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap" as="style" />
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" />
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap"
+        as="style" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        as="style" />
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet" />
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -87,6 +104,7 @@
 
     @yield('css')
 </head>
+
 
 <body class="font-poppins bg-gray-50 antialiased text-gray-800 flex flex-col min-h-screen">
 
@@ -164,7 +182,11 @@
 
             // Date Display
             function updateCurrentDate() {
-                const options = { weekday: 'short', month: 'short', day: 'numeric' };
+                const options = {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric'
+                };
                 const now = new Date();
                 const dateElement = document.getElementById('current-date');
                 if (dateElement) {
