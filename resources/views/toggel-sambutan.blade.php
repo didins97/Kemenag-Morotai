@@ -6,11 +6,12 @@
     flex items-center justify-center
     hover:from-green-800 hover:to-emerald-900
     transition-all duration-300
-    group" style="z-index: 999">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:rotate-12 transition-transform"
-        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+    group"
+    style="z-index: 999">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round"
-            d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
     </svg>
 </button>
 
@@ -19,7 +20,8 @@
 
 <!-- Side Panel (Responsive) -->
 <div id="sambutanPanel"
-    class="fixed left-0 top-0 h-full w-80 max-w-full bg-white shadow-xl z-[80] transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto" style="z-index: 9999">
+    class="fixed left-0 top-0 h-full w-80 max-w-full bg-white shadow-xl z-[80] transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto"
+    style="z-index: 9999">
 
     <!-- Panel Header -->
     <div class="h-48 bg-gradient-to-r from-green-700 to-emerald-800 relative">
@@ -32,7 +34,8 @@
         </button>
 
         <!-- Profile Photo -->
-        <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-xl border-4 border-white shadow-lg overflow-hidden bg-white">
+        <div
+            class="absolute -bottom-12 left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-xl border-4 border-white shadow-lg overflow-hidden bg-white">
             @if ($kepalaKantor->foto)
                 <img src="{{ asset('storage/' . $kepalaKantor->foto) }}" alt="{{ $kepalaKantor->nama }}"
                     class="w-full h-full object-cover">
