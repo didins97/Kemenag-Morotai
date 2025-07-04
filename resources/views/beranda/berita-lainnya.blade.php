@@ -20,15 +20,16 @@
 
         <!-- Featured News (Stacked on Mobile, Side-by-side on Desktop) -->
         <div class="flex flex-col lg:flex-row gap-5 sm:gap-8 mb-8 sm:mb-12">
+            @foreach ($beritasPilihan as $berita)
             <!-- Main Featured News -->
             <div class="lg:w-1/2">
                 <article class="featured-card group h-full">
-                    <a href="{{ route('berita.detail', $beritaTerbaru->slug) }}" class="block h-full">
+                    <a href="{{ route('berita.detail', $berita->slug) }}" class="block h-full">
                         <div
                             class="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg hover:shadow-xl h-full transition-all duration-300">
                             <div class="aspect-[4/3] sm:aspect-[16/9] w-full">
-                                <img src="{{ asset('storage/' . $beritaTerbaru->gambar) }}"
-                                    alt="{{ $beritaTerbaru->judul }}"
+                                <img src="{{ asset('storage/' . $berita->gambar) }}"
+                                    alt="{{ $berita->judul }}"
                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                     loading="lazy">
                             </div>
@@ -37,54 +38,22 @@
                             <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
                                 <span
                                     class="inline-block mb-2 px-3 py-1 text-xs sm:text-sm font-bold text-white uppercase bg-green-600 rounded-full">
-                                    {{ $beritaTerbaru->kategori->kategori }}
+                                    {{ $berita->kategori->kategori }}
                                 </span>
                                 <h3 class="text-xl sm:text-2xl font-bold text-white leading-tight mb-2 line-clamp-2">
-                                    {{ $beritaTerbaru->judul }}
+                                    {{ $berita->judul }}
                                 </h3>
                                 <div class="flex items-center text-xs sm:text-sm text-white/90">
-                                    <span>{{ $beritaTerbaru->user->name }}</span>
+                                    <span>{{ $berita->user->name }}</span>
                                     <span class="mx-2">•</span>
-                                    <span>{{ \Carbon\Carbon::parse($beritaTerbaru->created_at)->format('d M Y') }}</span>
+                                    <span>{{ \Carbon\Carbon::parse($berita->created_at)->format('d M Y') }}</span>
                                 </div>
                             </div>
                         </div>
                     </a>
                 </article>
             </div>
-
-            <!-- Secondary Featured News -->
-            <div class="lg:w-1/2">
-                <article class="featured-card group h-full">
-                    <a href="{{ route('berita.detail', $beritaPilihan->slug) }}" class="block h-full">
-                        <div
-                            class="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg hover:shadow-xl h-full transition-all duration-300">
-                            <div class="aspect-[4/3] sm:aspect-[16/9] w-full">
-                                <img src="{{ asset('storage/' . $beritaPilihan->gambar) }}"
-                                    alt="{{ $beritaPilihan->judul }}"
-                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                    loading="lazy">
-                            </div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent">
-                            </div>
-                            <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-                                <span
-                                    class="inline-block mb-2 px-3 py-1 text-xs sm:text-sm font-bold text-white uppercase bg-amber-500 rounded-full">
-                                    {{ $beritaPilihan->kategori->kategori }}
-                                </span>
-                                <h3 class="text-xl sm:text-2xl font-bold text-white leading-tight mb-2 line-clamp-2">
-                                    {{ $beritaPilihan->judul }}
-                                </h3>
-                                <div class="flex items-center text-xs sm:text-sm text-white/90">
-                                    <span>{{ $beritaPilihan->user->name }}</span>
-                                    <span class="mx-2">•</span>
-                                    <span>{{ \Carbon\Carbon::parse($beritaPilihan->created_at)->format('d M Y') }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
+            @endforeach
         </div>
 
         <!-- Clean News Grid Layout -->

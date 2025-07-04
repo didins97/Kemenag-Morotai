@@ -103,6 +103,26 @@
     @include('beranda.layanan')
 
     @include('beranda.lokasi')
+
+    <!-- Popup iklan -->
+    <div id="adPopup"
+        class="fixed bottom-4 right-4 w-48 h-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 transform hover:scale-105">
+        <!-- Tombol tutup -->
+        <button onclick="closeAd()"
+            class="absolute top-1 right-1 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+            ×
+        </button>
+
+        <!-- Gambar iklan -->
+        <a href="#" target="_blank" class="block w-full h-full">
+            <img src="https://via.placeholder.com/192x192" alt="Iklan" class="w-full h-full object-cover">
+        </a>
+
+        <!-- Label iklan kecil -->
+        <div class="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white text-xs px-2 py-1">
+            Iklan
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -348,5 +368,22 @@
                 });
             }
         });
+    </script>
+
+    <script>
+        // Fungsi untuk menutup popup
+        function closeAd() {
+            document.getElementById('adPopup').style.display = 'none';
+
+            // Simpan status di localStorage agar tidak muncul lagi
+            localStorage.setItem('adClosed', 'true');
+        }
+
+        // Cek localStorage saat halaman dimuat
+        window.onload = function() {
+            if (localStorage.getItem('adClosed') === 'true') {
+                document.getElementById('adPopup').style.display = 'none';
+            }
+        }
     </script>
 @endpush
