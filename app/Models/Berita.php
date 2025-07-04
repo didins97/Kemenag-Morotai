@@ -26,6 +26,12 @@ class Berita extends Model
             $berita->user_id = \Auth::id();
             $berita->slug = \Str::slug($berita->judul);
         });
+
+        static::saved(function ($berita) {
+            if ($berita->gambar) {
+                \App\Services\ImageResizer::resizeForSocial($berita->gambar);
+            }
+        });
     }
 
     public function user()

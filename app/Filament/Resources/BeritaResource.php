@@ -111,12 +111,12 @@ class BeritaResource extends Resource
                     ->sortable(),
 
                 ToggleColumn::make('is_featured')
-                ->label('Unggulan')
-                ->onColor('warning')
-                ->offColor('gray')
-                ->onIcon('heroicon-o-star')
-                ->offIcon('heroicon-o-star')
-                ->tooltip(fn ($record): string => $record->is_featured ? 'Klik untuk nonaktifkan' : 'Klik untuk jadikan unggulan'),
+                    ->label('Unggulan')
+                    ->onColor('warning')
+                    ->offColor('gray')
+                    ->onIcon('heroicon-o-star')
+                    ->offIcon('heroicon-o-star')
+                    ->tooltip(fn($record): string => $record->is_featured ? 'Klik untuk nonaktifkan' : 'Klik untuk jadikan unggulan'),
 
                 IconColumn::make('published')
                     ->label('STATUS')
@@ -243,7 +243,7 @@ class BeritaResource extends Resource
                 modifyQueryUsing: fn(Builder $query) => $query->whereNotNull('kategori')
             )
             ->options(
-               \App\Models\Kategori::query()
+                \App\Models\Kategori::query()
                     ->whereNotNull('kategori')
                     ->orderBy('kategori')
                     ->pluck('kategori', 'id')
@@ -337,31 +337,14 @@ class BeritaResource extends Resource
     protected static function getImageUploadSection(): Section
     {
         return Section::make('Gambar Utama')
-            ->icon('heroicon-o-photo')
-            ->description('Upload gambar utama berita')
-            ->collapsible()
             ->schema([
                 FileUpload::make('gambar')
-                    ->label('')
                     ->image()
                     ->directory('berita/thumbnails')
                     ->disk('public')
                     ->maxSize(2048)
                     ->imageEditor()
-                    ->imageResizeMode('cover')
-                    ->imageCropAspectRatio('16:9')
-                    ->imageEditorAspectRatios([
-                        '16:9',
-                        '4:3',
-                        '1:1',
-                    ])
-                    ->hint('Ukuran optimal: 800×450 piksel (16:9)')
-                    ->hintIcon('heroicon-o-camera')
-                    ->helperText('Format: JPG/PNG. Maksimal 2MB')
-                    ->downloadable()
-                    ->openable()
-                    ->previewable()
-                    ->columnSpanFull(),
+                    ->hint('Gambar akan otomatis diresize ke 1200×630 piksel')
             ]);
     }
 
