@@ -20,13 +20,13 @@ class BerandaController extends Controller
 
         $beritasPilihan = Berita::with(['kategori', 'user'])
             ->featured()
-            ->orderByDesc('views')
-            ->take(3)
+            ->orderByDesc('created_at', 'desc')
+            ->take(2)
             ->get();
 
         $beritaPilihan = Berita::with(['kategori', 'user'])
             ->featured()
-            ->orderByDesc('views')
+            ->orderByDesc('created_at', 'desc')
             ->first();
 
         $beritasTerbaru = Berita::with(['kategori', 'user'])
