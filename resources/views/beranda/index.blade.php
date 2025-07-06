@@ -87,9 +87,42 @@
             }
         }
     </style>
+
+    <style>
+        /* Animations */
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .animate-scaleIn {
+            animation: scaleIn 0.3s ease-out forwards;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #imageBannerPopup .relative {
+                max-width: 95%;
+            }
+
+            #closeBannerBtn {
+                right: -0.5rem;
+                top: -2.5rem;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
+    @include('beranda.banner')
+
     @include('beranda.headline')
 
     @include('beranda.waktu-sholat')
@@ -103,26 +136,6 @@
     @include('beranda.layanan')
 
     @include('beranda.lokasi')
-
-    <!-- Popup iklan -->
-    <div id="adPopup"
-        class="fixed bottom-4 right-4 w-48 h-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 transform hover:scale-105">
-        <!-- Tombol tutup -->
-        <button onclick="closeAd()"
-            class="absolute top-1 right-1 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
-            ×
-        </button>
-
-        <!-- Gambar iklan -->
-        <a href="#" target="_blank" class="block w-full h-full">
-            <img src="https://via.placeholder.com/192x192" alt="Iklan" class="w-full h-full object-cover">
-        </a>
-
-        <!-- Label iklan kecil -->
-        <div class="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white text-xs px-2 py-1">
-            Iklan
-        </div>
-    </div>
 @endsection
 
 @push('scripts')
@@ -371,19 +384,59 @@
     </script>
 
     <script>
-        // Fungsi untuk menutup popup
-        function closeAd() {
-            document.getElementById('adPopup').style.display = 'none';
+        document.addEventListener('DOMContentLoaded', function() {
+            const popup = document.getElementById('imageBannerPopup');
+            const closeBtn = document.getElementById('closeBannerBtn');
+            const disableBtn = document.getElementById('disableBannerBtn');
+            const countdownEl = document.getElementById('bannerCountdown');
 
-            // Simpan status di localStorage agar tidak muncul lagi
-            localStorage.setItem('adClosed', 'true');
-        }
+            let countdown = 10;
+            let countdownInterval;
 
-        // Cek localStorage saat halaman dimuat
-        window.onload = function() {
-            if (localStorage.getItem('adClosed') === 'true') {
-                document.getElementById('adPopup').style.display = 'none';
+            // Show popup after delay
+            setTimeout(showBanner, 3000);
+
+            function showBanner() {
+                popup.classList.remove('hidden');
+
+                // Start countdown
+                countdownInterval = setInterval(() => {
+                    countdown--;
+                    countdownEl.textContent = countdown;
+
+                    if (countdown <= 0) {
+                        closeBanner();
+                    }
+                }, 1000);
             }
-        }
+
+            function closeBanner() {
+                clearInterval(countdownInterval);
+                popup.classList.add('hidden');
+            }
+
+            // Close button
+            closeBtn.addEventListener('click', closeBanner);
+
+            // Disable button
+            disableBtn.addEventListener('click', () => {
+                closeBanner();
+                localStorage.setItem('bannerDisabled', new Date().toDateString());
+            });
+
+            // Check if banner was disabled today
+            if (localStorage.getItem('bannerDisabled') === new Date().toDateString()) {
+                // Don't show if already disabled today
+            } else {
+                // Will show via timeout
+            }
+
+            // Close when clicking outside
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    closeBanner();
+                }
+            });
+        });
     </script>
 @endpush
