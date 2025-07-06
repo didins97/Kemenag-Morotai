@@ -374,10 +374,10 @@
                                 <i class="far fa-eye meta-icon"></i>
                                 {{ number_format($berita->views, 0, ',', '.') }} Dilihat
                             </span>
-                            <span class="meta-item">
+                            {{-- <span class="meta-item">
                                 <i class="far fa-clock meta-icon"></i>
                                 {{ $berita->reading_time }} menit baca
-                            </span>
+                            </span> --}}
                         </div>
                     </div>
 

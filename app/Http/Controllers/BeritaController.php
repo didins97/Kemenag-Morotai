@@ -37,6 +37,13 @@ class BeritaController extends Controller
         $berita = Berita::BySlug($slug)->first();
         $beritaTerkait = Berita::where('kategori_id', $berita->kategori_id)->limit(3)->get();
 
+        $key = 'berita_' . $berita->id;
+
+        if (!session()->has($key)) {
+            $berita->increment('views'); // Tambah 1 view
+            session()->put($key, true);
+        }
+
         return view('berita.detail', compact('berita', 'beritaTerkait'));
     }
 }
