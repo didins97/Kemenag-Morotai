@@ -1,322 +1,337 @@
 @extends('app')
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-
     <style>
-        #thumbnail-container {
-            display: grid;
-            grid-auto-flow: column;
-            grid-template-columns: repeat(auto-fill, minmax(calc(50% - 0.5rem), 1fr));
-            grid-template-rows: repeat(auto-fill, minmax(0, 1fr));
+        /* === Animation Utilities === */
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
         }
 
-        .thumbnail-item {
-            transition: all 0.2s ease;
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
         }
 
-        .thumbnail-item:hover {
-            transform: translateY(-2px);
+        /* === Card Hover Effect === */
+        .card-hover {
+            transition: all 0.3s ease;
         }
 
-        /* Pastikan container parent menggunakan flex dan items stretch */
-        .flex-col.lg\:flex-row {
-            align-items: stretch;
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
 
-        /* Atur tinggi Main Featured dan Sidebar agar sama */
-        .w-full.lg\:w-2\/3,
-        .w-full.lg\:w-1\/3 {
-            display: flex;
-            flex-direction: column;
+        /* === Gradient Utilities === */
+        .gradient-bg {
+            background: linear-gradient(120deg, #f0fdf4 0%, #ecfdf5 50%, #f0fdf4 100%);
         }
 
-        /* Atur tinggi gambar utama dan sidebar */
-        .lg\:w-2\/3 .relative,
-        .lg\:w-1\/3 .bg-white {
-            flex: 1;
-            min-height: 0;
-            /* Penting untuk mencegah overflow */
+        .text-gradient {
+            background: linear-gradient(135deg, #16a34a 0%, #0d9488 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        /* Pastikan gambar utama memenuhi container */
-        .aspect-\[4\/3\].sm\:aspect-\[16\/9\] {
+        /* === Gallery Styles === */
+        .gallery-container {
+            position: relative;
+            padding: 1rem 0 3rem;
+        }
+
+        .gallery-slide {
+            height: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-slide:hover {
+            transform: translateY(-4px);
+        }
+
+        .gallery-image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             height: 100%;
         }
 
-        /* Atur tinggi thumbnail container */
-        .gallery-thumbnails {
-            height: calc(100% - 48px);
-            /* 48px adalah tinggi header */
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 4/3;
+            transition: transform 0.5s ease;
         }
 
-        @media (min-width: 640px) {
-            #thumbnail-container {
-                grid-template-columns: repeat(auto-fill, minmax(calc(100% - 0.75rem), 1fr));
-            }
-        }
-    </style>
-
-    <style>
-        /* Custom styles for the slider */
-        .swiper-pagination-bullet {
-            @apply w-2 h-2 bg-gray-300 opacity-100 transition-all;
+        .gallery-slide:hover .gallery-image {
+            transform: scale(1.05);
         }
 
-        .swiper-pagination-bullet-active {
-            @apply w-6 bg-green-500 rounded-full;
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+            padding: 1.5rem 1rem 1rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        /* Ensure proper aspect ratio for thumbnails */
-        .aspect-video {
-            aspect-ratio: 16/9;
+        .gallery-slide:hover .gallery-overlay {
+            opacity: 1;
         }
 
-        /* Fallback for browsers that don't support aspect-ratio */
-        @supports not (aspect-ratio: 16/9) {
-            .aspect-video::before {
-                float: left;
-                padding-top: 56.25%;
-                content: "";
-            }
-
-            .aspect-video::after {
-                display: block;
-                content: "";
-                clear: both;
-            }
-        }
-    </style>
-
-    <style>
-        /* Animations */
-        @keyframes scaleIn {
-            0% {
-                transform: scale(0.95);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+        .gallery-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            line-height: 1.25;
+            margin-bottom: 0.25rem;
         }
 
-        .animate-scaleIn {
-            animation: scaleIn 0.3s ease-out forwards;
+        .gallery-caption {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .gallery-nav-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-nav-btn:hover {
+            background: #f0fdf4;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .gallery-prev {
+            left: -1.5rem;
+        }
+
+        .gallery-next {
+            right: -1.5rem;
+        }
+
+        /* Lightbox Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 0.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .lightbox-caption {
+            color: white;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -2.5rem;
+            right: 0;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-prev {
+            left: 1rem;
+        }
+
+        .lightbox-next {
+            right: 1rem;
         }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
-            #imageBannerPopup .relative {
-                max-width: 95%;
+            .gallery-overlay {
+                opacity: 1;
+                padding: 1rem 0.75rem 0.75rem;
             }
 
-            #closeBannerBtn {
-                right: -0.5rem;
-                top: -2.5rem;
+            .gallery-title {
+                font-size: 0.8125rem;
             }
+
+            .gallery-caption {
+                font-size: 0.6875rem;
+            }
+
+            .gallery-nav-btn {
+                width: 2rem;
+                height: 2rem;
+            }
+
+            .gallery-prev {
+                left: -1rem;
+            }
+
+            .gallery-next {
+                right: -1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .gallery-container {
+                padding: 0.5rem 0 2.5rem;
+            }
+        }
+
+        /* Swiper Pagination */
+        .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            background-color: #d1d5db;
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+        .swiper-pagination-bullet-active {
+            width: 24px;
+            background-color: #16a34a;
+            border-radius: 5px;
         }
     </style>
 @endsection
 
 @section('content')
-    @include('beranda.banner')
-
     @include('beranda.headline')
-
     @include('beranda.waktu-sholat')
-
     @include('beranda.berita-lainnya')
-
-    @include('beranda.galeri')
-
-    @include('beranda.video')
-
     @include('beranda.layanan')
-
+    @include('beranda.pengumuman')
+    @include('beranda.video')
+    @include('beranda.galeri')
     @include('beranda.lokasi')
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <!-- Initialize Swiper JS -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const servicesSlider = new Swiper('.services-slider', {
-                loop: true,
-                slidesPerView: 1,
+            // Initialize Gallery Swiper
+            const gallerySwiper = new Swiper('.gallery-swiper', {
+                slidesPerView: 3,
+                grid: {
+                    rows: 2, // <-- 2 baris
+                    fill: 'row',
+                },
                 spaceBetween: 20,
-                centeredSlides: false,
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-                },
-                navigation: {
-                    nextEl: '.services-next',
-                    prevEl: '.services-prev',
-                },
                 pagination: {
                     el: '.swiper-pagination',
                     clickable: true,
-                    dynamicBullets: true,
+                },
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: true,
                 },
                 breakpoints: {
                     640: {
-                        slidesPerView: 2,
+                        slidesPerView: 1,
+                        grid: {
+                            rows: 1,
+                        },
                     },
                     768: {
-                        slidesPerView: 3,
+                        slidesPerView: 2,
+                        grid: {
+                            rows: 1,
+                        },
                     },
                     1024: {
-                        slidesPerView: 4,
+                        slidesPerView: 3,
+                        grid: {
+                            rows: 2,
+                        },
                     },
                     1280: {
-                        slidesPerView: 5,
+                        slidesPerView: 4,
+                        grid: {
+                            rows: 2,
+                        },
                     }
                 }
             });
-        });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get prayer times from the page (assuming they're in 24-hour format)
-            const prayerTimes = {
-                subuh: "{{ $jadwalSholat['jadwal']['subuh'] }}",
-                dhuha: "{{ $jadwalSholat['jadwal']['dhuha'] }}",
-                dzuhur: "{{ $jadwalSholat['jadwal']['dzuhur'] }}",
-                ashar: "{{ $jadwalSholat['jadwal']['ashar'] }}",
-                maghrib: "{{ $jadwalSholat['jadwal']['maghrib'] }}",
-                isya: "{{ $jadwalSholat['jadwal']['isya'] }}"
-            };
-
-            // Convert prayer time string to Date object
-            function getPrayerTime(prayerName) {
-                const [hours, minutes] = prayerTimes[prayerName].split(':').map(Number);
-                const now = new Date();
-                const prayerTime = new Date(now);
-                prayerTime.setHours(hours, minutes, 0, 0);
-                return prayerTime;
-            }
-
-            // Find the next prayer time
-            function getNextPrayer() {
-                const now = new Date();
-                const prayers = [{
-                        name: 'Subuh',
-                        time: getPrayerTime('subuh')
-                    },
-                    {
-                        name: 'Dhuha',
-                        time: getPrayerTime('dhuha')
-                    },
-                    {
-                        name: 'Dzuhur',
-                        time: getPrayerTime('dzuhur')
-                    },
-                    {
-                        name: 'Ashar',
-                        time: getPrayerTime('ashar')
-                    },
-                    {
-                        name: 'Maghrib',
-                        time: getPrayerTime('maghrib')
-                    },
-                    {
-                        name: 'Isya',
-                        time: getPrayerTime('isya')
-                    }
-                ];
-
-                // Sort prayers by time and find the first one after now
-                const nextPrayer = prayers
-                    .sort((a, b) => a.time - b.time)
-                    .find(prayer => prayer.time > now);
-
-                // If no prayer found today, return first prayer of next day
-                return nextPrayer || {
-                    name: 'Subuh',
-                    time: (() => {
-                        const tomorrow = new Date(now);
-                        tomorrow.setDate(tomorrow.getDate() + 1);
-                        tomorrow.setHours(...prayerTimes.subuh.split(':').map(Number), 0, 0);
-                        return tomorrow;
-                    })()
-                };
-            }
-
-            // Update countdown
-            function updateCountdown() {
-                const nextPrayer = getNextPrayer();
-                const now = new Date();
-                const diff = nextPrayer.time - now;
-
-                if (diff < 0) {
-                    // Prayer time has passed (shouldn't happen due to getNextPrayer logic)
-                    document.getElementById('next-prayer-indicator').innerHTML =
-                        `Waktu ${nextPrayer.name} sudah lewat`;
-                    return;
-                }
-
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                document.getElementById('next-prayer-indicator').innerHTML =
-                    `Waktu ${nextPrayer.name} dalam <span id="countdown">${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</span>`;
-            }
-
-            // Update countdown every second
-            setInterval(updateCountdown, 1000);
-            updateCountdown();
-        });
-    </script>
-
-    <script>
-        // Inisialisasi Swiper untuk thumbnail
-        const thumbnailsSwiper = new Swiper('.gallery-thumbnails', {
-            slidesPerView: 1,
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-            spaceBetween: 10,
-            pagination: {
-                el: '.swiper-pagination',
-                type: 'fraction',
-            },
-            navigation: {
-                nextEl: '.gallery-thumbnails-next',
-                prevEl: '.gallery-thumbnails-prev',
-            },
-        });
-
-        // Fungsi untuk menampilkan gambar yang dipilih di bagian utama
-        function showFeaturedImage(index) {
-            const galeries = @json($galeries);
-            if (galeries[index]) {
-                document.getElementById('featured-image').src = '{{ asset('storage') }}/' + galeries[index].gambar;
-                document.getElementById('featured-image').alt = galeries[index].judul;
-                document.getElementById('featured-title').textContent = galeries[index].judul;
-                document.getElementById('featured-caption').textContent = galeries[index].caption;
-
-                // Update active thumbnail
-                document.querySelectorAll('.thumbnail-item').forEach(item => {
-                    item.classList.remove('ring-2', 'ring-green-500');
-                });
-                document.querySelector(`.thumbnail-item[data-index="${index}"]`).classList.add('ring-2', 'ring-green-500');
-            }
-        }
-
-        // Jika tidak ada gambar, sembunyikan thumbnail slider
-        if (@json(count($galeries)) === 0) {
-            document.querySelector('.gallery-thumbnails').style.display = 'none';
-        }
-    </script>
-
-    <!-- Script for YouTube Video Loading -->
-    <script>
-        // Initialize Swiper
-        document.addEventListener('DOMContentLoaded', function() {
             const videoSlider = new Swiper('.video-slider', {
                 slidesPerView: 1,
                 spaceBetween: 20,
@@ -344,99 +359,173 @@
                     }
                 }
             });
+
+            var swiper = new Swiper(".layanan-swiper", {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                freeMode: true,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 24,
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 30,
+                    }
+                },
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: true,
+                },
+                loop: false,
+            });
+
+            // Prayer Times Countdown
+            const prayerTimes = {
+                subuh: "{{ $jadwalSholat['jadwal']['subuh'] }}",
+                dzuhur: "{{ $jadwalSholat['jadwal']['dzuhur'] }}",
+                ashar: "{{ $jadwalSholat['jadwal']['ashar'] }}",
+                maghrib: "{{ $jadwalSholat['jadwal']['maghrib'] }}",
+                isya: "{{ $jadwalSholat['jadwal']['isya'] }}"
+            };
+
+            function getPrayerTime(prayerName) {
+                const [hours, minutes] = prayerTimes[prayerName].split(':').map(Number);
+                const now = new Date();
+                const prayerTime = new Date(now);
+                prayerTime.setHours(hours, minutes, 0, 0);
+                return prayerTime;
+            }
+
+            function getNextPrayer() {
+                const now = new Date();
+                const prayers = [{
+                        name: 'Subuh',
+                        time: getPrayerTime('subuh')
+                    },
+                    {
+                        name: 'Dzuhur',
+                        time: getPrayerTime('dzuhur')
+                    },
+                    {
+                        name: 'Ashar',
+                        time: getPrayerTime('ashar')
+                    },
+                    {
+                        name: 'Maghrib',
+                        time: getPrayerTime('maghrib')
+                    },
+                    {
+                        name: 'Isya',
+                        time: getPrayerTime('isya')
+                    }
+                ];
+
+                const nextPrayer = prayers
+                    .sort((a, b) => a.time - b.time)
+                    .find(prayer => prayer.time > now);
+
+                return nextPrayer || {
+                    name: 'Subuh',
+                    time: (() => {
+                        const tomorrow = new Date(now);
+                        tomorrow.setDate(tomorrow.getDate() + 1);
+                        tomorrow.setHours(...prayerTimes.subuh.split(':').map(Number), 0, 0);
+                        return tomorrow;
+                    })()
+                };
+            }
+
+            function updateCountdown() {
+                const nextPrayer = getNextPrayer();
+                const now = new Date();
+                const diff = nextPrayer.time - now;
+
+                if (diff < 0) {
+                    document.getElementById('next-prayer-indicator').innerHTML =
+                        `Waktu ${nextPrayer.name} sudah lewat`;
+                    document.getElementById('countdown').textContent = '--:--:--';
+                    return;
+                }
+
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('next-prayer-indicator').innerHTML =
+                    `Waktu ${nextPrayer.name} dalam`;
+
+                document.getElementById('countdown').textContent =
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
         });
 
-        // Function to load YouTube iframe when thumbnail is clicked
-        function loadYouTubeIframe(element) {
-            const videoId = element.getAttribute('data-video-id');
-            const iframeHtml = `
-            <iframe class="w-full h-full"
-                    src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-        `;
-            element.innerHTML = iframeHtml;
-            element.classList.remove('video-thumbnail');
+        // Lightbox Functions
+        let currentLightboxIndex = 0;
+        const galleryItems = @json($galeries);
+
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+
+            lightboxImage.src = '{{ asset('storage') }}/' + galleryItems[index].gambar;
+            lightboxImage.alt = galleryItems[index].judul;
+            lightboxCaption.textContent = galleryItems[index].caption;
+
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
 
-        // Lazy loading for images
-        document.addEventListener("DOMContentLoaded", function() {
-            const lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
 
-            if ("IntersectionObserver" in window) {
-                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            let lazyImage = entry.target;
-                            lazyImage.src = lazyImage.src;
-                            lazyImage.classList.remove("lazy");
-                            lazyImageObserver.unobserve(lazyImage);
-                        }
-                    });
-                });
+        function navigateLightbox(direction) {
+            currentLightboxIndex += direction;
 
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImageObserver.observe(lazyImage);
-                });
+            if (currentLightboxIndex < 0) {
+                currentLightboxIndex = galleryItems.length - 1;
+            } else if (currentLightboxIndex >= galleryItems.length) {
+                currentLightboxIndex = 0;
+            }
+
+            openLightbox(currentLightboxIndex);
+        }
+
+        // Close lightbox when clicking outside the image
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
             }
         });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const popup = document.getElementById('imageBannerPopup');
-            const closeBtn = document.getElementById('closeBannerBtn');
-            const disableBtn = document.getElementById('disableBannerBtn');
-            const countdownEl = document.getElementById('bannerCountdown');
-
-            let countdown = 10;
-            let countdownInterval;
-
-            // Show popup after delay
-            setTimeout(showBanner, 3000);
-
-            function showBanner() {
-                popup.classList.remove('hidden');
-
-                // Start countdown
-                countdownInterval = setInterval(() => {
-                    countdown--;
-                    countdownEl.textContent = countdown;
-
-                    if (countdown <= 0) {
-                        closeBanner();
-                    }
-                }, 1000);
-            }
-
-            function closeBanner() {
-                clearInterval(countdownInterval);
-                popup.classList.add('hidden');
-            }
-
-            // Close button
-            closeBtn.addEventListener('click', closeBanner);
-
-            // Disable button
-            disableBtn.addEventListener('click', () => {
-                closeBanner();
-                localStorage.setItem('bannerDisabled', new Date().toDateString());
-            });
-
-            // Check if banner was disabled today
-            if (localStorage.getItem('bannerDisabled') === new Date().toDateString()) {
-                // Don't show if already disabled today
-            } else {
-                // Will show via timeout
-            }
-
-            // Close when clicking outside
-            popup.addEventListener('click', (e) => {
-                if (e.target === popup) {
-                    closeBanner();
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox.style.display === 'flex') {
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowLeft') {
+                    navigateLightbox(-1);
+                } else if (e.key === 'ArrowRight') {
+                    navigateLightbox(1);
                 }
-            });
+            }
         });
     </script>
 @endpush
