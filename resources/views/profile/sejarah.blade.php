@@ -1,234 +1,328 @@
 @extends('app')
 
 @section('css')
+    <link href="{{ asset('assets/css/profile.css') }}" rel="stylesheet">
     <style>
-        .timeline {
-            position: relative;
-            max-width: 100%;
-            margin: 0 auto;
+        /* Sejarah Specific Styles */
+        :root {
+            --hero-image: url('/assets/img/sejarah.png');
         }
 
-        .timeline::after {
+        /* Timeline Design */
+        .timeline-container {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .timeline-container::before {
             content: '';
             position: absolute;
-            width: 6px;
-            background-color: #059669;
+            width: 4px;
+            background: linear-gradient(to bottom, #059669, #10B981, #059669);
             top: 0;
             bottom: 0;
             left: 50%;
-            margin-left: -3px;
-            border-radius: 3px;
+            transform: translateX(-50%);
+            border-radius: 4px;
         }
 
         .timeline-item {
-            padding: 10px 40px;
+            padding: 1rem 0;
             position: relative;
             width: 50%;
             box-sizing: border-box;
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
         }
 
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            right: -12px;
-            background-color: white;
-            border: 4px solid #059669;
-            top: 15px;
-            border-radius: 50%;
-            z-index: 1;
-        }
-
-        .left {
+        .timeline-left {
             left: 0;
+            padding-right: 2.5rem;
         }
 
-        .right {
+        .timeline-left::after {
+            right: -10px;
+        }
+
+        .timeline-right {
             left: 50%;
+            padding-left: 2.5rem;
         }
 
-        .left::before {
-            content: " ";
-            height: 0;
-            position: absolute;
-            top: 22px;
-            width: 0;
-            z-index: 1;
-            right: 30px;
-            border: medium solid #e5e7eb;
-            border-width: 10px 0 10px 10px;
-            border-color: transparent transparent transparent #e5e7eb;
-        }
-
-        .right::before {
-            content: " ";
-            height: 0;
-            position: absolute;
-            top: 22px;
-            width: 0;
-            z-index: 1;
-            left: 30px;
-            border: medium solid #e5e7eb;
-            border-width: 10px 10px 10px 0;
-            border-color: transparent #e5e7eb transparent transparent;
-        }
-
-        .right::after {
-            left: -12px;
+        .timeline-right::after {
+            left: -10px;
         }
 
         .timeline-content {
-            padding: 20px 30px;
-            background-color: white;
-            position: relative;
-            border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #059669;
+            padding: 1.25rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border-top: 3px solid #059669;
         }
 
-        .history-hero {
-            background: linear-gradient(rgba(5, 150, 105, 0.8), rgba(5, 150, 105, 0.8)),
-                url('/assets/img/sejarah.png');
-            background-size: cover;
-            background-position: center;
+        .timeline-year {
+            position: absolute;
+            top: 1.25rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            background: #059669;
+            padding: 0.2rem 0.8rem;
+            border-radius: 1rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
         }
 
-        @media screen and (max-width: 768px) {
-            .timeline::after {
-                left: 31px;
+        .timeline-left .timeline-year {
+            right: -3.5rem;
+        }
+
+        .timeline-right .timeline-year {
+            left: -3.5rem;
+        }
+
+        .timeline-tag {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.75rem;
+            display: inline-block;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Mobile Timeline Adjustments */
+        @media (max-width: 768px) {
+            .timeline-container::before {
+                left: 1.5rem;
+                transform: none;
             }
 
             .timeline-item {
                 width: 100%;
-                padding-left: 70px;
-                padding-right: 25px;
+                padding-left: 3.5rem;
+                padding-right: 0;
             }
 
-            .timeline-item::before {
-                left: 60px;
-                border: medium solid #e5e7eb;
-                border-width: 10px 10px 10px 0;
-                border-color: transparent #e5e7eb transparent transparent;
+            .timeline-item::after {
+                left: 1rem;
+                width: 16px;
+                height: 16px;
+                border-width: 3px;
+                top: 1.25rem;
             }
 
-            .left::after,
-            .right::after {
-                left: 18px;
+            .timeline-left,
+            .timeline-right {
+                left: 0;
+                padding-right: 0;
+                padding-left: 3.5rem;
             }
 
-            .right {
-                left: 0%;
+            .timeline-left .timeline-year,
+            .timeline-right .timeline-year {
+                left: 0.25rem;
+                right: auto;
+                top: 1rem;
+                font-size: 0.8rem;
+                padding: 0.15rem 0.6rem;
             }
+
+            .timeline-content {
+                padding: 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .timeline-tag {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.5rem;
+            }
+
+            .timeline-card .card-body {
+                padding: 0;
+            }
+        }
+
+        .latar-belakang p {
+            text-align: justify;
+        }
+
+        /* Timeline Animations */
+        .timeline-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .timeline-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .timeline-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .timeline-item:nth-child(4) {
+            animation-delay: 0.4s;
         }
     </style>
 @endsection
 
 @section('content')
     <!-- Hero Section -->
-    <section class="history-hero py-16 text-white">
+    <section class="hero-section">
         <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">Sejarah Kemenag Kabupaten Pulau Morotai</h1>
-                <p class="text-xl md:text-2xl mb-8">Menelusuri Jejak Perjalanan Lembaga dari Masa ke Masa</p>
-                <div class="w-24 h-1 bg-yellow-400 mx-auto"></div>
+            <div class="max-w-4xl mx-auto text-center hero-content">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">Sejarah</h1>
+                <p class="text-xl md:text-2xl mb-6">Kementerian Agama Kabupaten Pulau Morotai</p>
+                <div class="hero-divider"></div>
             </div>
         </div>
     </section>
 
     <!-- Breadcrumb -->
-    <section class="bg-gray-50 py-3 border-b">
+    <section class="breadcrumb-nav">
         <div class="container mx-auto px-4">
-            <nav class="flex" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                    <li class="inline-flex items-center">
-                        <a href="/"
-                            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-green-600">
+            <nav aria-label="Breadcrumb">
+                <div class="flex flex-wrap items-center">
+                    <div class="breadcrumb-item">
+                        <a href="/" class="breadcrumb-link flex items-center">
                             <i class="fas fa-home mr-2"></i>
                             Beranda
                         </a>
-                    </li>
-                    <li aria-current="page">
-                        <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-gray-400 text-xs mx-2"></i>
-                            <span class="text-sm font-medium text-gray-500">Sejarah</span>
-                        </div>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <span class="text-gray-600">Sejarah</span>
+                    </div>
+                </div>
             </nav>
         </div>
     </section>
 
     <!-- Main Content -->
-    <section class="py-12 bg-white">
+    <section aria-labelledby="sejarahHeading" class="py-8 md:py-12 bg-gray-50">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col lg:flex-row gap-8">
+
+            <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
                 <!-- Main Content -->
                 <main class="w-full lg:w-2/3">
-                    <!-- Introduction -->
-
-                    <div class="prose max-w-none mb-16">
-                        <h2 class="text-3xl font-bold text-gray-800 mb-6">Latar Belakang Pembentukan</h2>
-                        @if ($sejarah && $sejarah->latar_belakang)
-                            <div class="text-gray-700 leading-relaxed space-y-4">
-                                {{ $sejarah->latar_belakang }}
-                            </div>
-                        @else
-                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                                <p class="text-yellow-700">Konten latar belakang belum tersedia</p>
-                            </div>
-                        @endif
+                    <!-- Latar Belakang Section -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="text-xl md:text-2xl font-bold text-green-800 flex items-center section-title">
+                                <i class="fas fa-landmark mr-3 text-green-600"></i>
+                                Latar Belakang Pembentukan
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            @if ($sejarah && $sejarah->latar_belakang)
+                                <div class="prose max-w-none latar-belakang">
+                                    <p class="content-text">{!! nl2br(e($sejarah->latar_belakang)) !!}</p>
+                                </div>
+                            @else
+                                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r">
+                                    <p class="text-yellow-700">Konten latar belakang belum tersedia</p>
+                                </div>
+                            @endif
+                        </div>
                     </div>
 
                     <!-- Timeline Section -->
-                    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Linimasa Sejarah</h2>
-
-                    @if ($sejarah && $sejarah->timeline)
-                        <div class="timeline">
-                            @foreach ($sejarah->timeline as $index => $item)
-                                <div class="timeline-item {{ $index % 2 == 0 ? 'left' : 'right' }}">
-                                    <div class="timeline-content">
-                                        <h3 class="text-xl font-bold text-green-800 mb-2">{{ $item['year'] ?? 'Tahun' }}
-                                        </h3>
-                                        <p class="text-gray-700">
-                                            {{ $item['description'] ?? 'Deskripsi tidak tersedia' }}
-                                        </p>
-                                        @if (isset($item['title']))
-                                            <div class="mt-3">
-                                                @foreach ((array) $item['title'] as $tag)
-                                                    @php
-                                                        $tagColors = [
-                                                            'Peresmian' => ['bg-green-100', 'text-green-800'],
-                                                            'SDM' => ['bg-blue-100', 'text-blue-800'],
-                                                            'Program' => ['bg-yellow-100', 'text-yellow-800'],
-                                                            'Infrastruktur' => ['bg-purple-100', 'text-purple-800'],
-                                                            'Pelayanan' => ['bg-red-100', 'text-red-800'],
-                                                            'Prestasi' => ['bg-indigo-100', 'text-indigo-800'],
-                                                            'default' => ['bg-gray-100', 'text-gray-800'],
-                                                        ];
-                                                        $color = $tagColors[$tag] ?? $tagColors['default'];
-                                                    @endphp
-                                                    <span
-                                                        class="inline-block {{ $color[0] }} {{ $color[1] }} text-xs px-2 py-1 rounded mr-1 mb-1">
-                                                        {{ $tag }}
-                                                    </span>
-                                                @endforeach
+                    <div class="content-card timeline-card">
+                        <div class="card-header">
+                            <h2 class="text-xl md:text-2xl font-bold text-green-800 flex items-center">
+                                <i class="fas fa-history mr-3 text-green-600"></i>
+                                Linimasa Sejarah
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            @if ($sejarah && $sejarah->timeline && count($sejarah->timeline) > 0)
+                                <div class="timeline-container">
+                                    @foreach ($sejarah->timeline as $index => $item)
+                                        <div
+                                            class="timeline-item {{ $index % 2 == 0 ? 'timeline-left' : 'timeline-right' }}">
+                                            <div class="timeline-year">{{ $item['year'] ?? 'Tahun' }}</div>
+                                            <div class="timeline-content">
+                                                <p class="content-text mb-2">
+                                                    {{ $item['description'] ?? 'Deskripsi tidak tersedia' }}</p>
+                                                @if (isset($item['title']))
+                                                    <div class="mt-2">
+                                                        @foreach ((array) $item['title'] as $tag)
+                                                            @php
+                                                                $tagColors = [
+                                                                    'Peresmian' => 'bg-green-100 text-green-800',
+                                                                    'SDM' => 'bg-blue-100 text-blue-800',
+                                                                    'Program' => 'bg-yellow-100 text-yellow-800',
+                                                                    'Infrastruktur' => 'bg-purple-100 text-purple-800',
+                                                                    'default' => 'bg-gray-100 text-gray-800',
+                                                                ];
+                                                                $color = $tagColors[$tag] ?? $tagColors['default'];
+                                                            @endphp
+                                                            <span
+                                                                class="timeline-tag {{ $color }}">{{ $tag }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
                                             </div>
-                                        @endif
-                                    </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
+                            @else
+                                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r text-center">
+                                    <p class="text-yellow-700">Data timeline sejarah belum tersedia</p>
+                                </div>
+                            @endif
                         </div>
-                    @else
-                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-center">
-                            <p class="text-yellow-700">Data timeline sejarah belum tersedia</p>
-                        </div>
-                    @endif
+                    </div>
                 </main>
 
-                <!-- Sidebar - Desktop Version -->
+                <!-- Sidebar -->
                 @include('sidebar')
             </div>
         </div>
     </section>
+@endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards on scroll
+            const animateElements = (selector, options = {}) => {
+                const elements = document.querySelectorAll(selector);
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.style.opacity = "1";
+                                entry.target.style.transform = "translateY(0)";
+                            }, index * (options.delay || 150));
+                        }
+                    });
+                }, {
+                    threshold: options.threshold || 0.1
+                });
+
+                elements.forEach(el => observer.observe(el));
+            };
+
+            // Animate content cards
+            animateElements('.content-card');
+
+            // Animate timeline items with different timing
+            animateElements('.timeline-item', {
+                delay: 100,
+                threshold: 0.05
+            });
+
+            // Add hover effect to timeline items
+            document.querySelectorAll('.timeline-content').forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    item.style.transform = "translateY(-3px)";
+                    item.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.1)";
+                });
+                item.addEventListener('mouseleave', () => {
+                    item.style.transform = "";
+                    item.style.boxShadow = "";
+                });
+            });
+        });
+    </script>
 @endsection

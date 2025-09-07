@@ -120,11 +120,51 @@
                     </div>
 
                     <!-- Pagination -->
-                    {{-- @if ($beritas->hasPages())
-                        <div class="mt-8">
-                            {{ $beritas->links('vendor.pagination.custom') }}
+                    @if ($beritas->hasPages())
+                        <div class="mt-8 flex justify-center">
+                            <nav class="inline-flex rounded-md shadow-sm">
+                                {{-- Previous Page Link --}}
+                                @if ($beritas->onFirstPage())
+                                    <span
+                                        class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-400 cursor-not-allowed">
+                                        &laquo;
+                                    </span>
+                                @else
+                                    <a href="{{ $beritas->previousPageUrl() }}"
+                                        class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                                        &laquo;
+                                    </a>
+                                @endif
+
+                                {{-- Pagination Elements --}}
+                                @foreach ($beritas->getUrlRange(1, $beritas->lastPage()) as $page => $url)
+                                    @if ($page == $beritas->currentPage())
+                                        <span class="px-3 py-2 border border-gray-300 bg-green-600 text-white">
+                                            {{ $page }}
+                                        </span>
+                                    @else
+                                        <a href="{{ $url }}"
+                                            class="px-3 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                                            {{ $page }}
+                                        </a>
+                                    @endif
+                                @endforeach
+
+                                {{-- Next Page Link --}}
+                                @if ($beritas->hasMorePages())
+                                    <a href="{{ $beritas->nextPageUrl() }}"
+                                        class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                                        &raquo;
+                                    </a>
+                                @else
+                                    <span
+                                        class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-400 cursor-not-allowed">
+                                        &raquo;
+                                    </span>
+                                @endif
+                            </nav>
                         </div>
-                    @endif --}}
+                    @endif
                 </main>
 
                 <!-- Sidebar -->

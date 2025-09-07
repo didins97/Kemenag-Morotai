@@ -62,6 +62,39 @@
             </div>
         </div>
 
+        <!-- New Banner Slider Section -->
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+            <!-- Slider Container with adjusted height -->
+            <div class="swiper sidebar-banner-slider aspect-[16/9]">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1 -->
+                    <div class="swiper-slide">
+                        <a href="#" class="block relative h-full">
+                            <img src="{{ asset('assets/img/banner.jpeg') }}"
+                                 alt="Banner 1"
+                                 class="w-full h-full object-contain bg-gray-100">
+                        </a>
+                    </div>
+
+                    <!-- Slide 2 -->
+                    <div class="swiper-slide">
+                        <a href="#" class="block relative h-full">
+                            <img src="{{ asset('assets/img/banner2.jpeg') }}"
+                                 alt="Banner 2"
+                                 class="w-full h-full object-contain bg-gray-100">
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="swiper-pagination !bottom-1"></div>
+
+                <!-- Navigation Buttons -->
+                <button class="swiper-button-next !right-2 !text-white/80 hover:!text-white" aria-label="Next slide"></button>
+                <button class="swiper-button-prev !left-2 !text-white/80 hover:!text-white" aria-label="Previous slide"></button>
+            </div>
+        </div>
+
         <!-- Digital Services - Improved Grid -->
         <div class="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
             <!-- Header -->

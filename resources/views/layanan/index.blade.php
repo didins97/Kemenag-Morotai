@@ -186,7 +186,8 @@
                         <div class="text-gray-700 leading-relaxed space-y-4">
                             Pelayanan Terpadu Satu Pintu merupakan bagian dari wujud komitmen Kementerian Agama untuk lebih
                             dekat melayani umat. Melayani umat adalah manifestasi dari komitmen motto Ikhlas Beramal. PTSP
-                            adalah satu cara mengejawantahkan Ikhlas Beramal juga 5 nilai budaya kerja Kemenag yaitu; Integritas, Profesionalitas, Inovasi, Tanggung Jawab dan Keteladanan. Inovasi pelayanan yang
+                            adalah satu cara mengejawantahkan Ikhlas Beramal juga 5 nilai budaya kerja Kemenag yaitu;
+                            Integritas, Profesionalitas, Inovasi, Tanggung Jawab dan Keteladanan. Inovasi pelayanan yang
                             terpusat dan dapat diakses secara online ini diharapkan akan mempermudah publik dalam mendapat
                             layanan Kementerian Agama.
                         </div>
@@ -282,18 +283,19 @@
                                     class="absolute inset-0 rounded-full border-4 border-green-300 opacity-70 animate-ping-slow">
                                 </div>
 
-                                <!-- Button Content -->
-                                <div
-                                    class="flex items-center bg-gradient-to-br from-[#25D366] to-[#128C7E] text-white rounded-full px-4 py-3 shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-105">
-                                    <!-- WhatsApp Icon -->
-                                    <div class="bg-white/20 rounded-full p-2 mr-3">
-                                        <i class="fab fa-whatsapp text-xl"></i>
-                                    </div>
+                                <div class="group">
+                                    <div
+                                        class="flex items-center bg-gradient-to-br from-[#25D366] to-[#128C7E] text-white rounded-full px-3 py-2 md:px-4 md:py-3 shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-105">
+                                        <!-- WhatsApp Icon -->
+                                        <div class="bg-white/20 rounded-full p-1.5 md:p-2 mr-2 md:mr-3">
+                                            <i class="fab fa-whatsapp text-lg md:text-xl"></i>
+                                        </div>
 
-                                    <!-- Text -->
-                                    <div class="text-left">
-                                        <div class="text-xs font-light">Customer Service</div>
-                                        <div class="text-sm font-bold">PTSP Kemenag</div>
+                                        <!-- Text -->
+                                        <div class="text-left">
+                                            <div class="text-[10px] md:text-xs font-light">Customer Service</div>
+                                            <div class="text-xs md:text-sm font-bold">PTSP Kemenag</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

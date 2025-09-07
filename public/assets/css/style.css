@@ -1,3 +1,9 @@
+/* Body */
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+}
+
 /* Info Bar Styles */
 .info-bar {
     background: linear-gradient(135deg, #111827 0%, #047857 100%);

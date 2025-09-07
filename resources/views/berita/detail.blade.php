@@ -391,6 +391,26 @@
                         {!! $berita->isi !!}
                     </article>
 
+                    <!-- Multi Image Gallery -->
+                    @if ($berita->multi_gambar)
+                        <div class="mt-10 space-y-4 mb-10">
+                            @foreach ($berita->multi_gambar as $image)
+                                <div class="rounded-lg overflow-hidden">
+                                    <a href="{{ asset('storage/' . $image) }}" data-fancybox="gallery" class="block">
+                                        <img src="{{ asset('storage/' . $image) }}"
+                                            alt="Gambar pendukung {{ $berita->judul }}"
+                                            class="w-full max-h-[500px] object-contain mx-auto">
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <!-- Caption -->
+                        @if ($berita->caption_berita)
+                    <span class="text-sm text-gray-500 mt-10 block">{{ $berita->caption_berita }}</span>
+                    @endif
+
                     <!-- Tags & Share -->
                     <div class="share-section">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -409,24 +429,21 @@
                                     <!-- Facebook -->
                                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
                                         target="_blank" rel="noopener noreferrer"
-                                        class="share-btn bg-blue-600 hover:bg-blue-700"
-                                        aria-label="Bagikan ke Facebook">
+                                        class="share-btn bg-blue-600 hover:bg-blue-700" aria-label="Bagikan ke Facebook">
                                         <i class="fab fa-facebook-f"></i>
                                     </a>
 
                                     <!-- Twitter -->
                                     <a href="https://twitter.com/intent/tweet?text={{ urlencode($berita->judul) }}&url={{ urlencode(url()->current()) }}"
                                         target="_blank" rel="noopener noreferrer"
-                                        class="share-btn bg-blue-400 hover:bg-blue-500"
-                                        aria-label="Bagikan ke Twitter">
+                                        class="share-btn bg-blue-400 hover:bg-blue-500" aria-label="Bagikan ke Twitter">
                                         <i class="fab fa-twitter"></i>
                                     </a>
 
                                     <!-- WhatsApp -->
                                     <a href="https://wa.me/?text={{ urlencode($berita->judul . ' ' . url()->current()) }}"
                                         target="_blank" rel="noopener noreferrer"
-                                        class="share-btn bg-green-500 hover:bg-green-600"
-                                        aria-label="Bagikan ke WhatsApp">
+                                        class="share-btn bg-green-500 hover:bg-green-600" aria-label="Bagikan ke WhatsApp">
                                         <i class="fab fa-whatsapp"></i>
                                     </a>
                                 </div>
@@ -445,8 +462,7 @@
                                         <a href="{{ route('berita.detail', $related->slug) }}" class="block h-full">
                                             <div class="news-card-img-container">
                                                 <img src="{{ asset('storage/' . $related->gambar) ?? asset('/assets/img/bg1.jpeg') }}"
-                                                    alt="{{ $related->judul }}"
-                                                    class="news-card-img">
+                                                    alt="{{ $related->judul }}" class="news-card-img">
                                             </div>
                                             <div class="news-card-body">
                                                 <div class="flex items-center text-xs text-gray-500 mb-1">
@@ -459,11 +475,13 @@
                                                         {{ number_format($related->views, 0, ',', '.') }}
                                                     </span>
                                                 </div>
-                                                <h4 class="font-semibold text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 hover:text-green-600 transition-colors">
+                                                <h4
+                                                    class="font-semibold text-gray-900 text-sm sm:text-base mb-1 line-clamp-2 hover:text-green-600 transition-colors">
                                                     {{ $related->judul }}
                                                 </h4>
                                                 <div class="mt-2">
-                                                    <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                                    <span
+                                                        class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                                                         {{ $related->kategori->nama ?? 'Berita' }}
                                                     </span>
                                                 </div>

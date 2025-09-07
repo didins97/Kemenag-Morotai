@@ -1,295 +1,316 @@
 @extends('app')
 
 @section('css')
+    <link href="{{ asset('assets/css/profile.css') }}" rel="stylesheet">
     <style>
-        .unit-hero {
-            background: linear-gradient(rgba(5, 150, 105, 0.8), rgba(5, 150, 105, 0.8)),
-                url('/assets/img/unitkerja.png');
-            background-size: cover;
-            background-position: center;
+        /* Unit Kerja Styles - Konsisten dengan Sejarah & Struktur */
+        :root {
+            --hero-image: url('/assets/img/unitkerja.png');
         }
 
-        .unit-card {
-            border-left: 4px solid #059669;
+        /* Card Styles - Sama seperti sejarah & struktur */
+        .content-card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
             transition: all 0.3s ease;
+            /* border-left: 3px solid #059669; */
         }
 
-        .unit-card:hover {
+        .content-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
-        .staff-card {
-            border: 1px solid #e5e7eb;
-            transition: all 0.3s ease;
+        .card-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
         }
 
-        .staff-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.1);
+        .card-body {
+            padding: 1.25rem;
         }
 
-        .staff-img {
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-custom th {
+            background-color: #f8fafc;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table-custom td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        .table-custom tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        /* Team Slider - Diperbarui */
+        .team-slider-container {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .team-slide {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .team-avatar {
             width: 120px;
             height: 120px;
-            object-fit: cover;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.375rem;
-            transition: border-color 0.2s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #059669;
-            ring: 2px #059669;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #374151;
-        }
-
-        .submit-btn {
-            background-color: #059669;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-
-        .submit-btn:hover {
-            background-color: #047857;
-        }
-
-        .teamCoverflowSwiper .swiper-slide {
-            transition: all 0.4s ease;
-        }
-
-        .teamCoverflowSwiper .swiper-slide:not(.swiper-slide-active) {
-            opacity: 0.6;
-            transform: scale(0.95);
-        }
-
-        .teamCoverflowSwiper .swiper-slide-active {
-            z-index: 10;
-        }
-
-        .swiper-button-prev,
-        .swiper-button-next {
-            background: white;
-            width: 36px;
-            height: 36px;
             border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 0 auto 1rem;
             transition: all 0.3s ease;
         }
 
-        .swiper-button-prev:after,
-        .swiper-button-next:after {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .swiper-button-prev:hover,
-        .swiper-button-next:hover {
+        .team-slide:hover .team-avatar {
             transform: scale(1.05);
-            background: #f0fdf4;
+            border-color: #059669;
         }
 
-        .prose ul {
-            list-style-type: disc;
-            padding-left: 1.5rem;
-            margin-top: 1rem;
+        /* Empty State - Konsisten */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-state-icon {
+            font-size: 2.5rem;
+            color: #d1d5db;
             margin-bottom: 1rem;
         }
 
-        .prose li {
-            margin-bottom: 0.5rem;
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+
+            .card-header,
+            .card-body {
+                padding: 1rem;
+            }
+
+            .team-avatar {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        p {
+            text-align: justify;
+        }
+
+        ul {
+            list-style: none;
+            /* Hilangkan default bullet */
+            padding-left: 1.5rem;
+            margin: 0;
+        }
+
+        ul li {
+            position: relative;
+            margin-bottom: 0.75rem;
+            padding-left: 1rem;
+            color: #374151;
+            /* Warna teks lebih netral (gray-700) */
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        ul li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: #059669;
+            border-radius: 50%;
         }
     </style>
 @endsection
 
 @section('content')
     <!-- Hero Section -->
-    <section class="unit-hero py-16 text-white">
+    <section class="hero-section unit-hero">
         <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ $unitKerja->nama_unit }}</h1>
-                <p class="text-xl md:text-2xl mb-8">Unit Kerja Kementerian Agama Kabupaten Pulau Morotai</p>
-                <div class="w-24 h-1 bg-yellow-400 mx-auto"></div>
+            <div class="max-w-4xl mx-auto text-center hero-content">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">{{ $unitKerja->nama_unit }}</h1>
+                <p class="text-xl md:text-2xl mb-6">Unit Kerja Kementerian Agama Kabupaten Pulau Morotai</p>
+                <div class="hero-divider"></div>
             </div>
         </div>
     </section>
 
     <!-- Breadcrumb -->
-    <section class="bg-gray-50 py-3 border-b">
+    <section class="breadcrumb-nav">
         <div class="container mx-auto px-4">
-            <nav class="flex" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                    <li class="inline-flex items-center">
-                        <a href="/"
-                            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-green-600">
+            <nav aria-label="Breadcrumb">
+                <div class="flex flex-wrap items-center">
+                    <div class="breadcrumb-item">
+                        <a href="/" class="breadcrumb-link flex items-center">
                             <i class="fas fa-home mr-2"></i>
                             Beranda
                         </a>
-                    </li>
-                    <li>
-                        <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-gray-400 text-xs mx-2"></i>
-                            <a href="#" class="text-sm font-medium text-gray-700 hover:text-green-600">Unit Kerja</a>
-                        </div>
-                    </li>
-                    <li aria-current="page">
-                        <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-gray-400 text-xs mx-2"></i>
-                            <span class="text-sm font-medium text-gray-500">{{ $unitKerja->nama_unit }}</span>
-                        </div>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <a href="#" class="breadcrumb-link">Unit Kerja</a>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <span class="text-gray-600">{{ $unitKerja->nama_unit }}</span>
+                    </div>
+                </div>
             </nav>
         </div>
     </section>
 
     <!-- Main Content -->
-    <section class="py-12 bg-white">
+    <section class="py-8 md:py-6 bg-gray-50">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col lg:flex-row gap-8">
+            <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
                 <!-- Main Content -->
                 <main class="w-full lg:w-2/3">
                     <!-- Profil Unit -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8 unit-card">
-                        <h2 class="text-3xl font-bold text-green-800 mb-6 flex items-center">
-                            <i class="fas fa-building mr-3 text-green-600"></i>
-                            Profil {{ $unitKerja->nama_unit }}
-                        </h2>
-                        <div class="prose max-w-none text-gray-700">
-                            {!! $unitKerja->profil !!}
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="text-xl md:text-2xl font-bold text-green-800 flex items-center">
+                                <i class="fas fa-building mr-3 text-green-600"></i>
+                                Profil {{ $unitKerja->nama_unit }}
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="prose max-w-none">
+                                {!! $unitKerja->profil !!}
+                            </div>
                         </div>
                     </div>
 
                     <!-- Tugas dan Fungsi -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8 unit-card">
-                        <h2 class="text-3xl font-bold text-green-800 mb-6 flex items-center">
-                            <i class="fas fa-tasks mr-3 text-green-600"></i>
-                            Tugas dan Fungsi
-                        </h2>
-                        <div class="prose max-w-none text-gray-700">
-                            <h3 class="text-xl font-semibold text-gray-800 mb-3">Tugas Pokok:</h3>
-                            {!! $unitKerja->tugas !!}
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="text-xl md:text-2xl font-bold text-green-800 flex items-center">
+                                <i class="fas fa-tasks mr-3 text-green-600"></i>
+                                Tugas dan Fungsi
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="prose max-w-none">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-3">Tugas Pokok:</h3>
+                                {!! $unitKerja->tugas !!}
 
-                            <h3 class="text-xl font-semibold text-gray-800 mb-3 mt-6">Fungsi:</h3>
-                            {!! $unitKerja->fungsi !!}
+                                <h3 class="text-lg font-semibold text-gray-800 mb-3 mt-6">Fungsi:</h3>
+                                {!! $unitKerja->fungsi !!}
+                            </div>
                         </div>
                     </div>
 
                     <!-- Struktur Bagian -->
-                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8 unit-card">
-                        <h2 class="text-3xl font-bold text-green-800 mb-6 flex items-center">
-                            <i class="fas fa-sitemap mr-3 text-green-600"></i>
-                            Struktur Bagian Tata Usaha
-                        </h2>
-                        <div class="prose max-w-none text-gray-700">
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full border border-gray-200">
-                                    <thead class="bg-gray-50">
+                    {{-- <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="text-xl md:text-2xl font-bold text-green-800 flex items-center">
+                                <i class="fas fa-sitemap mr-3 text-green-600"></i>
+                                Struktur Bagian Tata Usaha
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table-custom">
+                                    <thead>
                                         <tr>
-                                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">
-                                                Jabatan</th>
-                                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Nama
-                                            </th>
-                                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">
-                                                Pangkat/Golongan</th>
+                                            <th>Jabatan</th>
+                                            <th>Nama</th>
+                                            <th>Pangkat/Golongan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($unitKerja->strukturUnit as $struktur)
-                                            <tr class="{{ $loop->odd ? 'bg-gray-50' : '' }}">
-                                                <td class="px-4 py-2 border-b">{{ $struktur->jabatan }}</td>
-                                                <td class="px-4 py-2 border-b">{{ $struktur->nama }}</td>
-                                                <td class="px-4 py-2 border-b">{{ $struktur->pangkat_golongan }}</td>
+                                        @forelse ($unitKerja->strukturUnit as $struktur)
+                                            <tr>
+                                                <td>{{ $struktur->jabatan }}</td>
+                                                <td>{{ $struktur->nama }}</td>
+                                                <td>{{ $struktur->pangkat_golongan }}</td>
                                             </tr>
-                                        @endforeach
-
-                                        @if ($unitKerja->strukturUnit->isEmpty())
+                                        @empty
                                             <tr>
                                                 <td colspan="3" class="text-center py-4 text-gray-500">Belum ada data
                                                     struktur unit</td>
                                             </tr>
-                                        @endif
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Team Slider -->
-                    <div class="bg-white py-8 rounded-lg shadow-sm mb-8 overflow-hidden">
-                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div class="text-center mb-10">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-3 relative inline-block">
-                                    <span class="relative z-10">Tim {{ $unitKerja->nama_unit }}</span>
-                                    <span
-                                        class="absolute bottom-0 left-0 w-full h-2 bg-green-100/80 -z-[1] transform translate-y-1"></span>
-                                </h2>
-                                <p class="text-gray-500 max-w-2xl mx-auto">Tim profesional yang siap melayani Anda</p>
-                            </div>
-
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="text-xl md:text-2xl font-bold text-green-800 flex items-center">
+                                <i class="fas fa-users mr-3 text-green-600"></i>
+                                Tim {{ $unitKerja->nama_unit }}
+                            </h2>
+                        </div>
+                        <div class="card-body">
                             @if ($unitKerja->anggotaUnit->isNotEmpty())
-                                <div class="relative px-4">
-                                    <div class="swiper teamCoverflowSwiper"
-                                        style="padding: 1.5rem 0 !important; overflow: hidden !important; width: 100%;">
-                                        <div class="swiper-wrapper" style="display: flex; align-items: center;">
-                                            @foreach ($unitKerja->anggotaUnit as $anggota)
-                                                <div class="swiper-slide"
-                                                    style="width: 250px !important; margin-right: 20px !important;">
-                                                    <div class="flex flex-col items-center text-center group pb-4">
-                                                        <div
-                                                            class="relative mb-4 w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-lg transform transition-all duration-500 group-hover:border-green-200 group-hover:scale-105">
-                                                            <img src="{{ $anggota->foto ? asset('storage/' . $anggota->foto) : '/assets/img/default.png' }}"
-                                                                alt="{{ $anggota->nama }}"
-                                                                class="w-full h-full object-cover">
-                                                            <div
-                                                                class="absolute inset-0 bg-gradient-to-t from-green-600/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                            </div>
-                                                        </div>
-                                                        <div class="px-2 w-full">
-                                                            <h3 class="text-lg font-semibold text-gray-800 mb-1 truncate">
-                                                                {{ $anggota->nama }}</h3>
-                                                            <p class="text-green-600 text-xs font-medium truncate">
-                                                                {{ $anggota->jabatan }}</p>
-                                                            <p class="text-xs text-gray-500 mt-1 truncate">NIP.
-                                                                {{ $anggota->nip }}</p>
-                                                        </div>
+                                <div class="swiper teamSwiper">
+                                    <div class="swiper-wrapper">
+                                        @foreach ($unitKerja->anggotaUnit as $anggota)
+                                            <div class="swiper-slide">
+                                                <div class="relative rounded-xl overflow-hidden shadow-lg">
+                                                    <!-- Foto -->
+                                                    <img src="{{ $anggota->foto ? asset('storage/' . $anggota->foto) : '/assets/img/default.png' }}"
+                                                        alt="{{ $anggota->nama }}" class="w-full h-72 object-cover">
+
+                                                    <!-- Overlay -->
+                                                    <div
+                                                        class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+                                                    </div>
+
+                                                    <!-- Info di atas overlay -->
+                                                    <div
+                                                        class="absolute bottom-0 left-0 right-0 p-4 text-white text-center">
+                                                        <h3 class="font-semibold text-lg">{{ $anggota->nama }}</h3>
+                                                        <p class="text-sm text-green-300">{{ $anggota->jabatan }}</p>
+                                                        <p class="text-xs text-gray-200 mt-1">NIP. {{ $anggota->nip }}</p>
                                                     </div>
                                                 </div>
-                                            @endforeach
-                                        </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             @else
-                                <div class="text-center py-8 bg-gray-50 rounded-xl mx-4">
-                                    <div
-                                        class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-md font-medium text-gray-900 mb-1">Belum ada anggota</h3>
-                                    <p class="text-sm text-gray-500">Tim untuk unit ini akan segera diumumkan</p>
+                                <div class="empty-state">
+                                    <i class="fas fa-users empty-state-icon"></i>
+                                    <h3 class="text-lg font-medium text-gray-700">Belum ada anggota</h3>
+                                    <p class="text-gray-500">Tim untuk unit ini akan segera diumumkan</p>
                                 </div>
                             @endif
                         </div>
                     </div>
+
+
+
                 </main>
 
                 <!-- Sidebar -->
@@ -302,45 +323,38 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            new Swiper('.teamCoverflowSwiper', {
-                effect: 'coverflow',
+            // Inisialisasi Swiper
+            const swiper = new Swiper(".teamSwiper", {
+                effect: "coverflow",
                 grabCursor: true,
                 centeredSlides: true,
-                slidesPerView: 'auto',
+                slidesPerView: 3, // tampil 3
                 loop: true,
+                loopAdditionalSlides: 3, // tambahkan duplikasi biar loop mulus
+                coverflowEffect: {
+                    rotate: 30,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows: true,
+                },
                 autoplay: {
-                    delay: 3000, // 3 detik
+                    delay: 2500,
                     disableOnInteraction: false,
                 },
-                speed: 1000,
-                coverflowEffect: {
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 80,
-                    modifier: 2,
-                    slideShadows: false,
-                },
-                navigation: {
-                    nextEl: '.team-swiper-next',
-                    prevEl: '.team-swiper-prev',
-                },
-                breakpoints: {
-                    640: {
-                        coverflowEffect: {
-                            modifier: 1.5
-                        }
-                    },
-                    768: {
-                        coverflowEffect: {
-                            modifier: 1.8
-                        }
-                    },
-                    1024: {
-                        coverflowEffect: {
-                            modifier: 2
-                        }
-                    }
-                }
+            });
+
+
+            // Animasi card seperti halaman sejarah
+            const cards = document.querySelectorAll('.content-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.opacity = 1;
+                    card.style.transform = 'translateY(0)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                }, index * 150);
             });
         });
     </script>
