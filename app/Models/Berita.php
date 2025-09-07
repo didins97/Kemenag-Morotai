@@ -18,6 +18,12 @@ class Berita extends Model
         'user_id',
         'is_featured',
         'views',
+        'multi_gambar',
+        'caption_berita',
+    ];
+
+    protected $casts = [
+        'multi_gambar' => 'array',
     ];
 
     protected static function booted()
@@ -27,9 +33,19 @@ class Berita extends Model
             $berita->slug = \Str::slug($berita->judul);
         });
 
+        static::updating(function ($berita) {
+            $berita->slug = \Str::slug($berita->judul);
+        });
+
         static::saved(function ($berita) {
             if ($berita->gambar) {
                 \App\Services\ImageResizer::resizeForSocial($berita->gambar);
+            }
+
+            if ($berita->multi_gambar) {
+                foreach ($berita->multi_gambar as $gambar) {
+                    \App\Services\ImageResizer::resizeForSocial($gambar);
+                }
             }
         });
     }

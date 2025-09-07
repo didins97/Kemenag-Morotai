@@ -64,7 +64,7 @@
 
                         <div class="relative z-20">
                             <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-md mb-6 group-hover:scale-110 transition-transform duration-300">
-                                <i class="fa-solid fa-mosque text-white text-2xl"></i>
+                                <i class="fa-solid fa-church text-white text-2xl"></i>
                             </div>
                             <h3 class="font-bold text-gray-900 text-xl mb-2">Bimas Kristen</h3>
                             <p class="text-gray-600 text-sm leading-relaxed mb-4">

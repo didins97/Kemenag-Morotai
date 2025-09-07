@@ -47,7 +47,7 @@ class BerandaController extends Controller
         $kalenderHijriyah = $this->jadwalSholatService->getKalenderHijriyah()['data'];
 
         // Media
-        $playLists = Video::published()->get();
+        $playLists = Video::published()->orderByDesc('created_at')->get();
         $galeries = Galeri::all();
 
         // Pengumuman & Dokumen

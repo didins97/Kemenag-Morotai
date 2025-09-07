@@ -42,8 +42,7 @@
                                 <div class="flex-1">
                                     <h3
                                         class="text-lg md:text-xl font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">
-                                        <a
-                                            href="#">{{ $pengumuman->judul }}</a>
+                                        <a href="#">{{ $pengumuman->judul }}</a>
                                     </h3>
                                     <p class="text-gray-600 text-sm md:text-base mb-4 line-clamp-2">
                                         {{ Str::limit(strip_tags($pengumuman->isi), 72) }}
@@ -164,7 +163,7 @@
                                     <div
                                         class="flex-shrink-0 w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
                                         @php
-                                            $extension = pathinfo($dokumen->file_path, PATHINFO_EXTENSION);
+                                            $extension = pathinfo($dokumen->file, PATHINFO_EXTENSION);
                                             $icon = 'fa-file';
                                             $color = 'text-gray-600';
 
@@ -193,7 +192,7 @@
                                     <div class="flex-1 min-w-0">
                                         <h4
                                             class="text-sm font-medium text-gray-900 truncate group-hover:text-green-600 transition-colors">
-                                            <a href="{{ asset('storage/' . $dokumen->file_path) }}"
+                                            <a href="{{ asset('storage/' . $dokumen->file) }}"
                                                 target="_blank">{{ $dokumen->judul }}</a>
                                         </h4>
                                         <p class="text-xs text-gray-500 mt-1">
@@ -201,11 +200,12 @@
                                             {{ \Carbon\Carbon::parse($dokumen->tanggal)->diffForHumans() }}
                                         </p>
                                     </div>
-                                    <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank"
+                                    <a href="{{ asset('storage/' . $dokumen->file) }}" target="_blank"
                                         class="flex-shrink-0 text-green-600 hover:text-green-700" title="Download"
-                                        download>
+                                        download="{{ Str::slug($dokumen->judul) }}.pdf">
                                         <i class="fa-solid fa-download"></i>
                                     </a>
+
                                 </div>
                             @endforeach
                         </div>

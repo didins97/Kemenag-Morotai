@@ -527,5 +527,23 @@
                 }
             }
         });
+
+        // Load YouTube Iframe on Thumbnail Click
+        function loadYouTubeIframe(element) {
+            const videoId = element.getAttribute("data-video-id");
+
+            // bikin iframe YouTube
+            const iframe = document.createElement("iframe");
+            iframe.setAttribute("src", "https://www.youtube.com/embed/" + videoId + "?autoplay=1");
+            iframe.setAttribute("frameborder", "0");
+            iframe.setAttribute("allowfullscreen", "1");
+            iframe.setAttribute("allow",
+                "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+            iframe.classList.add("w-full", "h-full");
+
+            // replace thumbnail dengan iframe
+            element.innerHTML = "";
+            element.appendChild(iframe);
+        }
     </script>
 @endpush

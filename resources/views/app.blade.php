@@ -39,6 +39,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
+
     <!-- AOS Animation -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
@@ -46,6 +49,7 @@
 
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
+    <link href="{{ asset('assets/css/banner.css') }}" rel="stylesheet">
 
     <!-- Internal Optimized Style -->
     <style>
@@ -127,7 +131,7 @@
     @include('footer')
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="{{ asset('assets/js/banner.js') }}"></script>
     <script>
         // Initialize AOS
         AOS.init({

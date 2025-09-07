@@ -78,7 +78,7 @@
 
                             <!-- Video Info -->
                             <div class="p-4">
-                                <h3 class="font-semibold text-gray-800 mb-1 line-clamp-2">{{ $playList->title }}</h3>
+                                <h3 class="font-semibold text-gray-800 mb-1 line-clamp-2">{{ $playList->judul }}</h3>
                                 <div class="flex items-center text-xs text-gray-500">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">

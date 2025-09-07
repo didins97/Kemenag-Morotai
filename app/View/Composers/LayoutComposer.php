@@ -6,6 +6,7 @@ use App\Models\Berita;
 use App\Models\Informasi;
 use App\Models\Kontak;
 use App\Models\Opini;
+use App\Models\Pengumuman;
 use App\Models\ProfilPimpinan;
 use App\Models\UnitKerja;
 use Illuminate\View\View;
@@ -23,6 +24,7 @@ class LayoutComposer
             'unitKerjas' => UnitKerja::all(),
             'kepalaKantor' => ProfilPimpinan::latest()->first(),
             'informasi' => Informasi::all(),
+            'pengumumans' => Pengumuman::latest()->take(3)->get(),
         ]);
     }
 }

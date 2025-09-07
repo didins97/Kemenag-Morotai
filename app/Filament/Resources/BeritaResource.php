@@ -67,13 +67,34 @@ class BeritaResource extends Resource
 
                     // Media & Settings Grid
                     Grid::make()
-                        ->schema([
-                            self::getImageUploadSection()->columnSpan(['lg' => 2]),
-                            self::getSettingsSection()->columnSpan(['lg' => 1]),
-                        ])
-                        ->columns(3),
-                ])
-                ->columns(1),
+                    ->schema([
+                        // Gabungkan upload gambar utama dan multi gambar dalam satu section
+                        Section::make('Media Upload')
+                            ->icon('heroicon-o-photo')
+                            ->description('Upload gambar utama dan gambar pendukung')
+                            ->collapsible()
+                            ->schema([
+                                self::getImageUploadSection(),
+
+                                FileUpload::make('multi_gambar')
+                                    ->label('Gambar Pendukung (Bisa banyak)')
+                                    ->multiple()
+                                    ->image()
+                                    ->directory('berita/multi') // folder terpisah
+                                    ->reorderable()
+                                    ->appendFiles() // mempertahankan file yang sudah diupload
+                                    ->downloadable()
+                                    ->openable()
+                                    ->columnSpanFull()
+                                    ->helperText('Anda bisa upload banyak gambar sekaligus')
+                            ])
+                            ->columnSpan(['lg' => 2]),
+
+                        self::getSettingsSection()->columnSpan(['lg' => 1]),
+                    ])
+                    ->columns(3),
+            ])
+            ->columns(1),
         ]);
     }
 
@@ -331,6 +352,15 @@ class BeritaResource extends Resource
                     ->fileAttachmentsVisibility('public')
                     ->columnSpanFull()
                     ->extraAttributes(['class' => 'min-h-[300px]']),
+
+                TextInput::make('caption_berita')
+                ->label('Tentang Berita')
+                ->placeholder('Nama Penulis, Pewarta dan lainnya')
+                ->required()
+                ->maxLength(255)
+                ->columnSpanFull()
+                ->hint('muncul sebagai tulisan kecil di akhir berita')
+                ->hintIcon('heroicon-o-information-circle'),
             ]);
     }
 
