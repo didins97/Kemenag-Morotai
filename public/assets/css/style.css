@@ -51,16 +51,21 @@ body {
     padding: 1rem 0;
 }
 
+/* Container Flex Horizontal */
 .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
 }
 
+/* Logo */
 .logo-container {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
+    gap: 1rem;
 }
 
 .logo {
@@ -72,16 +77,11 @@ body {
     transform: scale(1.05);
 }
 
-.site-info {
-    margin-left: 1rem;
-}
-
 .site-title {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 700;
-    color: #065f46;
+    color: #008435;
     margin: 0;
-    line-height: 1.2;
 }
 
 .site-subtitle {
@@ -90,23 +90,32 @@ body {
     margin: 0;
 }
 
+/* Banner */
 .banner-container {
-    width: 100%;
-    height: 4rem;
+    width: 340px;
+    height: 90px;
     border-radius: 0.5rem;
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    display: none; /* default mobile: hide */
+}
+
+@media (min-width: 768px) {
+    .banner-container {
+        display: block; /* tampil di desktop */
+    }
 }
 
 .banner-slider {
     display: flex;
     height: 100%;
+    width: 200%; /* Untuk slider */
     transition: transform 0.5s ease-in-out;
 }
 
 .banner-slide {
-    min-width: 100%;
+    width: 100%;
     height: 100%;
 }
 
@@ -115,6 +124,7 @@ body {
     height: 100%;
     object-fit: cover;
 }
+
 
 /* Navigation Styles */
 .main-nav {
@@ -138,7 +148,7 @@ body {
 }
 
 .nav-link {
-    color: #065f46;
+    color: #008435;
     font-weight: 500;
     position: relative;
     padding: 0.5rem 0;
@@ -146,7 +156,7 @@ body {
 }
 
 .nav-link:hover {
-    color: #d97706;
+    color: #fbbf24;
 }
 
 .nav-link::after {
@@ -156,7 +166,7 @@ body {
     left: 0;
     width: 0;
     height: 2px;
-    background-color: #d97706;
+    background-color: #fbbf24;
     transition: width 0.3s;
 }
 

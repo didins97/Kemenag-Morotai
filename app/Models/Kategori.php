@@ -15,4 +15,9 @@ class Kategori extends Model
             $kategori->slug = \Str::slug($kategori->kategori);
         });
     }
+
+    public function beritas()
+    {
+        return $this->hasMany(Berita::class, 'kategori_id', 'id');
+    }
 }

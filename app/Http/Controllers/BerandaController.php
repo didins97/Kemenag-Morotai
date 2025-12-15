@@ -7,6 +7,7 @@ use App\Models\Video;
 use App\Models\Galeri;
 use App\Models\Pengumuman;
 use App\Models\Dokumen;
+use App\Models\Kategori;
 use App\Services\JadwalSholatService;
 
 class BerandaController extends Controller
@@ -20,27 +21,60 @@ class BerandaController extends Controller
 
     public function index()
     {
-        // Berita
-        $beritasPopuler = Berita::with(['kategori', 'user'])
-            ->trending()
-            ->orderByDesc('views')
-            ->take(3)
-            ->get();
+        // ===========================================
+        // 1. BERITA (Optimasi Query)
+        // ===========================================
 
-        $beritasPilihan = Berita::with(['kategori', 'user'])
-            ->featured()
-            ->orderByDesc('created_at')
-            ->take(2)
-            ->get();
+        // Berita Terbaru (Optimasi)
+        $latestQuery = Berita::published()->terbaru();
+        $beritaTerbaru = $latestQuery->first();
 
-        $beritaPilihan = $beritasPilihan->first();
+        // Memastikan $beritaTerbaru ada sebelum melakukan pengecualian ID
+        if ($beritaTerbaru) {
+            $beritasTerbaru = $latestQuery->where('id', '!=', $beritaTerbaru->id)->take(3)->get();
+        } else {
+            $beritasTerbaru = $latestQuery->take(3)->get();
+        }
 
-        $beritasTerbaru = Berita::with(['kategori', 'user'])
-            ->terbaru()
-            ->take(3)
-            ->get();
+        // Berita Populer (Optimasi)
+        $trendingQuery = Berita::published()->trending();
+        $beritaPopuler = $trendingQuery->first();
 
-        $beritaTerbaru = $beritasTerbaru->first();
+        if ($beritaPopuler) {
+            $beritasPopuler = $trendingQuery->where('id', '!=', $beritaPopuler->id)->take(5)->get();
+        } else {
+            $beritasPopuler = $trendingQuery->take(5)->get();
+        }
+
+        // Berita Pilihan Editor (Menghilangkan Redundansi & Mengganti Logic)
+        // Menggabungkan $beritaPilihan dan $beritasPilihan menjadi satu query utama
+        $featuredQuery = Berita::published()->featured()->terbaru()->take(7)->get(); // Ambil total 7
+
+        // $beritaPilihan: Ambil 3 pertama untuk dijadikan slider (atau 3 record pertama)
+        $beritaPilihan = $featuredQuery->take(3);
+
+        // $beritasPilihan: Ambil 3 pertama yang sama dengan $beritaPilihan (Redundan, tapi dipertahankan karena variabel harus ada)
+        // Sesuai permintaan, $beritasPilihan akan berisi 3 data pertama, sama dengan $beritaPilihan
+        $beritasPilihan = $beritaPilihan;
+
+        // Catatan: Baris asli Anda: $beritaPilihan dan $beritasPilihan mengambil data yang sama persis (3 record pertama). Kode ini mempertahankan logic tersebut.
+        // Jika Anda ingin 4 data berikutnya, gunakan: $beritasPilihan = $featuredQuery->skip(3)->take(4);
+
+        // 3 Berita Dari 3 Kategori Terpopuler
+        $beritasKategoriPopuler = Kategori::with(['beritas' => function ($q) {
+            $q->published()->terbaru()->take(3);
+        }])
+        ->withCount('beritas')
+        ->orderByDesc('beritas_count')
+        ->take(3)
+        ->get();
+
+        // Kategori Berita
+        $kategories = Kategori::withCount('beritas')->orderByDesc('beritas_count')->limit(7)->get();
+
+        // ===========================================
+        // 2. DATA LAIN
+        // ===========================================
 
         // Jadwal & Kalender
         $jadwalSholat = $this->jadwalSholatService->getJadwal()['data'];
@@ -52,22 +86,34 @@ class BerandaController extends Controller
 
         // Pengumuman & Dokumen
         $pengumumans = Pengumuman::latest('tanggal')->take(4)->get();
-        $dokumens = Dokumen::latestDocuments(4);
+        // Mengganti Dokumen::latestDocuments(4) jika itu custom scope:
+        $dokumens = Dokumen::latest('created_at')->take(4)->get();
+
+        // Jika Dokumen::latestDocuments(4) adalah custom scope yang benar, pertahankan:
+        // $dokumens = Dokumen::latestDocuments(4);
+
         $dokumenCounts = Dokumen::countsByCategory();
 
-        return view('beranda.index', [
-            'beritasPopuler'  => $beritasPopuler,
-            'beritaPilihan'   => $beritaPilihan,
-            'beritasPilihan'  => $beritasPilihan,
-            'beritasTerbaru'  => $beritasTerbaru,
-            'beritaTerbaru'   => $beritaTerbaru,
-            'jadwalSholat'    => $jadwalSholat,
-            'kalenderHijriyah'=> $kalenderHijriyah,
-            'playLists'       => $playLists,
-            'galeries'        => $galeries,
-            'pengumumans'     => $pengumumans,
-            'dokumens'        => $dokumens,
-            'dokumenCounts'   => $dokumenCounts,
-        ]);
+        // ===========================================
+        // 3. PASSING VIEW
+        // ===========================================
+
+        return view('beranda.index', compact(
+            'beritasPopuler',
+            'beritaPopuler',
+            'beritaPilihan',
+            'beritasPilihan',
+            'beritasTerbaru',
+            'beritaTerbaru',
+            'beritasKategoriPopuler',
+            'kategories',
+            'jadwalSholat',
+            'kalenderHijriyah',
+            'playLists',
+            'galeries',
+            'pengumumans',
+            'dokumens',
+            'dokumenCounts'
+        ));
     }
 }

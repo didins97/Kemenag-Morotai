@@ -26,21 +26,19 @@
     <link rel="icon" href="{{ asset('assets/img/logokemenag.png') }}" type="image/x-icon" />
 
     <!-- Preload Resources -->
-    <link rel="preload"
-        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap"
-        as="style" />
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         as="style" />
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!-- Swiper -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
     <!-- AOS Animation -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
@@ -48,13 +46,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" /> --}}
     <link href="{{ asset('assets/css/banner.css') }}" rel="stylesheet">
 
     <!-- Internal Optimized Style -->
     <style>
         body {
-            font-family: 'Open Sans', sans-serif;
+            font-family: "Manrope", sans-serif;
             color: #333;
         }
 
@@ -64,13 +62,13 @@
         h4,
         h5,
         h6 {
-            font-family: 'Lora', serif;
+            font-family: "Manrope", sans-serif;
         }
 
         .container {
-            max-width: 1200px;
+            /* max-width: 1200px; */
             margin: 0 auto;
-            padding: 0 15px;
+            padding: 0 0px;
         }
 
         @keyframes bounce-slow {
@@ -116,9 +114,6 @@
         <div class="loader"></div>
     </div>
 
-    {{-- Floating Sambutan --}}
-    @include('toggel-sambutan')
-
     {{-- Header --}}
     @include('header')
 
@@ -148,56 +143,6 @@
                     loader.style.display = 'none';
                 }, 300);
             }, 500);
-        });
-
-        // Floating Panel Functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleButton = document.getElementById('toggleSambutan');
-            const closeButton = document.getElementById('closeSambutan');
-            const overlay = document.getElementById('sambutanOverlay');
-            const panel = document.getElementById('sambutanPanel');
-
-            if (toggleButton && closeButton && overlay && panel) {
-                function togglePanel() {
-                    if (panel.classList.contains('-translate-x-full')) {
-                        overlay.classList.remove('hidden');
-                        void overlay.offsetWidth; // Trigger reflow
-                        overlay.classList.remove('opacity-0');
-                        panel.classList.remove('-translate-x-full');
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        closePanel();
-                    }
-                }
-
-                function closePanel() {
-                    panel.classList.add('-translate-x-full');
-                    overlay.classList.add('opacity-0');
-                    setTimeout(() => {
-                        overlay.classList.add('hidden');
-                        document.body.style.overflow = '';
-                    }, 300);
-                }
-
-                toggleButton.addEventListener('click', togglePanel);
-                closeButton.addEventListener('click', closePanel);
-                overlay.addEventListener('click', closePanel);
-            }
-
-            // Date Display
-            function updateCurrentDate() {
-                const options = {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric'
-                };
-                const now = new Date();
-                const dateElement = document.getElementById('current-date');
-                if (dateElement) {
-                    dateElement.textContent = now.toLocaleDateString('en-US', options);
-                }
-            }
-            updateCurrentDate();
         });
     </script>
 

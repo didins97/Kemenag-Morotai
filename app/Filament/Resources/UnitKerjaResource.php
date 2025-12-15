@@ -227,7 +227,7 @@ class UnitKerjaResource extends Resource
                             ->imageEditor()
                             ->imageCropAspectRatio('1:1')
                             ->imageResizeMode('cover')
-                            ->circleCropper()
+                            // ->circleCropper()
                             ->downloadable()
                             ->openable()
                             ->columnSpanFull()

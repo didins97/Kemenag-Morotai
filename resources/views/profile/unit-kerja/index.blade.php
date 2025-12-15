@@ -327,10 +327,10 @@
             const swiper = new Swiper(".teamSwiper", {
                 effect: "coverflow",
                 grabCursor: true,
-                centeredSlides: true,
-                slidesPerView: 3, // tampil 3
-                loop: true,
-                loopAdditionalSlides: 3, // tambahkan duplikasi biar loop mulus
+                centeredSlides: false,
+                slidesPerView: 3,
+                loop: true, // loop terus-menerus
+                loopAdditionalSlides: 5,
                 coverflowEffect: {
                     rotate: 30,
                     stretch: 0,
@@ -340,7 +340,26 @@
                 },
                 autoplay: {
                     delay: 2500,
-                    disableOnInteraction: false,
+                    disableOnInteraction: false, // autoplay tetap jalan meski user swipe
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+                breakpoints: {
+                    320: {
+                        slidesPerView: 1
+                    },
+                    640: {
+                        slidesPerView: 2
+                    },
+                    1024: {
+                        slidesPerView: 3
+                    },
                 },
             });
 
