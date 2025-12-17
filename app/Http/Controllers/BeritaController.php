@@ -35,7 +35,18 @@ class BeritaController extends Controller
     public function detail($slug)
     {
         $berita = Berita::BySlug($slug)->first();
-        $beritaTerkait = Berita::where('kategori_id', $berita->kategori_id)->limit(3)->get();
+        $beritasPopuler = Berita::with(['kategori', 'user'])
+            ->published()
+            ->trending()
+            ->take(4)
+            ->get();
+        $beritasTerkait = Berita::with(['kategori', 'user'])
+            ->published()
+            ->where('kategori_id', $berita->kategori_id)
+            ->where('id', '!=', $berita->id)
+            ->terbaru()
+            ->take(3)
+            ->get();
 
         $key = 'berita_' . $berita->id;
 
@@ -44,6 +55,6 @@ class BeritaController extends Controller
             session()->put($key, true);
         }
 
-        return view('berita.detail', compact('berita', 'beritaTerkait'));
+        return view('berita.detail', compact('berita', 'beritasPopuler', 'beritasTerkait'));
     }
 }

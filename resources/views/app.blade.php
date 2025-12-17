@@ -65,11 +65,11 @@
             font-family: "Manrope", sans-serif;
         }
 
-        .container {
+        /* .container { */
             /* max-width: 1200px; */
-            margin: 0 auto;
-            padding: 0 0px;
-        }
+            /* margin: 0 auto; */
+            /* padding: 0 0px; */
+        /* } */
 
         @keyframes bounce-slow {
 

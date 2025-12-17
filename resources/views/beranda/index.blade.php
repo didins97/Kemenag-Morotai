@@ -2,6 +2,12 @@
 
 @section('css')
     <style>
+        /* .container { */
+            /* max-width: 1200px; */
+            /* margin: 0 auto; */
+            /* padding: 0 0px; */
+        /* } */
+
         /* Styling Pagination (Titik-titik) */
         .main-banner-pagination.swiper-pagination-bullets {
             background-color: rgba(255, 255, 255, 0.4);
@@ -27,6 +33,15 @@
         .headingnews-mobile-pagination .swiper-pagination-bullet-active {
             background-color: #059669;
             /* emerald-600 */
+        }
+
+        /* container full width untuk desktop */
+        @media (min-width: 768px) {
+            .container {
+                /* max-width: 1200px; */
+                margin: 0 auto;
+                padding: 0 0px;
+            }
         }
     </style>
 @endsection
