@@ -1,272 +1,328 @@
 @extends('app')
 
 @section('css')
-    <link href="{{ asset('assets/css/profile.css') }}" rel="stylesheet">
     <style>
-        /* Visi-Misi Specific Styles */
-        :root {
-            --hero-image: url('/assets/img/visimisi.png');
+        /* Vision Card Styling */
+        .vision-container {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            border: 1px solid #d1fae5;
         }
 
-        .vision-quote {
-            position: relative;
-            padding: 1.5rem 1.5rem 1.5rem 3rem;
-            background-color: #f0fdf4;
-            border-radius: 0.75rem;
-            font-style: italic;
-            border-left: 4px solid #00A63D;
-            box-shadow: inset 0 0 10px rgba(0, 166, 61, 0.1);
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #065f46;
-            margin-bottom: 1.5rem;
-        }
-
-        .vision-quote::before {
-            content: "\201C";
-            position: absolute;
-            top: 0.5rem;
-            left: 1rem;
-            font-size: 4rem;
-            color: rgba(0, 166, 61, 0.15);
-            font-family: Georgia, serif;
+        .vision-mark {
+            font-family: 'Georgia', serif;
             line-height: 1;
         }
 
-        .mission-list {
-            list-style-type: none;
-            padding-left: 0;
+        /* Mission List Styling */
+        .mission-item {
+            transition: all 0.3s ease;
         }
 
-        .mission-list li {
-            position: relative;
-            padding-left: 2.5rem;
-            margin-bottom: 1.2rem;
-            line-height: 1.7;
+        .mission-item:hover {
+            transform: translateX(8px);
         }
 
-        .mission-list li::before {
-            content: "";
-            position: absolute;
-            left: 0.5rem;
-            top: 0.7em;
-            width: 0.6rem;
-            height: 0.6rem;
-            background-color: #059669;
-            border-radius: 50%;
-            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+        .mission-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: #10b981;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
         }
 
-        .values-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
+        /* Value Card Styling */
+        .value-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .value-item {
-            padding: 1.25rem;
-            background-color: #f0fdf4;
-            border-radius: 0.5rem;
-            border-left: 3px solid #059669;
-        }
-
-        @media (max-width: 768px) {
-            .vision-quote {
-                font-size: 0.8rem;
-                padding: 1rem 1rem 1rem 2.5rem;
-            }
-
-            .mission-list li {
-                font-size: 0.8rem;
-                padding-left: 2rem;
-            }
-
-            .value-item h3 {
-                font-size: 0.8rem;
-            }
-
-            .value-item p {
-                font-size: 0.8rem;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .values-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .value-card:hover {
+            border-color: #10b981;
+            box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.1);
         }
     </style>
 @endsection
 
 @section('content')
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center hero-content">
-                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">Visi & Misi</h1>
-                <p class="text-xl md:text-2xl mb-6">Kementerian Agama Kabupaten Pulau Morotai</p>
-                <div class="hero-divider"></div>
-            </div>
-        </div>
-    </section>
+    <section
+        class="relative bg-gradient-to-b from-emerald-50 via-white to-gray-50 py-16 sm:py-24 overflow-hidden border-b border-emerald-100/50">
+        <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-emerald-200/30 rounded-full opacity-50 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-green-200/30 rounded-full opacity-50 blur-3xl"></div>
 
-    <!-- Breadcrumb -->
-    <section class="breadcrumb-nav">
-        <div class="container mx-auto px-4">
-            <nav aria-label="Breadcrumb">
-                <div class="flex flex-wrap items-center">
-                    <div class="breadcrumb-item">
-                        <a href="/" class="breadcrumb-link flex items-center">
-                            <i class="fas fa-home mr-2"></i>
-                            Beranda
-                        </a>
-                    </div>
-                    <div class="breadcrumb-item">
-                        <span class="text-gray-600">Visi & Misi</span>
-                    </div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl">
+                <nav class="flex mb-6" aria-label="Breadcrumb">
+                    <ol
+                        class="flex items-center space-x-2 text-emerald-600/80 text-[10px] uppercase tracking-[0.2em] font-bold">
+                        <li><a href="/" class="hover:text-emerald-900 transition-colors">Beranda</a></li>
+                        <li><i class="fas fa-chevron-right text-[8px] opacity-50"></i></li>
+                        <li class="opacity-50">Profil</li>
+                        <li><i class="fas fa-chevron-right text-[8px] opacity-50"></i></li>
+                        <li class="text-emerald-950">Visi & Misi</li>
+                    </ol>
+                </nav>
+
+                <h1 class="text-4xl md:text-6xl font-black text-emerald-950 mb-6 tracking-tight uppercase">
+                    Visi <span class="text-emerald-600">& Misi</span>
+                </h1>
+
+                <p class="text-emerald-800/70 text-base md:text-xl leading-relaxed font-medium max-w-2xl">
+                    Komitmen kami dalam melayani umat dan membangun fondasi keagamaan yang kokoh di Kabupaten Pulau Morotai.
+                </p>
+
+                <div class="flex items-center gap-4 mt-8">
+                    <div class="w-12 h-1 bg-emerald-600 rounded-full"></div>
+                    <div class="w-2 h-1 bg-emerald-200 rounded-full"></div>
+                    <div class="w-2 h-1 bg-emerald-100 rounded-full"></div>
                 </div>
-            </nav>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <section aria-labelledby="visiMisiHeading" class="py-8 md:py-6 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <h2 id="visiMisiHeading" class="sr-only">Visi dan Misi Kementerian Agama</h2>
-
-            <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
-                <!-- Main Content -->
-                <main class="w-full lg:w-2/3">
-                    @if ($visiMisi)
-                        <!-- Visi Section -->
-                        <div class="content-card">
-                            <div class="card-header">
-                                <h2 class="text-xl md:text-2xl font-bold text-green-800 flex items-center">
-                                    <i class="fas fa-eye mr-3 text-green-600"></i>
-                                    Visi Kementerian Agama
-                                </h2>
-                            </div>
-                            <div class="card-body">
-                                <div class="vision-quote">
-                                    {!! $visiMisi->visi !!}
-                                </div>
-                                <p class="content-text">
-                                    Visi ini menjadi panduan strategis bagi seluruh jajaran Kementerian Agama Kabupaten
-                                    Pulau Morotai dalam menjalankan tugas dan fungsi pelayanan kepada masyarakat.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Misi Section -->
-                        <div class="content-card">
-                            <div class="card-header">
-                                <h2 class="text-xl md:text-2xl font-bold text-green-800 flex items-center">
-                                    <i class="fas fa-bullseye mr-3 text-green-600"></i>
-                                    Misi Kementerian Agama
-                                </h2>
-                            </div>
-                            <div class="card-body">
-                                <p class="content-text mb-4">Untuk mewujudkan visi tersebut, Kementerian Agama Kabupaten
-                                    Pulau Morotai melaksanakan misi sebagai berikut:</p>
-                                <div class="mission-list">
-                                    {!! $visiMisi->misi !!}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Nilai-nilai Section -->
-                        <div class="content-card">
-                            <div class="card-header">
-                                <h2 class="text-xl md:text-2xl font-bold text-green-800 flex items-center">
-                                    <i class="fas fa-heart mr-3 text-green-600"></i>
-                                    Nilai-nilai Kami
-                                </h2>
-                            </div>
-                            <div class="card-body">
-                                <div class="values-grid">
-                                    <div class="value-item">
-                                        <h3 class="font-bold text-green-800 mb-2 flex items-center">
-                                            <i class="fas fa-hand-holding-heart mr-2 text-green-600"></i>
-                                            Profesionalisme
-                                        </h3>
-                                        <p class="text-gray-700">Bekerja dengan keahlian, integritas, dan tanggung jawab.
-                                        </p>
-                                    </div>
-                                    <div class="value-item">
-                                        <h3 class="font-bold text-green-800 mb-2 flex items-center">
-                                            <i class="fas fa-users mr-2 text-green-600"></i>
-                                            Pelayanan Prima
-                                        </h3>
-                                        <p class="text-gray-700">Memberikan pelayanan yang cepat, tepat, dan ramah.</p>
-                                    </div>
-                                    <div class="value-item">
-                                        <h3 class="font-bold text-green-800 mb-2 flex items-center">
-                                            <i class="fas fa-balance-scale mr-2 text-green-600"></i>
-                                            Keadilan
-                                        </h3>
-                                        <p class="text-gray-700">Memperlakukan semua pihak secara adil dan setara.</p>
-                                    </div>
-                                    <div class="value-item">
-                                        <h3 class="font-bold text-green-800 mb-2 flex items-center">
-                                            <i class="fas fa-shield-alt mr-2 text-green-600"></i>
-                                            Akuntabilitas
-                                        </h3>
-                                        <p class="text-gray-700">Transparan dalam setiap tindakan dan keputusan.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <div class="content-card">
-                            <div class="card-body text-center">
-                                <i class="fas fa-info-circle text-gray-400 text-4xl mb-4"></i>
-                                <h3 class="text-lg font-medium text-gray-600 mb-2">Data visi dan misi belum tersedia</h3>
-                                <p class="text-gray-500">Konten sedang dalam proses penyusunan</p>
-                            </div>
-                        </div>
-                    @endif
-                </main>
-
-                <!-- Sidebar -->
-                @include('sidebar')
             </div>
         </div>
     </section>
-@endsection
 
-@section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Animate cards on scroll
-            const cards = document.querySelectorAll('.content-card');
+    <section class="py-16 sm:py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto space-y-24">
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.style.opacity = "1";
-                            entry.target.style.transform = "translateY(0)";
-                        }, index * 150);
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
+                @if ($visiMisi)
+                    <div class="relative">
+                        <div
+                            class="absolute -top-10 -left-10 text-[12rem] vision-mark text-emerald-50 opacity-60 select-none">
+                            “</div>
+                        <div class="relative z-10 vision-container rounded-[2.5rem] p-8 md:p-16 shadow-sm overflow-hidden">
+                            <div class="flex flex-col md:flex-row gap-10 items-center">
+                                <div class="w-full md:w-1/4 text-center md:text-left">
+                                    <h2 class="text-xs font-black text-emerald-600 uppercase tracking-[0.3em] mb-2">Visi
+                                        Kami</h2>
+                                    <div class="h-1 w-12 bg-emerald-500 mx-auto md:mx-0"></div>
+                                </div>
+                                <div class="w-full md:w-3/4">
+                                    <blockquote
+                                        class="text-2xl md:text-4xl font-bold text-emerald-900 leading-tight italic">
+                                        "{!! $visiMisi->visi !!}"
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            cards.forEach(card => {
-                observer.observe(card);
-            });
+                    <div class="grid lg:grid-cols-12 gap-12 items-start">
+                        <div class="lg:col-span-4 sticky top-10">
+                            <h2 class="text-3xl md:text-4xl font-black text-emerald-950 leading-tight">
+                                Langkah Nyata <br>
+                                <span class="text-emerald-600">Misi Kami</span>
+                            </h2>
+                            <p class="mt-4 text-slate-500 font-medium leading-relaxed">
+                                Strategi operasional yang kami jalankan untuk mewujudkan cita-cita luhur kementerian.
+                            </p>
+                        </div>
+                        <div class="lg:col-span-8 space-y-6">
+                            @php
+                                // Asumsi data misi dipisahkan oleh tag <li> jika dari editor
+                                // Jika tidak, kita bisa melakukan manual parsing sederhana
+                                $misiClean = str_replace(['<ul>', '</ul>'], '', $visiMisi->misi);
+                                $misiItems = explode('<li>', $misiClean);
+                            @endphp
 
-            // Add hover effect to mission items
-            const missionItems = document.querySelectorAll('.mission-list li');
-            missionItems.forEach(item => {
-                item.addEventListener('mouseenter', function() {
-                    this.style.transform = "translateX(5px)";
-                });
-                item.addEventListener('mouseleave', function() {
-                    this.style.transform = "translateX(0)";
-                });
-            });
-        });
-    </script>
+                            @foreach ($misiItems as $index => $item)
+                                @if (trim($item))
+                                    <div
+                                        class="mission-item flex gap-6 p-6 rounded-3xl bg-gray-50 border border-gray-100 hover:bg-white hover:border-emerald-200 shadow-sm hover:shadow-xl transition-all group">
+                                        <div class="mission-number">{{ $index }}</div>
+                                        <div class="text-slate-700 font-bold leading-relaxed">
+                                            {!! str_replace('</li>', '', $item) !!}
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="pt-12">
+                        <div class="text-center mb-16">
+                            <h2 class="text-3xl font-black text-emerald-950">Nilai-Nilai Dasar</h2>
+                            <p class="text-emerald-600/70 font-bold uppercase tracking-widest text-xs mt-2">Budaya Kerja
+                                Kami</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            @php
+                                $values = [
+                                    [
+                                        'icon' => 'fa-hand-holding-heart',
+                                        'title' => 'Profesionalisme',
+                                        'desc' => 'Keahlian dan integritas dalam tanggung jawab.',
+                                    ],
+                                    [
+                                        'icon' => 'fa-users',
+                                        'title' => 'Pelayanan Prima',
+                                        'desc' => 'Pelayanan yang cepat, tepat, dan ramah.',
+                                    ],
+                                    [
+                                        'icon' => 'fa-balance-scale',
+                                        'title' => 'Keadilan',
+                                        'desc' => 'Memperlakukan semua pihak secara setara.',
+                                    ],
+                                    [
+                                        'icon' => 'fa-shield-alt',
+                                        'title' => 'Akuntabilitas',
+                                        'desc' => 'Transparan dalam setiap tindakan.',
+                                    ],
+                                ];
+                            @endphp
+
+                            @foreach ($values as $v)
+                                <div
+                                    class="value-card p-8 bg-white border border-emerald-50 rounded-[2rem] text-center group">
+                                    <div
+                                        class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-500">
+                                        <i class="fas {{ $v['icon'] }} text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-black text-emerald-900 mb-2">{{ $v['title'] }}</h3>
+                                    <p class="text-sm text-slate-500 leading-relaxed font-medium">{{ $v['desc'] }}</p>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <div class="py-20 text-center bg-gray-50 rounded-[3rem] border border-dashed border-gray-200">
+                        <i class="fas fa-info-circle text-emerald-200 text-6xl mb-6"></i>
+                        <h3 class="text-2xl font-bold text-gray-400">Data Visi & Misi Belum Tersedia</h3>
+                    </div>
+                @endif
+
+            </div>
+        </div>
+    </section>
+
+    <section class="relative py-24 overflow-hidden bg-white">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-emerald-50 rounded-full blur-3xl opacity-50"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-green-50 rounded-full blur-3xl opacity-50"></div>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <span
+                    class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-4">
+                    Struktur Organisasi
+                </span>
+                <h2 class="text-3xl md:text-5xl font-black text-emerald-950 mb-6 leading-tight">
+                    Eksplorasi <span class="text-emerald-600">Unit Kerja</span> Kami
+                </h2>
+                <p class="text-emerald-800/60 font-medium text-lg italic">
+                    "Bahu-membahu mewujudkan visi melalui pelayanan yang terintegrasi di setiap lini."
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <a href="{{ route('profile.unit-kerja', ['slug' => 'bagian-tata-usaha']) }}"
+                    class="group relative bg-white border border-emerald-100 p-8 rounded-[2rem] transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-900/10 hover:-translate-y-2 overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-[3rem] -mr-8 -mt-8 transition-transform group-hover:scale-150 duration-500">
+                    </div>
+                    <div class="relative z-10">
+                        <div
+                            class="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-200">
+                            <i class="fas fa-file-invoice text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-emerald-950 mb-3">Subbag Tata Usaha</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-6">Pusat koordinasi administrasi, perencanaan,
+                            keuangan, dan kepegawaian internal.</p>
+                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                            Lihat Detail <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="{{ route('profile.unit-kerja', ['slug' => 'bimas-islam']) }}"
+                    class="group relative bg-white border border-emerald-100 p-8 rounded-[2rem] transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-900/10 hover:-translate-y-2">
+                    <div class="relative z-10">
+                        <div
+                            class="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-200">
+                            <i class="fas fa-mosque text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-emerald-950 mb-3">Seksi Bimas Islam</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-6">Pelayanan kemasjidan, produk halal, kemitraan
+                            umat, dan urusan agama Islam.</p>
+                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                            Lihat Detail <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="{{ route('profile.unit-kerja', ['slug' => 'pendidikan-agama']) }}"
+                    class="group relative bg-white border border-emerald-100 p-8 rounded-[2rem] transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-900/10 hover:-translate-y-2">
+                    <div class="relative z-10">
+                        <div
+                            class="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-200">
+                            <i class="fas fa-graduation-cap text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-emerald-950 mb-3">Seksi Pendis</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-6">Pengelolaan pendidikan Madrasah, PD Pontren,
+                            dan Pendidikan Agama Islam.</p>
+                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                            Lihat Detail <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="{{ route('profile.unit-kerja', ['slug' => 'haji-umrah']) }}"
+                    class="group relative bg-white border border-emerald-100 p-8 rounded-[2rem] transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-900/10 hover:-translate-y-2">
+                    <div class="relative z-10">
+                        <div
+                            class="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-200">
+                            <i class="fas fa-kaaba text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-emerald-950 mb-3">Penyelenggaraan Haji</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-6">Pelayanan pendaftaran, dokumen, dan
+                            pembinaan ibadah haji serta umrah.</p>
+                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                            Lihat Detail <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="{{ route('profile.unit-kerja', ['slug' => 'bimas-kristen']) }}"
+                    class="group relative bg-white border border-emerald-100 p-8 rounded-[2rem] transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-900/10 hover:-translate-y-2">
+                    <div class="relative z-10">
+                        <div
+                            class="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-200">
+                            <i class="fas fa-church text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-emerald-950 mb-3">Bimas Kristen</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-6">Pelayanan bimbingan masyarakat, urusan
+                            agama, pendidikan keagamaan, dan pemberdayaan umat Kristen.</p>
+                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                            Lihat Detail <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="/unit-kerja"
+                    class="group relative bg-emerald-900 p-8 rounded-[2rem] transition-all duration-500 hover:bg-emerald-800 flex flex-col justify-center items-center text-center overflow-hidden">
+                    <div class="absolute inset-0 opacity-10">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <path d="M0 0 L100 100 M100 0 L0 100" stroke="white" stroke-width="0.5" />
+                        </svg>
+                    </div>
+                    <div class="relative z-10">
+                        <p class="text-emerald-300 font-bold text-xs uppercase tracking-[0.3em] mb-4">Lainnya</p>
+                        <h3 class="text-2xl font-black text-white mb-6">Lihat Seluruh <br> Struktur</h3>
+                        <div
+                            class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto group-hover:bg-white group-hover:text-emerald-900 transition-all">
+                            <i class="fas fa-th-large text-white group-hover:text-emerald-900"></i>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
 @endsection

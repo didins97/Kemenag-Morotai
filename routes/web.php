@@ -56,9 +56,9 @@ Route::post('/pengaduan-masyarakat', [PengaduanController::class, 'store'])->nam
 //     return view('profile.struktur');
 // })->name('profile.struktur');
 
-Route::get('/subbagian-tata-usaha', function () {
-    return view('profile.unit-kerja.tata-usaha');
-})->name('profile.unit-kerja.tata-usaha');
+// Route::get('/subbagian-tata-usaha', function () {
+//     return view('profile.unit-kerja.tata-usaha');
+// })->name('profile.unit-kerja.tata-usaha');
 
 // Route::get('/layanan-publik', function () {
 //     return view('layanan.index');
