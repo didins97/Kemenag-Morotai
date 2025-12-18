@@ -8,26 +8,28 @@ use Illuminate\Http\Request;
 
 class BeritaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // $beritas = Berita::published()->terbaru()->paginate(6);
-        // $kategories = \App\Models\Kategori::all();
+        $beritas = Berita::with(['kategori', 'user'])
+            ->published()
+            ->terbaru()
+            // 1. Logic Search (Judul & Isi)
+            ->when($request->search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('judul', 'like', "%{$search}%")
+                        ->orWhere('isi', 'like', "%{$search}%");
+                });
+            })
+            // 2. Logic Filter Kategori (Mencari berdasarkan SLUG di tabel relasi)
+            ->when($request->kategori, function ($query, $slug) {
+                $query->whereHas('kategori', function ($q) use ($slug) {
+                    $q->where('slug', $slug);
+                });
+            })
+            ->paginate(6)
+            ->withQueryString();
 
-        if (request('kategori')) {
-            $beritas = Berita::with(['kategori', 'user'])
-                ->published()
-                ->kategori(request('kategori'))
-                ->terbaru()
-                ->paginate(6);
-        } else {
-            $beritas = Berita::with(['kategori', 'user'])
-                ->published()
-                ->terbaru()
-                ->paginate(6);
-        }
-
-        $kategories = \App\Models\Kategori::all();
-
+        $kategories = \App\Models\Kategori::select('id', 'kategori', 'slug')->get();
 
         return view('berita.index', compact('beritas', 'kategories'));
     }
