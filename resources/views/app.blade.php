@@ -65,11 +65,35 @@
             font-family: "Manrope", sans-serif;
         }
 
-        /* .container { */
-            /* max-width: 1200px; */
-            /* margin: 0 auto; */
-            /* padding: 0 0px; */
-        /* } */
+        /* Menghilangkan jeda antara tombol dan menu */
+        .dropdown-menu-wrapper {
+            padding-top: 15px;
+            /* Jembatan kursor vertikal */
+            margin-top: -5px;
+            /* Menarik area ke atas agar rapat */
+        }
+
+        .dropdown-content {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: visible;
+        }
+
+        /* Jembatan untuk Submenu Unit Kerja (Samping) */
+        .submenu-wrapper {
+            padding-left: 15px;
+            /* Jembatan kursor horizontal */
+            margin-left: -5px;
+        }
+
+        .submenu-content {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
 
         @keyframes bounce-slow {
 
