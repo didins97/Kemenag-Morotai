@@ -75,6 +75,11 @@ class Berita extends Model
         return $query->where('published', true);
     }
 
+    public function scopeDraft($query)
+    {
+        return $query->where('published', false);
+    }
+
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);

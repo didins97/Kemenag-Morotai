@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -27,12 +28,18 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->passwordReset()
+            ->emailVerification()
+            ->profile()
             ->brandName('Kemenag Morotai')
             ->brandLogo(asset('assets/img/logokemenag-admin.png'))
             ->brandLogoHeight('90px') // Ubah ukuran sesuai kebutuhan
             ->colors([
-                'primary' => Color::Green,
+                'primary' => Color::Emerald,
+                'gray' => Color::Slate,
             ])
+            ->font('Poppins')
+            ->defaultThemeMode(ThemeMode::Light)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -40,7 +47,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                \App\Filament\Widgets\StatistikKonten::class,
+                \App\Filament\Widgets\StatistikBerita::class,
+                \App\Filament\Widgets\StatistikLainnya::class,
+                \App\Filament\Widgets\BeritaViewsChart::class,
             ])
             ->navigationGroups([
                 'Data & Informasi',
