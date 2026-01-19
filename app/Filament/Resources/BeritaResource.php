@@ -67,34 +67,34 @@ class BeritaResource extends Resource
 
                     // Media & Settings Grid
                     Grid::make()
-                    ->schema([
-                        // Gabungkan upload gambar utama dan multi gambar dalam satu section
-                        Section::make('Media Upload')
-                            ->icon('heroicon-o-photo')
-                            ->description('Upload gambar utama dan gambar pendukung')
-                            ->collapsible()
-                            ->schema([
-                                self::getImageUploadSection(),
+                        ->schema([
+                            // Gabungkan upload gambar utama dan multi gambar dalam satu section
+                            Section::make('Media Upload')
+                                ->icon('heroicon-o-photo')
+                                ->description('Upload gambar utama dan gambar pendukung')
+                                ->collapsible()
+                                ->schema([
+                                    self::getImageUploadSection(),
 
-                                FileUpload::make('multi_gambar')
-                                    ->label('Gambar Pendukung (Bisa banyak)')
-                                    ->multiple()
-                                    ->image()
-                                    ->directory('berita/multi') // folder terpisah
-                                    ->reorderable()
-                                    ->appendFiles() // mempertahankan file yang sudah diupload
-                                    ->downloadable()
-                                    ->openable()
-                                    ->columnSpanFull()
-                                    ->helperText('Anda bisa upload banyak gambar sekaligus')
-                            ])
-                            ->columnSpan(['lg' => 2]),
+                                    FileUpload::make('multi_gambar')
+                                        ->label('Gambar Pendukung (Bisa banyak)')
+                                        ->multiple()
+                                        ->image()
+                                        ->directory('berita/multi') // folder terpisah
+                                        ->reorderable()
+                                        ->appendFiles() // mempertahankan file yang sudah diupload
+                                        ->downloadable()
+                                        ->openable()
+                                        ->columnSpanFull()
+                                        ->helperText('Anda bisa upload banyak gambar sekaligus')
+                                ])
+                                ->columnSpan(['lg' => 2]),
 
-                        self::getSettingsSection()->columnSpan(['lg' => 1]),
-                    ])
-                    ->columns(3),
-            ])
-            ->columns(1),
+                            self::getSettingsSection()->columnSpan(['lg' => 1]),
+                        ])
+                        ->columns(3),
+                ])
+                ->columns(1),
         ]);
     }
 
@@ -190,9 +190,17 @@ class BeritaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make()
-                        ->icon('heroicon-o-eye')
-                        ->color('success'),
+                    Tables\Actions\Action::make('view')
+                        ->label(fn($record) => $record->published ? 'Lihat di Web' : 'Pratinjau Draft')
+                        ->icon(fn($record) => $record->published ? 'heroicon-o-globe-alt' : 'heroicon-o-eye')
+                        ->color(fn($record) => $record->published ? 'success' : 'warning')
+                        ->url(function ($record) {
+                            if ($record->published) {
+                                return route('berita.detail', $record->slug);
+                            }
+                            // return
+                        })
+                        ->openUrlInNewTab(),
                     Tables\Actions\EditAction::make()
                         ->icon('heroicon-o-pencil')
                         ->color('primary'),
@@ -234,8 +242,7 @@ class BeritaResource extends Resource
             ->persistSortInSession()
             ->persistSearchInSession()
             ->persistFiltersInSession()
-            ->striped()
-            ->poll('10s');
+            ->striped();
     }
 
     public static function getRelations(): array
@@ -354,13 +361,13 @@ class BeritaResource extends Resource
                     ->extraAttributes(['class' => 'min-h-[300px]']),
 
                 TextInput::make('caption_berita')
-                ->label('Tentang Berita')
-                ->placeholder('Nama Penulis, Pewarta dan lainnya')
-                ->required()
-                ->maxLength(255)
-                ->columnSpanFull()
-                ->hint('muncul sebagai tulisan kecil di akhir berita')
-                ->hintIcon('heroicon-o-information-circle'),
+                    ->label('Tentang Berita')
+                    ->placeholder('Nama Penulis, Pewarta dan lainnya')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull()
+                    ->hint('muncul sebagai tulisan kecil di akhir berita')
+                    ->hintIcon('heroicon-o-information-circle'),
             ]);
     }
 

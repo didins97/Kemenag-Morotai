@@ -3,9 +3,9 @@
 @section('css')
     <style>
         /* .container { */
-            /* max-width: 1200px; */
-            /* margin: 0 auto; */
-            /* padding: 0 0px; */
+        /* max-width: 1200px; */
+        /* margin: 0 auto; */
+        /* padding: 0 0px; */
         /* } */
 
         /* Styling Pagination (Titik-titik) */
@@ -49,83 +49,47 @@
 
 @section('content')
     <div
-        class="w-full bg-gradient-to-b from-teal-800 to-emerald-700 text-white py-2 shadow-2xl hidden sm:block ring-1 ring-black/10">
-        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        class="w-full bg-gradient-to-r from-emerald-900 via-teal-900 to-emerald-900 text-white shadow-lg hidden sm:block border-b border-white/10">
+        <div class="container mx-auto max-w-7xl px-4 py-2">
+            <div class="flex items-center justify-between">
 
-            <div class="flex items-center justify-between text-base">
-                <div class="flex items-center gap-4 flex-shrink-0">
-
-                    <div class="flex items-center gap-2 pr-4 border-r border-white/20">
-                        <i class="fa-solid fa-location-dot text-yellow-400 text-base"></i>
-                        <span class="font-semibold tracking-widest text-white/95">
-                            {{ $jadwal['lokasi'] ?? 'PULAU MOROTAI' }}
-                        </span>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/10">
+                        <i class="fa-solid fa-location-dot text-amber-400 animate-pulse"></i>
+                        <span
+                            class="text-xs font-bold tracking-widest uppercase">{{ $jadwal['lokasi'] ?? 'PULAU MOROTAI' }}</span>
                     </div>
-
-                    <div class="flex items-center gap-2 hidden md:flex">
-                        <i class="fa-solid fa-calendar text-yellow-400 text-sm"></i>
-                        <span class="font-light text-white/80">
-                            {{ $jadwal['tanggal'] ?? now()->translatedFormat('d F Y') }}
-                        </span>
+                    <div class="hidden lg:block text-[11px] text-emerald-200/70 font-medium">
+                        <i class="fa-regular fa-clock mr-1"></i>
+                        {{ $jadwal['tanggal'] ?? now()->translatedFormat('d F Y') }}
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-4 md:space-x-6 text-sm flex-shrink-0">
+                <div class="flex items-center gap-2">
+                    @php
+                        $sholat = [
+                            ['n' => 'Subuh', 'v' => $jadwalSholat['jadwal']['subuh'], 'i' => 'fa-mosque'],
+                            ['n' => 'Dzuhur', 'v' => $jadwalSholat['jadwal']['dzuhur'], 'i' => 'fa-sun'],
+                            ['n' => 'Ashar', 'v' => $jadwalSholat['jadwal']['ashar'], 'i' => 'fa-cloud-sun'],
+                            ['n' => 'Maghrib', 'v' => $jadwalSholat['jadwal']['maghrib'], 'i' => 'fa-moon'],
+                            ['n' => 'Isya', 'v' => $jadwalSholat['jadwal']['isya'], 'i' => 'fa-star'],
+                        ];
+                    @endphp
 
-                    <div
-                        class="flex items-center gap-1.5 group transition duration-300 rounded-md hover:shadow-yellow-500/50 hover:shadow-md hover:bg-white/10 p-1">
-                        <i class="fa-solid fa-moon text-sm text-yellow-400"></i>
-                        <div class="flex items-center">
-                            <span class="hidden md:inline font-light text-white/80">Subuh</span>
-                            <span class="md:hidden font-light text-white/80">S.</span>
-                            <strong
-                                class="ml-1 font-semibold text-yellow-300">{{ $jadwalSholat['jadwal']['subuh'] }}</strong>
+                    @foreach ($sholat as $s)
+                        <div
+                            class="group relative flex items-center bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1 rounded-lg transition-all duration-300">
+                            <div class="flex flex-col items-start pr-2 border-r border-white/10">
+                                <span
+                                    class="text-[9px] uppercase leading-none text-emerald-300 font-semibold tracking-tighter">{{ $s['n'] }}</span>
+                                <span class="text-sm font-bold tracking-tight text-white">{{ $s['v'] }}</span>
+                            </div>
+                            <i
+                                class="fa-solid {{ $s['i'] }} text-[10px] ml-2 text-amber-400/50 group-hover:text-amber-400 transition-colors"></i>
                         </div>
-                    </div>
-
-                    <div
-                        class="flex items-center gap-1.5 hidden sm:flex group transition duration-300 rounded-md hover:shadow-yellow-500/50 hover:shadow-md hover:bg-white/10 p-1">
-                        <i class="fa-solid fa-sun text-sm text-yellow-400"></i>
-                        <div class="flex items-center">
-                            <span class="hidden md:inline font-light text-white/80">Dzuhur</span>
-                            <span class="md:hidden font-light text-white/80">D.</span>
-                            <strong
-                                class="ml-1 font-semibold text-yellow-300">{{ $jadwalSholat['jadwal']['dzuhur'] }}</strong>
-                        </div>
-                    </div>
-
-                    <div
-                        class="flex items-center gap-1.5 flex-shrink-0 hidden xl:flex group transition duration-300 rounded-md hover:shadow-yellow-500/50 hover:shadow-md hover:bg-white/10 p-1">
-                        <i class="fa-solid fa-cloud-sun text-sm text-yellow-400"></i>
-                        <div class="flex items-center">
-                            <span class="font-light text-white/80">Ashar</span>
-                            <strong
-                                class="ml-1 font-semibold text-yellow-300">{{ $jadwalSholat['jadwal']['ashar'] }}</strong>
-                        </div>
-                    </div>
-
-                    <div
-                        class="flex items-center gap-1.5 group transition duration-300 rounded-md hover:shadow-yellow-500/50 hover:shadow-md hover:bg-white/10 p-1">
-                        <i class="fa-solid fa-circle text-sm text-yellow-400"></i>
-                        <div class="flex items-center">
-                            <span class="hidden md:inline font-light text-white/80">Maghrib</span>
-                            <span class="md:hidden font-light text-white/80">M.</span>
-                            <strong
-                                class="ml-1 font-semibold text-yellow-300">{{ $jadwalSholat['jadwal']['maghrib'] }}</strong>
-                        </div>
-                    </div>
-
-                    <div
-                        class="flex items-center gap-1.5 group transition duration-300 rounded-md hover:shadow-yellow-500/50 hover:shadow-md hover:bg-white/10 p-1">
-                        <i class="fa-solid fa-star text-sm text-yellow-400"></i>
-                        <div class="flex items-center">
-                            <span class="hidden md:inline font-light text-white/80">Isya</span>
-                            <span class="md:hidden font-light text-white/80">I.</span>
-                            <strong
-                                class="ml-1 font-semibold text-yellow-300">{{ $jadwalSholat['jadwal']['isya'] }}</strong>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
+
             </div>
         </div>
     </div>

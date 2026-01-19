@@ -36,12 +36,17 @@ class BeritaController extends Controller
 
     public function detail($slug)
     {
-        $berita = Berita::BySlug($slug)->first();
+        $berita = Berita::with(['kategori', 'user'])
+            ->published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
         $beritasPopuler = Berita::with(['kategori', 'user'])
             ->published()
             ->trending()
             ->take(4)
             ->get();
+
         $beritasTerkait = Berita::with(['kategori', 'user'])
             ->published()
             ->where('kategori_id', $berita->kategori_id)
