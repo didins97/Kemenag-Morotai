@@ -76,9 +76,11 @@ class BerandaController extends Controller
         // 2. DATA LAIN
         // ===========================================
 
-        // Jadwal & Kalender
-        $jadwalSholat = $this->jadwalSholatService->getJadwal()['data'];
-        $kalenderHijriyah = $this->jadwalSholatService->getKalenderHijriyah()['data'];
+        $resJadwal = $this->jadwalSholatService->getJadwal();
+        $jadwalSholat = $resJadwal['data'] ?? null; // Jika 'data' tidak ada, isi null
+
+        $resKalender = $this->jadwalSholatService->getKalenderHijriyah();
+        $kalenderHijriyah = $resKalender['data'] ?? null;
 
         // Media
         $playLists = Video::published()->orderByDesc('created_at')->get();

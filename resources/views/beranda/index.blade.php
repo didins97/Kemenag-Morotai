@@ -2,46 +2,113 @@
 
 @section('css')
     <style>
-        /* .container { */
-        /* max-width: 1200px; */
-        /* margin: 0 auto; */
-        /* padding: 0 0px; */
-        /* } */
+        /* --- General Layout --- */
+        @media (min-width: 768px) {
+            .container {
+                margin: 0 auto;
+                padding: 0 0px;
+            }
+        }
 
-        /* Styling Pagination (Titik-titik) */
+        @media (max-width: 639px) {
+            section {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
+
+        /* --- Global Swiper Reset --- */
+        .swiper-pagination-bullets.swiper-pagination-horizontal {
+            background: none !important;
+        }
+
+        /* --- Component: Main Banner --- */
         .main-banner-pagination.swiper-pagination-bullets {
             background-color: rgba(255, 255, 255, 0.4);
         }
 
         .main-banner-pagination .swiper-pagination-bullet {
-            background-color: #ffffff;
-            opacity: 0.8;
+            background: rgba(255, 255, 255, 0.7) !important;
+            opacity: 1 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .main-banner-pagination .swiper-pagination-bullet-active {
-            background-color: #059669;
+            background: #ffffff !important;
+            width: 20px;
+            border-radius: 5px;
         }
 
+        /* --- Component: Mobile Hero --- */
+        .mobileHeroSwiper {
+            padding-bottom: 5px !important;
+        }
+
+        .mobile-hero-pagination {
+            width: 100%;
+            height: 12px;
+        }
+
+        .mobile-hero-pagination .swiper-pagination-bullet {
+            width: 7px;
+            height: 7px;
+            background: #10b981 !important;
+            opacity: 0.2;
+            margin: 0 3px !important;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .mobile-hero-pagination .swiper-pagination-bullet-active {
+            width: 22px !important;
+            border-radius: 12px;
+            opacity: 1 !important;
+        }
+
+        /* --- Component: Heading News Mobile --- */
         .headingnews-mobile-pagination .swiper-pagination-bullet {
-            background-color: #d1d5db;
-            /* Abu-abu terang */
-            opacity: 1;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
+            background: #fff !important;
+            opacity: 0.4;
+            transition: all 0.3s ease;
         }
 
         .headingnews-mobile-pagination .swiper-pagination-bullet-active {
-            background-color: #059669;
-            /* emerald-600 */
+            width: 24px;
+            border-radius: 10px;
+            opacity: 1;
+            background: #10b981 !important;
         }
 
-        /* container full width untuk desktop */
-        @media (min-width: 768px) {
-            .container {
-                /* max-width: 1200px; */
-                margin: 0 auto;
-                padding: 0 0px;
-            }
+        /* --- Component: Video Section --- */
+        .video-pagination .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            background: #059669;
+            opacity: 0.2;
+            transition: all 0.3s;
+        }
+
+        .video-pagination .swiper-pagination-bullet-active {
+            width: 30px;
+            border-radius: 5px;
+            opacity: 1;
+        }
+
+        /* --- Component: Gallery Section --- */
+        .gallery-pagination .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            background: #059669;
+            opacity: 0.2;
+            transition: all 0.3s;
+        }
+
+        .gallery-pagination .swiper-pagination-bullet-active {
+            width: 24px;
+            border-radius: 4px;
+            opacity: 1;
         }
     </style>
 @endsection
@@ -56,23 +123,26 @@
                 <div class="flex items-center gap-4">
                     <div class="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/10">
                         <i class="fa-solid fa-location-dot text-amber-400 animate-pulse"></i>
-                        <span
-                            class="text-xs font-bold tracking-widest uppercase">{{ $jadwal['lokasi'] ?? 'PULAU MOROTAI' }}</span>
+                        {{-- Handle jika lokasi tidak ada --}}
+                        <span class="text-xs font-bold tracking-widest uppercase">
+                            {{ $jadwalSholat['lokasi'] ?? 'LOKASI TIDAK TERSEDIA' }}
+                        </span>
                     </div>
                     <div class="hidden lg:block text-[11px] text-emerald-200/70 font-medium">
                         <i class="fa-regular fa-clock mr-1"></i>
-                        {{ $jadwal['tanggal'] ?? now()->translatedFormat('d F Y') }}
+                        {{ $jadwalSholat['tanggal'] ?? now()->translatedFormat('d F Y') }}
                     </div>
                 </div>
 
                 <div class="flex items-center gap-2">
                     @php
+                        $dataJadwal = $jadwalSholat['jadwal'] ?? null;
                         $sholat = [
-                            ['n' => 'Subuh', 'v' => $jadwalSholat['jadwal']['subuh'], 'i' => 'fa-mosque'],
-                            ['n' => 'Dzuhur', 'v' => $jadwalSholat['jadwal']['dzuhur'], 'i' => 'fa-sun'],
-                            ['n' => 'Ashar', 'v' => $jadwalSholat['jadwal']['ashar'], 'i' => 'fa-cloud-sun'],
-                            ['n' => 'Maghrib', 'v' => $jadwalSholat['jadwal']['maghrib'], 'i' => 'fa-moon'],
-                            ['n' => 'Isya', 'v' => $jadwalSholat['jadwal']['isya'], 'i' => 'fa-star'],
+                            ['n' => 'Subuh', 'v' => $dataJadwal['subuh'] ?? '--:--', 'i' => 'fa-mosque'],
+                            ['n' => 'Dzuhur', 'v' => $dataJadwal['dzuhur'] ?? '--:--', 'i' => 'fa-sun'],
+                            ['n' => 'Ashar', 'v' => $dataJadwal['ashar'] ?? '--:--', 'i' => 'fa-cloud-sun'],
+                            ['n' => 'Maghrib', 'v' => $dataJadwal['maghrib'] ?? '--:--', 'i' => 'fa-moon'],
+                            ['n' => 'Isya', 'v' => $dataJadwal['isya'] ?? '--:--', 'i' => 'fa-star'],
                         ];
                     @endphp
 
@@ -94,64 +164,76 @@
         </div>
     </div>
 
-    <section class="modern-news py-12 md:py-16 px-4 sm:px-6 bg-white">
+    <section class="modern-news py-4 md:py-12 px-0 sm:px-6 bg-white overflow-hidden">
         <div class="container mx-auto max-w-7xl">
 
-            <div class="featured-layout grid grid-cols-1 lg:grid-cols-4 gap-8 md:gap-10">
+            <div class="featured-layout grid grid-cols-1 lg:grid-cols-4 gap-8 md:gap-10 items-start">
 
-                <div class="lg:col-span-3 space-y-8 md:space-y-10">
+                <div class="lg:col-span-3">
 
                     <div class="hidden lg:block">
                         <div class="swiper headingnews-desktop">
                             <div class="swiper-wrapper">
                                 @foreach ($beritaPilihan as $berita)
-                                    <div class="swiper-slide">
-                                        <article class="relative group h-[450px] overflow-hidden rounded-2xl shadow-xl">
+                                    <div class="swiper-slide py-0">
+                                        <article
+                                            class="relative group h-[485px] w-full overflow-hidden rounded-[2rem] bg-white border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_20px_45px_rgba(16,185,129,0.08)]">
 
-                                            <img src="{{ asset('storage/' . $berita->gambar) }}"
-                                                class="absolute inset-y-0 right-0 w-[90%] h-full object-cover rounded-xl">
+                                            <div class="absolute inset-y-0 right-0 w-[58%] h-full overflow-hidden">
+                                                <img src="{{ asset('storage/' . $berita->gambar) }}"
+                                                    class="w-full h-full object-cover transition-transform duration-[1500ms] group-hover:scale-105">
+
+                                                <div
+                                                    class="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-transparent z-10">
+                                                </div>
+                                            </div>
 
                                             <div
-                                                class="absolute top-8 left-8 w-[55%] bg-white/95 backdrop-blur-lg p-8 rounded-xl shadow-2xl border border-gray-100 flex flex-col gap-4">
+                                                class="absolute top-0 left-0 w-[48%] h-full bg-white p-10 flex flex-col z-20">
 
-                                                <div class="flex items-center gap-2 text-gray-600 text-sm">
-                                                    <img src="{{ asset('assets/img/logokemenag.png') }}"
-                                                        class="w-5 h-5 opacity-80" alt="">
-                                                    <span class="font-medium text-gray-800">Kemenag News</span>
-                                                    <span class="text-gray-400">•</span>
-                                                    <span class="text-gray-500">
-                                                        {{ \Carbon\Carbon::parse($berita->created_at)->diffForHumans() }}
+                                                <div class="flex items-center gap-3 mb-6">
+                                                    <span
+                                                        class="px-3 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-full uppercase tracking-widest">
+                                                        Berita Utama
+                                                    </span>
+                                                    <span class="text-[11px] text-slate-400 font-medium italic">
+                                                        {{ \Carbon\Carbon::parse($berita->created_at)->translatedFormat('d F Y') }}
                                                     </span>
                                                 </div>
 
-                                                <h1 class="text-3xl font-bold text-gray-900 leading-tight">
-                                                    <a href="{{ route('berita.detail', $berita->slug) }}"
-                                                        class="hover:text-emerald-600 transition-colors">
-                                                        {{ $berita->judul }}
-                                                    </a>
-                                                </h1>
+                                                <div class="mb-4">
+                                                    <h2
+                                                        class="text-[28px] font-black text-slate-900 leading-[1.2] tracking-tight group-hover:text-emerald-600 transition-colors duration-300">
+                                                        <a href="{{ route('berita.detail', $berita->slug) }}"
+                                                            class="line-clamp-2">
+                                                            {{ $berita->judul }}
+                                                        </a>
+                                                    </h2>
+                                                    <div class="w-12 h-1 bg-emerald-500 rounded-full mt-4"></div>
+                                                </div>
 
-                                                <p class="text-gray-700 text-base leading-relaxed line-clamp-3">
-                                                    {{ Str::limit(strip_tags($berita->isi), 200) }}
-                                                </p>
-
-                                                <a href="{{ route('berita.detail', $berita->slug) }}"
-                                                    class="text-emerald-600 font-semibold flex items-center gap-1 text-sm">
-                                                    Read More
-                                                    <i class="fa-solid fa-arrow-right text-xs"></i>
-                                                </a>
+                                                <div class="mb-6">
+                                                    <p class="text-slate-500 text-[15px] leading-relaxed line-clamp-3">
+                                                        {{ Str::limit(strip_tags($berita->isi), 140) }}
+                                                    </p>
+                                                </div>
 
                                                 <div
-                                                    class="text-gray-500 text-sm flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
-                                                    <span>{{ $berita->created_at->format('M d, Y') }}</span>
-                                                    <div class="flex items-center gap-2">
+                                                    class="mt-auto flex items-center justify-between gap-4 pt-6 border-t border-slate-50">
+                                                    <a href="{{ route('berita.detail', $berita->slug) }}"
+                                                        class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl text-xs font-bold transition-all hover:bg-emerald-600 hover:shadow-lg active:scale-95">
+                                                        <span>Baca Selengkapnya</span>
+                                                        <i class="fa-solid fa-arrow-right-long text-[10px]"></i>
+                                                    </a>
+
+                                                    <div class="flex gap-2">
                                                         <button
-                                                            class="text-gray-400 hover:text-gray-600 transition-colors headingnews-prev">
-                                                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                                                            class="w-10 h-10 rounded-lg border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-white hover:text-emerald-600 hover:border-emerald-200 hover:shadow-md transition-all headingnews-prev">
+                                                            <i class="fa-solid fa-chevron-left text-[10px]"></i>
                                                         </button>
                                                         <button
-                                                            class="text-emerald-600 hover:text-emerald-700 transition-colors headingnews-next">
-                                                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                                                            class="w-10 h-10 rounded-lg border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-white hover:text-emerald-600 hover:border-emerald-200 hover:shadow-md transition-all headingnews-next">
+                                                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -164,84 +246,108 @@
                         </div>
                     </div>
 
-
-                    <div class="lg:hidden">
-                        <div class="swiper headingnews-mobile">
-                            <div class="swiper-wrapper">
-                                @foreach ($beritasPilihan as $berita)
-                                    <div class="swiper-slide">
-                                        <article class="relative group h-96 overflow-hidden rounded-xl shadow-lg">
-
-                                            <img src="{{ asset('storage/' . $berita->gambar) }}"
-                                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                                            <div class="absolute inset-0 bg-black/40"></div>
-
-                                            <div
-                                                class="absolute bottom-0 left-0 p-6 flex flex-col justify-end h-full w-full">
-
-                                                <div class="flex items-center gap-2 text-white text-xs mb-2">
-                                                    <span class="font-medium">Kemenag News</span>
-                                                    <span class="text-white/70">•</span>
-                                                    <span class="text-white/70">
-                                                        {{ \Carbon\Carbon::parse($berita->created_at)->diffForHumans() }}
-                                                    </span>
+                    <div class="lg:hidden py-2">
+                        {{-- Tambahkan relative pada container utama --}}
+                        <div class="relative">
+                            <div class="swiper mobileHeroSwiper !px-5 overflow-visible">
+                                <div class="swiper-wrapper">
+                                    @foreach ($beritasPilihan as $berita)
+                                        <div class="swiper-slide !w-[85%]">
+                                            <article
+                                                class="relative h-[48vh] w-full overflow-hidden rounded-[2.5rem] bg-slate-900 shadow-lg">
+                                                <img src="{{ asset('storage/' . $berita->gambar) }}"
+                                                    class="absolute inset-0 w-full h-full object-cover opacity-80"
+                                                    loading="eager">
+                                                <div
+                                                    class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent">
                                                 </div>
 
-                                                <h1 class="text-xl font-bold text-white leading-snug line-clamp-3">
-                                                    <a href="{{ route('berita.detail', $berita->slug) }}"
-                                                        class="hover:text-emerald-600 transition-colors">
-                                                        {{ $berita->judul }}
-                                                    </a>
-                                                </h1>
-
-                                                <a href="{{ route('berita.detail', $berita->slug) }}"
-                                                    class="text-emerald-600 font-semibold flex items-center gap-1 text-sm mt-3">
-                                                    Read More
-                                                    <i class="fa-solid fa-arrow-right text-xs"></i>
-                                                </a>
-
-                                            </div>
-                                        </article>
-                                    </div>
-                                @endforeach
+                                                <div class="absolute inset-0 flex flex-col justify-end p-6 pb-10 z-10">
+                                                    <div class="flex items-center gap-2 mb-3">
+                                                        <img src="https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff"
+                                                            class="w-8 h-8 rounded-full border border-emerald-500 shadow-sm">
+                                                        <div class="flex flex-col text-white">
+                                                            <span class="font-bold text-[11px] leading-none">Admin
+                                                                Kemenag</span>
+                                                            <span
+                                                                class="opacity-70 text-[9px]">{{ \Carbon\Carbon::parse($berita->created_at)->diffForHumans() }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <h2
+                                                        class="text-[1.4rem] font-black text-white leading-tight tracking-tight">
+                                                        <a href="{{ route('berita.detail', $berita->slug) }}"
+                                                            class="line-clamp-3">{{ $berita->judul }}</a>
+                                                    </h2>
+                                                </div>
+                                            </article>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
 
-                            <div class="swiper-pagination headingnews-mobile-pagination mt-4"></div>
+                            {{-- Pagination diletakkan di luar Swiper container tapi di dalam 'relative' --}}
+                            <div class="mobile-hero-pagination flex justify-center items-center gap-1 mt-3"></div>
                         </div>
                     </div>
 
                 </div>
 
-                <aside class="lg:col-span-1 mt-6 lg:mt-0">
-                    <div class="sticky top-20">
-                        <div class="flex items-center justify-between mb-5 pb-3 border-b-2 border-emerald-600">
-                            <h3 class="text-xl font-extrabold text-gray-900">Trending Now</h3>
-                            <i class="fa-solid fa-arrow-trend-up text-emerald-600 text-lg"></i>
+                <aside class="lg:col-span-1 mt-8 lg:mt-0 px-4 lg:px-0">
+                    <div class="sticky top-24">
+                        <div class="relative mb-8">
+                            <h3 class="text-xl font-black text-gray-900 tracking-tight uppercase">
+                                Trending <span class="text-emerald-600">Now</span>
+                            </h3>
+                            <div class="absolute -bottom-2 left-0 w-12 h-1 bg-emerald-600 rounded-full"></div>
+                            <div class="absolute -bottom-2 left-0 w-full h-[1px] bg-gray-100"></div>
                         </div>
 
-                        <div class="space-y-4">
+                        <div class="space-y-8">
                             @foreach ($beritasPilihan as $post)
-                                <article
-                                    class="group flex gap-3 items-start p-2 rounded-lg hover:bg-green-50 transition-colors duration-300">
-                                    <span
-                                        class="flex-shrink-0 text-xl font-black text-emerald-600 group-hover:text-emerald-500 transition-colors duration-300 w-6 text-center">
-                                        {{ $loop->iteration }}
-                                    </span>
-
-                                    <div class="flex-1 min-w-0">
-                                        <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
-                                            {{ $post->kategori->kategori }}
+                                <article class="group relative flex items-start gap-4">
+                                    <div class="flex-shrink-0 relative">
+                                        <span
+                                            class="text-4xl font-black text-transparent stroke-emerald-600 group-hover:opacity-100 transition-opacity duration-500"
+                                            style="-webkit-text-stroke: 1px #059669;">
+                                            {{ $loop->iteration }}
                                         </span>
-                                        <h4
-                                            class="text-base font-bold text-gray-900 mt-0.5 mb-1 group-hover:text-emerald-600 transition-colors duration-300 line-clamp-2">
-                                            <a href="{{ route('berita.detail', $post->slug) }}">{{ $post->judul }}</a>
-                                        </h4>
-                                        <div class="flex items-center justify-between text-xs text-gray-500 mt-1">
-                                            <span>{{ \Carbon\Carbon::parse($post->created_at)->diffForHumans() }}</span>
-                                            <span class="flex items-center">
-                                                <i class="fa-solid fa-eye mr-1 text-xs"></i>
-                                                {{ number_format(rand(1000, 10000)) }}
+                                    </div>
+
+                                    <div class="flex-1 border-b border-gray-50 group-last:border-0">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">
+                                                {{ $post->kategori->kategori }}
                                             </span>
+                                        </div>
+
+                                        <h4
+                                            class="text-[15px] leading-relaxed font-bold text-gray-800 group-hover:text-emerald-600 transition-all duration-300">
+                                            <a href="{{ route('berita.detail', $post->slug) }}"
+                                                class="hover:underline decoration-emerald-200 underline-offset-4">
+                                                {{ $post->judul }}
+                                            </a>
+                                        </h4>
+
+                                        <div class="flex items-center gap-4 mt-3 text-[11px] text-gray-400 font-medium">
+                                            <div class="flex items-center gap-1.5">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                {{ \Carbon\Carbon::parse($post->created_at)->diffForHumans() }}
+                                            </div>
+                                            <div class="flex items-center gap-1.5">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                                {{ number_format(rand(1000, 10000)) }}
+                                            </div>
                                         </div>
                                     </div>
                                 </article>
@@ -253,160 +359,145 @@
         </div>
     </section>
 
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8 md:py-10">
+    <section class="w-full py-4 sm:py-6 bg-[#f0f9f4]">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="relative w-full group">
 
-        <div
-            class="relative w-full
-               h-[120px] sm:h-[180px] md:h-[235px] lg:h-[260px] rounded-2xl shadow-2xl overflow-hidden
-               bg-gradient-to-r from-emerald-50/70 to-white border border-gray-100/50">
+                <div class="overflow-hidden sm:rounded-xl shadow-md border-b sm:border border-gray-100 bg-white">
 
-            <div class="swiper mainBannerSwiper w-full h-full">
-                <div class="swiper-wrapper">
+                    <div class="swiper mainBannerSwiper w-full h-auto">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide w-full">
+                                <img src="{{ asset('assets/img/bannerH1.png') }}" alt="Banner 1"
+                                    class="w-full h-auto object-contain block">
+                            </div>
+                            <div class="swiper-slide w-full">
+                                <img src="{{ asset('assets/img/bannerH2.png') }}" alt="Banner 2"
+                                    class="w-full h-auto object-contain block">
+                            </div>
+                        </div>
 
-                    <div class="swiper-slide">
-                        <img src="{{ asset('assets/img/banner-hab.png') }}" alt="Banner 1"
-                            class="w-full h-full object-contain">
-                    </div>
-
-                    <div class="swiper-slide">
-                        <img src="{{ asset('assets/img/banner-hab.png') }}" alt="Banner 2"
-                            class="w-full h-full object-contain">
-                    </div>
-
-                    <div class="swiper-slide">
-                        <img src="{{ asset('assets/img/banner-hab.png') }}" alt="Banner 3"
-                            class="w-full h-full object-contain">
+                        <div class="swiper-pagination main-banner-pagination !bottom-2"></div>
                     </div>
                 </div>
 
-                <div class="swiper-pagination main-banner-pagination"></div>
+                <button
+                    class="hidden sm:flex main-banner-prev absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full
+               bg-white/90 shadow-lg items-center justify-center transition-all duration-300
+               hover:bg-white border border-gray-100 group">
+                    <i class="fas fa-chevron-left text-gray-500 group-hover:text-emerald-600"></i>
+                </button>
+
+                <button
+                    class="hidden sm:flex main-banner-next absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full
+               bg-white/90 shadow-lg items-center justify-center transition-all duration-300
+               hover:bg-white border border-gray-100 group">
+                    <i class="fas fa-chevron-right text-gray-500 group-hover:text-emerald-600"></i>
+                </button>
             </div>
-
-            <button
-                class="main-banner-prev absolute left-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 md:w-10 md:h-10 rounded-full
-                   bg-white/70 shadow-xl flex items-center justify-center transition-all duration-300
-                   hover:bg-white hover:scale-105 group hidden md:flex">
-                <i
-                    class="fas fa-chevron-left text-emerald-600 group-hover:text-emerald-700 transition-colors text-base"></i>
-            </button>
-
-            <button
-                class="main-banner-next absolute right-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 md:w-10 md:h-10 rounded-full
-                   bg-white/70 shadow-xl flex items-center justify-center transition-all duration-300
-                   hover:bg-white hover:scale-105 group hidden md:flex">
-                <i
-                    class="fas fa-chevron-right text-emerald-600 group-hover:text-emerald-700 transition-colors text-base"></i>
-            </button>
-
         </div>
     </section>
 
     <section class="bg-white py-12 md:py-16 px-4 sm:px-6">
         <div class="container mx-auto max-w-7xl">
 
-            <div class="mb-10 md:mb-12">
-                <div class="flex flex-col items-start">
-                    <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">
-                        Berita Terkini
-                    </h2>
-                    <p class="text-sm md:text-base text-gray-600 max-w-lg">
-                        Berita terkini seputar Kementerian Agama Kabupaten Morotai
-                    </p>
-                    <div class="h-0.5 w-16 bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-full mt-1"></div>
+            <div class="mb-10">
+                <div class="flex items-center justify-between border-b border-gray-200 pb-4">
+                    <div class="flex flex-col">
+                        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">
+                            <span class="flex items-center gap-2">
+                                <span class="text-[#1a202c]">BERITA</span>
+                                <span class="text-[#059669]">TERKINI</span>
+                            </span>
+                            <div class="h-1.5 w-14 bg-[#059669] mt-2 rounded-full"></div>
+                        </h2>
+                    </div>
+
+                    <a href="#"
+                        class="group text-sm font-bold text-[#059669] flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-emerald-100 hover:bg-[#059669] hover:text-white transition-all duration-300">
+                        Lihat Semua
+                        <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </a>
                 </div>
             </div>
 
-
-            <div class="flex flex-col lg:flex-row gap-10">
+            <div class="flex flex-col lg:flex-row gap-12">
 
                 <div class="lg:w-2/3">
 
                     @if ($beritaPopuler)
-                        <div class="mb-10 pb-8 border-b border-gray-100">
+                        <div class="mb-12 pb-10 border-b border-gray-100">
                             <a href="{{ route('berita.detail', $beritaPopuler->slug) }}" class="group block">
 
-                                <div class="mb-3">
-                                    <span class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"
-                                                clip-rule="evenodd" />
-                                        </svg>
+                                <div class="mb-4 flex items-center gap-3">
+                                    <span
+                                        class="bg-emerald-600 text-white text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-md">
                                         Berita Utama
                                     </span>
+                                    <span
+                                        class="text-xs font-bold text-emerald-600 uppercase">{{ $beritaPopuler->kategori->kategori }}</span>
                                 </div>
 
-                                <div class="mb-5">
+                                <div class="mb-6 overflow-hidden rounded-2xl shadow-xl">
                                     <img src="{{ asset('storage/' . $beritaPopuler->gambar) }}"
                                         alt="{{ $beritaPopuler->judul }}"
-                                        class="w-full h-64 md:h-80 object-cover rounded-xl shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                                        class="w-full h-64 md:h-[400px] object-cover group-hover:scale-105 transition-transform duration-700">
                                 </div>
 
                                 <h1
-                                    class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
+                                    class="text-2xl md:text-4xl font-black text-gray-900 mb-4 group-hover:text-emerald-600 transition-colors leading-tight">
                                     {{ $beritaPopuler->judul }}
                                 </h1>
 
-                                <p class="text-gray-600 text-sm md:text-base mb-4 leading-relaxed line-clamp-3">
-                                    {{ Str::limit(strip_tags($beritaPopuler->isi), 150) }}
+                                <p class="text-gray-600 text-sm md:text-lg mb-6 leading-relaxed line-clamp-3">
+                                    {{ Str::limit(strip_tags($beritaPopuler->isi), 180) }}
                                 </p>
 
-                                <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs md:text-sm text-gray-500">
-                                    <div class="flex items-center gap-1.5">
-                                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                        <span class="font-medium">{{ $beritaPopuler->user->name }}</span>
+                                <div
+                                    class="flex flex-wrap items-center gap-6 text-xs md:text-sm text-gray-400 font-medium">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-user-circle text-emerald-500 text-base"></i>
+                                        <span>{{ $beritaPopuler->user->name }}</span>
                                     </div>
-                                    <div class="flex items-center gap-1.5">
-                                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <span class="font-medium">{{ $beritaPopuler->created_at->format('d F Y') }}</span>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-calendar-alt text-emerald-500"></i>
+                                        <span>{{ $beritaPopuler->created_at->format('d F Y') }}</span>
                                     </div>
-                                    <div class="flex items-center gap-1.5">
-                                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <span class="font-medium">{{ $beritaPopuler->created_at->format('H:i') }}
-                                            WIB</span>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-clock text-emerald-500"></i>
+                                        <span>{{ $beritaPopuler->created_at->format('H:i') }} WIB</span>
                                     </div>
                                 </div>
                             </a>
                         </div>
                     @endif
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
                         @foreach ($beritasPopuler as $index => $berita)
                             @if ($index > 0 && $index < 5)
-                                <div class="pb-2">
-                                    <a href="{{ route('berita.detail', $berita->slug) }}" class="group">
-                                        <div class="flex gap-4">
+                                <div class="group">
+                                    <a href="{{ route('berita.detail', $berita->slug) }}" class="flex gap-4">
+                                        <div
+                                            class="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-24 overflow-hidden rounded-xl shadow-sm border border-gray-100">
+                                            <img src="{{ asset('storage/' . $berita->gambar) }}"
+                                                alt="{{ $berita->judul }}"
+                                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                        </div>
 
-                                            <div
-                                                class="flex-shrink-0 w-28 h-20 sm:w-32 sm:h-24 overflow-hidden rounded-lg shadow-sm">
-                                                <img src="{{ asset('storage/' . $berita->gambar) }}"
-                                                    alt="{{ $berita->judul }}"
-                                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                            </div>
-
-                                            <div class="flex-1">
+                                        <div class="flex flex-col justify-between py-1">
+                                            <div>
+                                                <span
+                                                    class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">
+                                                    {{ $berita->kategori->kategori }}
+                                                </span>
                                                 <h3
-                                                    class="text-base font-bold text-gray-900 group-hover:text-emerald-600 transition-colors line-clamp-2 mb-1">
+                                                    class="text-sm sm:text-base font-bold text-gray-900 group-hover:text-emerald-600 transition-colors line-clamp-2 leading-snug mt-1">
                                                     {{ $berita->judul }}
                                                 </h3>
-                                                <div class="flex flex-col text-xs text-gray-500 mt-1">
-                                                    <span
-                                                        class="font-semibold text-emerald-600">{{ $berita->kategori->kategori }}</span>
-                                                    <span class="mt-1">{{ $berita->created_at->format('d F Y') }}</span>
-                                                </div>
                                             </div>
+                                            <span class="text-[11px] text-gray-400 font-medium italic">
+                                                {{ $berita->created_at->diffForHumans() }}
+                                            </span>
                                         </div>
                                     </a>
                                 </div>
@@ -415,54 +506,62 @@
                     </div>
                 </div>
 
-                <div class="lg:w-1/3 mt-6 lg:mt-0">
+                <div class="lg:w-1/3 mt-12 lg:mt-0">
+                    <div class="sticky top-24 space-y-10">
 
-                    <div class="sticky top-20 space-y-10">
-
-                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
-                            <h3 class="font-bold text-xl text-gray-900 mb-4 pb-2 border-b-2 border-emerald-600">Kategori
+                        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3 class="font-black text-lg text-gray-900 mb-6 flex items-center gap-2">
+                                <span class="w-2 h-7 bg-emerald-600 rounded-full"></span>
+                                KATEGORI
                             </h3>
-                            <div class="space-y-2">
+                            <div class="grid grid-cols-1 gap-2">
                                 @foreach ($kategories as $kategori)
                                     <a href="#"
-                                        class="flex justify-between items-center px-3 py-1.5 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 rounded-lg transition-colors">
-                                        <span class="font-medium text-sm">{{ $kategori->kategori }}</span>
+                                        class="flex justify-between items-center px-4 py-2.5 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 rounded-xl transition-all group">
                                         <span
-                                            class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">{{ $kategori->beritas_count }}</span>
+                                            class="font-bold text-sm group-hover:translate-x-1 transition-transform">{{ $kategori->kategori }}</span>
+                                        <span
+                                            class="text-[10px] bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg font-black">
+                                            {{ $kategori->beritas_count }}
+                                        </span>
                                     </a>
                                 @endforeach
                             </div>
                         </div>
 
-                        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                            <h3 class="font-bold text-xl text-gray-900 mb-4 pb-2 border-b-2 border-emerald-600">Berita
-                                Populer</h3>
-                            <div class="space-y-4">
-                                @foreach ($beritasPopuler as $index => $berita)
-                                    <div
-                                        class="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-0 last:pb-0">
+                        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                            <h3 class="font-black text-lg text-gray-900 mb-6 flex items-center gap-2">
+                                <span class="w-2 h-7 bg-emerald-600 rounded-full"></span>
+                                BERITA POPULER
+                            </h3>
+                            <div class="space-y-6">
+                                @foreach ($beritasPopuler->take(5) as $index => $berita)
+                                    <div class="flex items-start gap-4 group">
                                         <div
-                                            class="flex-shrink-0 w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs font-extrabold shadow-md mt-1">
+                                            class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center text-sm font-black group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
                                             {{ $index + 1 }}
                                         </div>
-                                        <div>
+                                        <div class="border-b border-gray-50 pb-4 w-full group-last:border-0">
                                             <a href="{{ route('berita.detail', $berita->slug) }}" class="block">
                                                 <h4
-                                                    class="font-semibold text-sm text-gray-900 hover:text-emerald-700 transition-colors line-clamp-2 mb-0.5">
+                                                    class="font-bold text-sm text-gray-800 hover:text-emerald-600 transition-colors line-clamp-2 leading-relaxed">
                                                     {{ $berita->judul }}
                                                 </h4>
                                             </a>
-                                            <div class="flex items-center gap-2 text-xs text-gray-500">
-                                                <span>{{ $berita->created_at->format('d M') }}</span>
+                                            <div
+                                                class="flex items-center gap-3 mt-2 text-[11px] text-gray-400 font-medium">
+                                                <span class="flex items-center gap-1"><i class="far fa-calendar-alt"></i>
+                                                    {{ $berita->created_at->format('d M') }}</span>
                                                 <span>•</span>
-                                                <span class="font-medium">{{ $berita->dibaca ?? rand(100, 1000) }}x
-                                                    dibaca</span>
+                                                <span class="flex items-center gap-1"><i class="far fa-eye"></i>
+                                                    {{ $berita->dibaca ?? '0' }}x dibaca</span>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -470,125 +569,136 @@
     </section>
 
     <section class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-gradient-to-r from-emerald-50 to-white">
-        <div class="relative">
+        <div class="mb-8 flex items-center justify-between border-b border-gray-100 pb-4">
+            <div class="flex flex-col">
+                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">
+                    <span class="flex items-center gap-2">
+                        <span class="text-[#1a202c]">VIDEO</span>
+                        <span class="text-[#059669]">KEGIATAN</span>
+                    </span>
+                    <div class="h-1.5 w-14 bg-[#059669] mt-2 rounded-full"></div>
+                </h2>
+            </div>
+            <a href="#"
+                class="group text-sm font-bold text-[#059669] flex items-center gap-2 transition-all hover:text-emerald-700">
+                Lainnya
+                <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
 
-            <div class="absolute inset-y-0 left-0 flex items-center z-10 -translate-x-1/2 hidden md:flex">
+        <div class="relative">
+            <div class="absolute inset-y-0 -left-4 md:-left-6 flex items-center z-20 hidden md:flex">
                 <button
-                    class="video-prev bg-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-xl border border-gray-100 transition-all duration-200 hover:bg-emerald-600 hover:text-white group">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5 sm:h-6 sm:w-6 text-gray-800 transition-colors group-hover:text-white"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
+                    class="video-prev bg-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-xl border border-gray-100 transition-all duration-300 hover:bg-emerald-600 text-emerald-600 hover:text-white group">
+                    <i class="fas fa-chevron-left text-lg"></i>
                 </button>
             </div>
 
             <div class="swiper video-slider">
                 <div class="swiper-wrapper">
                     @foreach ($playLists as $playList)
-                        <div class="swiper-slide">
-                            <div class="overflow-hidden group">
-                                <div class="aspect-video w-full relative cursor-pointer video-thumbnail overflow-hidden
-                                        rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300"
-                                    data-video-id="{{ $playList->youtube_id }}" onclick="loadYouTubeIframe(this)">
+                        <div class="swiper-slide py-4">
+                            <div class="relative aspect-video w-full cursor-pointer video-thumbnail overflow-hidden
+                                    rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 group"
+                                data-video-id="{{ $playList->youtube_id }}" onclick="loadYouTubeIframe(this)">
 
-                                    <img src="https://img.youtube.com/vi/{{ $playList->youtube_id }}/maxresdefault.jpg"
-                                        alt="{{ $playList->title }}" class="w-full h-full object-cover lazy"
-                                        loading="lazy">
+                                <img src="https://img.youtube.com/vi/{{ $playList->youtube_id }}/maxresdefault.jpg"
+                                    alt="{{ $playList->title }}"
+                                    class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
 
+                                <div
+                                    class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/50 transition-all duration-300">
                                     <div
-                                        class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-colors">
-                                        <div
-                                            class="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 shadow-lg">
-                                            <i class="fa-solid fa-play text-emerald-600 text-xl pl-0.5"></i>
-                                        </div>
+                                        class="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center shadow-2xl transform scale-90 group-hover:scale-110 transition-all duration-300">
+                                        <i class="fa-solid fa-play text-emerald-600 text-xl pl-1"></i>
                                     </div>
-
-                                    <div
-                                        class="absolute bottom-3 right-3 bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded">
-                                        5:30 </div>
-
                                 </div>
+
+                                <div
+                                    class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-md">
+                                    5:30
+                                </div>
+
                             </div>
                         </div>
                     @endforeach
                 </div>
 
-                <div class="video-pagination mt-8"></div>
+                <div class="video-pagination mt-8 flex justify-center"></div>
             </div>
 
-            <div class="absolute inset-y-0 right-0 flex items-center z-10 translate-x-1/2 hidden md:flex">
+            <div class="absolute inset-y-0 -right-4 md:-right-6 flex items-center z-20 hidden md:flex">
                 <button
-                    class="video-next bg-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-xl border border-gray-100 transition-all duration-200 hover:bg-emerald-600 hover:text-white group">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5 sm:h-6 sm:w-6 text-gray-800 transition-colors group-hover:text-white"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
+                    class="video-next bg-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-xl border border-gray-100 transition-all duration-300 hover:bg-emerald-600 text-emerald-600 hover:text-white group">
+                    <i class="fas fa-chevron-right text-lg"></i>
                 </button>
             </div>
-
         </div>
     </section>
 
     <section class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white">
-        <div class="flex flex-col lg:flex-row gap-10 lg:gap-12">
-
-            <div class="lg:w-2/3">
-
-                <div class="flex items-center justify-between mb-6 pb-2 border-b-2 border-emerald-600">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-                            <i class="fa-solid fa-bullhorn text-emerald-700 text-base"></i>
+        <div class="flex flex-col lg:flex-row gap-10 lg:gap-16">
+            <div class="lg:w-2/3 flex flex-col">
+                <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center shadow-sm border border-emerald-100">
+                            <i class="fa-solid fa-bullhorn text-xl"></i>
                         </div>
-                        <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">
-                            Pengumuman Terbaru
-                        </h2>
+                        <div>
+                            <h2 class="text-2xl md:text-3xl font-black text-[#1a202c] tracking-tight">
+                                PENGUMUMAN <span class="text-emerald-600 uppercase">Terbaru</span>
+                            </h2>
+                            <div class="h-1.5 w-12 bg-emerald-600 mt-1 rounded-full"></div>
+                        </div>
                     </div>
                     <a href="/pengumuman"
-                        class="text-sm font-semibold text-emerald-600 hover:text-emerald-700 flex items-center transition-colors">
+                        class="group text-sm font-bold text-emerald-600 flex items-center gap-2 hover:underline">
                         Lihat Semua
-                        <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
 
-                <div class="space-y-6 mt-8">
+                <div class="space-y-6 flex-1">
                     @if ($pengumumans->count() > 0)
                         @foreach ($pengumumans as $pengumuman)
                             <article
-                                class="group bg-white border border-gray-100 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6">
+                                class="group bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 p-5 md:p-6 border-l-4 border-l-emerald-600">
                                 <div class="flex flex-col md:flex-row md:items-start gap-6">
-
                                     <div class="flex-shrink-0">
-                                        <div class="bg-emerald-600 text-white rounded-lg p-3 text-center w-20 shadow-md">
+                                        <div
+                                            class="bg-emerald-50 text-emerald-700 rounded-xl p-3 text-center w-20 border border-emerald-100 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-500">
                                             <div class="text-2xl font-black leading-none">
-                                                {{ $pengumuman->tanggal->format('d') }}</div>
-                                            <div class="text-xs uppercase font-semibold mt-1">
-                                                {{ $pengumuman->tanggal->format('M') }}</div>
-                                            <div class="text-xs mt-0.5 opacity-80">{{ $pengumuman->tanggal->format('Y') }}
+                                                {{ $pengumuman->tanggal->format('d') }}
+                                            </div>
+                                            <div class="text-[10px] uppercase font-bold mt-1 tracking-widest">
+                                                {{ $pengumuman->tanggal->translatedFormat('M') }}
+                                            </div>
+                                            <div class="text-[10px] mt-0.5 opacity-80 font-medium">
+                                                {{ $pengumuman->tanggal->format('Y') }}
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="flex-1 min-w-0">
                                         <h3
-                                            class="text-xl font-bold text-gray-900 mb-2 group-hover:text-emerald-700 transition-colors line-clamp-2">
+                                            class="text-lg md:text-xl font-bold text-gray-900 mb-2 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-snug">
                                             <a href="#">{{ $pengumuman->judul }}</a>
                                         </h3>
-                                        <p class="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2">
-                                            {{ Str::limit(strip_tags($pengumuman->isi), 120) }}
+                                        <p class="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-2">
+                                            {{ Str::limit(strip_tags($pengumuman->isi), 150) }}
                                         </p>
 
-                                        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
-                                            <div class="flex items-center text-xs font-medium text-gray-500">
-                                                <i class="fa-solid fa-user-circle mr-1.5 text-emerald-500 text-sm"></i>
-                                                <span class="text-gray-700">{{ $pengumuman->penulis }}</span>
+                                        <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+                                            <div class="flex items-center text-xs font-semibold text-gray-400">
+                                                <i class="fa-solid fa-circle-user mr-2 text-emerald-500"></i>
+                                                <span class="uppercase tracking-wider">{{ $pengumuman->penulis }}</span>
                                             </div>
                                             <a href="#"
-                                                class="text-sm font-semibold text-emerald-600 hover:text-emerald-700 flex items-center">
-                                                Baca selengkapnya
+                                                class="text-sm font-bold text-emerald-600 flex items-center group/btn">
+                                                Baca Selengkapnya
                                                 <i
-                                                    class="fa-solid fa-arrow-right ml-2 text-xs transition-transform group-hover:translate-x-1"></i>
+                                                    class="fa-solid fa-chevron-right ml-2 text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -596,263 +706,254 @@
                             </article>
                         @endforeach
                     @else
-                        <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-10 text-center">
+                        <div
+                            class="bg-gray-50 border border-dashed border-gray-200 rounded-2xl p-12 text-center flex-1 flex flex-col justify-center items-center">
                             <div
-                                class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mb-4">
-                                <i class="fa-solid fa-bullhorn text-emerald-700 text-3xl"></i>
+                                class="w-20 h-20 bg-emerald-50 text-emerald-400 rounded-full flex items-center justify-center mb-6">
+                                <i class="fa-solid fa-bullhorn text-3xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">Tidak ada Pengumuman</h3>
-                            <p class="text-gray-500 mb-6">Belum ada pengumuman resmi yang diterbitkan saat ini.</p>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Tidak ada Pengumuman</h3>
+                            <p class="text-gray-500 text-sm max-w-sm mx-auto mb-8 leading-relaxed">Belum ada pengumuman
+                                resmi yang diterbitkan saat ini. Silakan periksa kembali nanti.</p>
                             <a href="/pengumuman"
-                                class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-semibold transition-colors">
-                                <i class="fa-solid fa-refresh mr-2"></i>
-                                Periksa Arsip Pengumuman
+                                class="inline-flex items-center gap-2 text-emerald-600 font-bold hover:bg-emerald-600 hover:text-white px-6 py-2 rounded-full border border-emerald-600 transition-all">
+                                <i class="fa-solid fa-rotate"></i> Periksa Arsip
                             </a>
                         </div>
                     @endif
                 </div>
             </div>
 
-            <div class="lg:w-1/3 mt-6 lg:mt-0">
-                <div class="sticky top-20">
-
-                    <div class="flex items-center justify-between mb-6 pb-2 border-b-2 border-emerald-600">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-                                <i class="fa-solid fa-file-lines text-emerald-700 text-base"></i>
-                            </div>
-                            <h2 class="text-xl md:text-2xl font-extrabold text-gray-900">
-                                Dokumen Terbaru
-                            </h2>
+            <div class="lg:w-1/3 mt-12 lg:mt-0 flex flex-col">
+                <div class="mb-8 pb-4 border-b border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center shadow-sm border border-emerald-100">
+                            <i class="fa-solid fa-file-invoice text-xl"></i>
                         </div>
+                        <h2 class="text-2xl font-black text-[#1a202c] tracking-tight uppercase">Dokumen</h2>
                     </div>
+                </div>
 
-                    <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6">
-                        @if ($dokumens->count() > 0)
-                            <div class="space-y-4 pt-4">
-                                @foreach ($dokumens as $dokumen)
-                                    <div class="flex items-start gap-4 group">
+                <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex-1 flex flex-col">
+                    <div class="p-6 space-y-5 flex-1">
+                        @forelse ($dokumens as $dokumen)
+                            @php
+                                $extension = pathinfo($dokumen->file, PATHINFO_EXTENSION);
+                                $bg_color = 'bg-gray-50';
+                                $text_color = 'text-gray-600';
+                                $icon = 'fa-file';
 
-                                        <div
-                                            class="flex-shrink-0 w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center border border-emerald-100">
-                                            @php
-                                                $extension = pathinfo($dokumen->file, PATHINFO_EXTENSION);
-                                                $icon = 'fa-file';
-                                                $color = 'text-gray-600';
+                                if ($extension == 'pdf') {
+                                    $bg_color = 'bg-red-50';
+                                    $text_color = 'text-red-600';
+                                    $icon = 'fa-file-pdf';
+                                } elseif (in_array($extension, ['doc', 'docx'])) {
+                                    $bg_color = 'bg-blue-50';
+                                    $text_color = 'text-blue-600';
+                                    $icon = 'fa-file-word';
+                                }
+                            @endphp
 
-                                                if ($extension === 'pdf') {
-                                                    $icon = 'fa-file-pdf';
-                                                    $color = 'text-red-600';
-                                                } elseif (in_array($extension, ['doc', 'docx'])) {
-                                                    $icon = 'fa-file-word';
-                                                    $color = 'text-blue-600';
-                                                } elseif (in_array($extension, ['xls', 'xlsx'])) {
-                                                    $icon = 'fa-file-excel';
-                                                    $color = 'text-green-600'; // Tetap hijau untuk Excel
-                                                } elseif (in_array($extension, ['ppt', 'pptx'])) {
-                                                    $icon = 'fa-file-powerpoint';
-                                                    $color = 'text-orange-600';
-                                                } elseif (in_array($extension, ['zip', 'rar', '7z'])) {
-                                                    $icon = 'fa-file-zipper';
-                                                    $color = 'text-yellow-600';
-                                                } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                                    $icon = 'fa-file-image';
-                                                    $color = 'text-purple-600';
-                                                }
-                                            @endphp
-                                            <i class="fa-solid {{ $icon }} {{ $color }} text-lg"></i>
-                                        </div>
-
-                                        <div class="flex-1 min-w-0">
-                                            <h4
-                                                class="text-sm font-semibold text-gray-900 truncate group-hover:text-emerald-700 transition-colors">
-                                                <a href="{{ asset('storage/' . $dokumen->file) }}"
-                                                    target="_blank">{{ $dokumen->judul }}</a>
-                                            </h4>
-                                            <p class="text-xs text-gray-500 mt-1">
-                                                <span class="text-emerald-600 font-medium">{{ $dokumen->kategori }}</span>
-                                                •
-                                                {{ \Carbon\Carbon::parse($dokumen->tanggal)->diffForHumans() }}
-                                            </p>
-                                        </div>
-
-                                        <a href="{{ asset('storage/' . $dokumen->file) }}" target="_blank"
-                                            class="flex-shrink-0 text-emerald-600 hover:text-emerald-700 transition-colors"
-                                            title="Download"
-                                            download="{{ Str::slug($dokumen->judul) }}.{{ $extension ?? 'pdf' }}">
-                                            <i class="fa-solid fa-download text-sm"></i>
-                                        </a>
-
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="text-center py-8 pt-4">
+                            <div
+                                class="group flex items-center gap-4 p-3 rounded-xl hover:bg-emerald-50 transition-all border border-transparent hover:border-emerald-100">
                                 <div
-                                    class="inline-flex items-center justify-center w-14 h-14 bg-emerald-100 rounded-full mb-4">
-                                    <i class="fa-solid fa-file-circle-exclamation text-emerald-700 text-2xl"></i>
+                                    class="w-12 h-12 {{ $bg_color }} {{ $text_color }} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors border border-transparent group-hover:border-emerald-100">
+                                    <i class="fa-solid {{ $icon }} text-xl"></i>
                                 </div>
-                                <h4 class="text-lg font-bold text-gray-700 mb-2">Tidak ada dokumen</h4>
-                                <p class="text-gray-500 text-sm">Belum ada dokumen yang diunggah baru-baru ini.</p>
-                            </div>
-                        @endif
-
-                        <div class="mt-6 pt-4 border-t border-gray-100">
-                            <a href="/dokumen"
-                                class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold rounded-lg transition-colors shadow-sm">
-                                <i class="fa-solid fa-folder-open mr-2"></i>
-                                Lihat Semua Dokumen
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white">
-
-        <div class="flex items-center justify-between mb-8 md:mb-10 pb-2 border-b-2 border-emerald-600">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 md:w-8 md:h-8 bg-emerald-600 rounded-lg flex items-center justify-center shadow-md">
-                    <i class="fa-solid fa-camera-retro text-white text-sm md:text-base"></i>
-                </div>
-                <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">
-                    Galeri Desain
-                </h2>
-            </div>
-            <a href="/galeri"
-                class="text-base font-semibold text-emerald-600 hover:text-emerald-700 flex items-center transition-colors">
-                Lihat Semua
-                <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
-            </a>
-        </div>
-
-        <div class="relative">
-
-            <div class="swiper gallerySwiper">
-                <div class="swiper-wrapper">
-
-                    @foreach ($galeries as $design)
-                        <div class="swiper-slide">
-                            <div class="rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 group">
-                                <a href="#"
-                                    class="block bg-white rounded-xl overflow-hidden border border-gray-100">
-
-                                    <div class="relative pt-[125%] overflow-hidden">
-                                        <img src="{{ asset('storage/' . $design->gambar) }}"
-                                            alt="{{ $design->caption }}"
-                                            class="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                            loading="lazy">
+                                <div class="flex-1 min-w-0">
+                                    <a href="{{ asset('storage/' . $dokumen->file) }}" target="_blank" class="block">
+                                        <h4
+                                            class="text-sm font-bold text-gray-900 truncate group-hover:text-emerald-700 transition-colors mb-1">
+                                            {{ $dokumen->judul }}
+                                        </h4>
+                                    </a>
+                                    <div
+                                        class="flex items-center gap-2 text-[11px] text-gray-400 font-semibold uppercase tracking-tighter">
+                                        <span class="text-emerald-600">{{ $dokumen->kategori }}</span>
+                                        <span>•</span>
+                                        <span>{{ \Carbon\Carbon::parse($dokumen->tanggal)->diffForHumans() }}</span>
                                     </div>
-
-                                    <div class="p-3 text-center">
-                                        <h3
-                                            class="text-sm font-semibold text-gray-800 truncate group-hover:text-emerald-600 transition-colors">
-                                            {{ $design->caption }}
-                                        </h3>
-                                    </div>
+                                </div>
+                                <a href="{{ asset('storage/' . $dokumen->file) }}" download
+                                    class="text-gray-300 hover:text-emerald-600 transition-colors">
+                                    <i class="fa-solid fa-circle-down text-lg"></i>
                                 </a>
                             </div>
-                        </div>
-                    @endforeach
+                        @empty
+                            <div class="text-center py-10">
+                                <i class="fa-solid fa-file-circle-xmark text-4xl text-gray-200 mb-4 block"></i>
+                                <p class="text-gray-400 text-sm">Belum ada dokumen.</p>
+                            </div>
+                        @endforelse
+                    </div>
 
+                    <div class="p-6 bg-gray-50/50 mt-auto">
+                        <a href="/dokumen"
+                            class="flex items-center justify-center gap-2 w-full py-3 bg-emerald-100 text-emerald-800 font-bold rounded-xl hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
+                            <i class="fa-solid fa-folder-open text-xs"></i>
+                            LIHAT SEMUA DOKUMEN
+                        </a>
+                    </div>
                 </div>
-
-                <div class="gallery-pagination mt-6"></div>
             </div>
-
-            <button
-                class="gallery-prev absolute left-0 top-1/2 -mt-10 transform -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 rounded-full
-               bg-white/70 shadow-lg flex items-center justify-center hover:bg-white hover:opacity-100
-               transition-all duration-300 z-10 opacity-90 hidden md:flex">
-                <i class="fa-solid fa-chevron-left text-base md:text-lg text-emerald-600"></i>
-            </button>
-
-            <button
-                class="gallery-next absolute right-0 top-1/2 -mt-10 transform -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 rounded-full
-               bg-white/70 shadow-lg flex items-center justify-center hover:bg-white hover:opacity-100
-               transition-all duration-300 z-10 opacity-90 hidden md:flex">
-                <i class="fa-solid fa-chevron-right text-base md:text-lg text-emerald-600"></i>
-            </button>
-
         </div>
     </section>
 
     <section class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white">
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-14">
 
             @foreach ($beritasKategoriPopuler as $kategori)
-                <div class="category-column">
+                <div class="category-column flex flex-col h-full">
 
-                    <div class="flex items-center justify-between mb-6 pb-2 border-b-2 border-emerald-600">
-                        <h3 class="text-xl font-extrabold text-gray-900 tracking-tight relative">
-                            {{ strtoupper($kategori->kategori) }}
-                        </h3>
+                    <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+                        <div class="flex flex-col">
+                            <h3 class="text-lg font-black text-[#1a202c] tracking-wider uppercase">
+                                {{ $kategori->kategori }}
+                            </h3>
+                            <div class="h-1 w-10 bg-emerald-600 mt-1.5 rounded-full"></div>
+                        </div>
                         <a href="#"
-                            class="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center">
+                            class="group text-[11px] font-bold text-emerald-600 flex items-center gap-1 uppercase tracking-widest hover:text-emerald-700 transition-colors">
                             Lainnya
-                            <i class="fa-solid fa-arrow-right ml-1 text-xs"></i>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                         </a>
                     </div>
 
-                    <div class="space-y-6">
-
+                    <div class="flex-1 space-y-8">
                         @if ($kategori->beritas->count() > 0)
                             @php $primaryPost = $kategori->beritas->first(); @endphp
 
-                            <article class="primary-post group pb-6 border-b border-gray-100">
-                                <a href="{{ route('berita.detail', $primaryPost->slug) }}"
-                                    class="block overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg">
-                                    <img src="{{ asset('storage/' . $primaryPost->gambar) }}"
-                                        alt="{{ $primaryPost->judul }}"
-                                        class="w-full object-cover aspect-video transform group-hover:scale-[1.05] transition-transform duration-500">
+                            <article class="group">
+                                <a href="{{ route('berita.detail', $primaryPost->slug) }}" class="block">
+                                    <div
+                                        class="relative aspect-video overflow-hidden rounded-2xl shadow-md border border-gray-100 mb-4">
+                                        <img src="{{ asset('storage/' . $primaryPost->gambar) }}"
+                                            alt="{{ $primaryPost->judul }}"
+                                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+
+                                        <div
+                                            class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                                        </div>
+                                    </div>
+
+                                    <h4
+                                        class="text-lg md:text-xl font-extrabold text-gray-900 leading-tight group-hover:text-emerald-600 transition-colors line-clamp-3">
+                                        {{ $primaryPost->judul }}
+                                    </h4>
+
+                                    <div
+                                        class="mt-3 flex items-center gap-3 text-[11px] text-gray-400 font-bold uppercase tracking-tighter">
+                                        <span class="flex items-center gap-1.5">
+                                            <i class="fa-regular fa-calendar-alt text-emerald-500 text-xs"></i>
+                                            {{ \Carbon\Carbon::parse($primaryPost->created_at)->translatedFormat('l, d F Y') }}
+                                        </span>
+                                    </div>
                                 </a>
-
-                                <h4
-                                    class="mt-4 text-xl font-bold text-gray-900 leading-snug group-hover:text-emerald-600 transition-colors line-clamp-3">
-                                    <a
-                                        href="{{ route('berita.detail', $primaryPost->slug) }}">{{ $primaryPost->judul }}</a>
-                                </h4>
-
-                                <p class="text-sm text-gray-500 mt-1">
-                                    <i class="fa-regular fa-clock text-xs mr-1 text-emerald-500"></i>
-                                    {{ \Carbon\Carbon::parse($primaryPost->created_at)->translatedFormat('l, d F Y') }}
-                                </p>
                             </article>
                         @endif
 
-                        <div class="space-y-4">
-                            @foreach ($kategori->beritas->slice(1) as $secondaryPost)
-                                <article
-                                    class="secondary-post flex gap-4 items-start pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
+                        <div class="space-y-5">
+                            @foreach ($kategori->beritas->slice(1, 3) as $secondaryPost)
+                                <article class="group flex gap-4 items-center py-2">
                                     <a href="{{ route('berita.detail', $secondaryPost->slug) }}"
-                                        class="flex-shrink-0 w-24 h-16 sm:w-28 sm:h-20 overflow-hidden rounded-md shadow-md">
+                                        class="flex-shrink-0 w-24 h-20 overflow-hidden rounded-xl shadow-sm border border-gray-50">
                                         <img src="{{ asset('storage/' . $secondaryPost->gambar) }}"
                                             alt="{{ $secondaryPost->judul }}"
-                                            class="w-full h-full object-cover transform hover:scale-[1.08] transition-transform duration-300">
+                                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
                                     </a>
 
                                     <div class="flex-1 min-w-0">
                                         <h4
-                                            class="text-sm font-semibold text-gray-800 leading-snug group-hover:text-emerald-600 transition-colors line-clamp-3">
-                                            <a
-                                                href="{{ route('berita.detail', $secondaryPost->slug) }}">{{ $secondaryPost->judul }}</a>
+                                            class="text-sm font-bold text-gray-800 leading-snug group-hover:text-emerald-600 transition-colors line-clamp-2">
+                                            <a href="{{ route('berita.detail', $secondaryPost->slug) }}">
+                                                {{ $secondaryPost->judul }}
+                                            </a>
                                         </h4>
-                                        <p class="text-xs text-gray-500 mt-1">
-                                            <i class="fa-regular fa-calendar text-xs mr-1 text-emerald-500"></i>
+                                        <div
+                                            class="text-[10px] text-gray-400 font-semibold mt-1.5 flex items-center gap-1 uppercase">
+                                            <i class="fa-regular fa-clock text-emerald-500"></i>
                                             {{ \Carbon\Carbon::parse($secondaryPost->created_at)->translatedFormat('d M Y') }}
-                                        </p>
+                                        </div>
                                     </div>
                                 </article>
                             @endforeach
                         </div>
-
                     </div>
+
+                    <div class="mt-8 border-b border-gray-50 md:hidden"></div>
                 </div>
             @endforeach
 
+        </div>
+    </section>
+
+    <section class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white overflow-hidden">
+
+        <div class="mb-10 flex items-center justify-between border-b border-gray-100 pb-4">
+            <div class="flex flex-col">
+                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">
+                    <span class="flex items-center gap-2">
+                        <span class="text-[#1a202c]">GALERI</span>
+                        <span class="text-[#059669]">DESAIN</span>
+                    </span>
+                    <div class="h-1.5 w-14 bg-[#059669] mt-2 rounded-full"></div>
+                </h2>
+            </div>
+            <a href="/galeri" class="group text-sm font-bold text-[#059669] flex items-center gap-2 hover:underline">
+                Lihat Semua
+                <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+
+        <div class="relative group/nav px-2">
+            <button
+                class="gallery-prev absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-emerald-600 transition-all duration-300 hover:bg-emerald-600 hover:text-white opacity-0 group-hover/nav:opacity-100 hidden md:flex">
+                <i class="fa-solid fa-chevron-left text-lg"></i>
+            </button>
+
+            <div class="swiper gallerySwiper">
+                <div class="swiper-wrapper">
+                    @foreach ($galeries as $design)
+                        <div class="swiper-slide py-4">
+                            <div
+                                class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 border border-gray-100">
+
+                                <div class="relative aspect-[3/4] overflow-hidden cursor-pointer">
+                                    <img src="{{ asset('storage/' . $design->gambar) }}" alt="{{ $design->caption }}"
+                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        loading="lazy">
+
+                                    <div
+                                        class="absolute inset-0 bg-emerald-900/10 group-hover:bg-emerald-900/40 transition-all duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                        <div
+                                            class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 text-white">
+                                            <i class="fa-solid fa-expand"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 bg-white text-center">
+                                    <h3
+                                        class="text-sm font-bold text-gray-800 line-clamp-2 min-h-[2.5rem] group-hover:text-emerald-600 transition-colors">
+                                        {{ $design->caption }}
+                                    </h3>
+                                    <div class="mt-2 text-[10px] font-bold text-emerald-600/50 uppercase tracking-widest">
+                                        Media Informasi
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="gallery-pagination mt-10 flex justify-center"></div>
+            </div>
+
+            <button
+                class="gallery-next absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-emerald-600 transition-all duration-300 hover:bg-emerald-600 hover:text-white opacity-0 group-hover/nav:opacity-100 hidden md:flex">
+                <i class="fa-solid fa-chevron-right text-lg"></i>
+            </button>
         </div>
     </section>
 
@@ -1055,20 +1156,23 @@
                     prevEl: '.headingnews-prev',
                 },
             });
-
-            const headingNewsMobile = new Swiper('.headingnews-mobile', {
-                slidesPerView: 1,
-                spaceBetween: 0,
+            const mobileHeroSwiper = new Swiper('.mobileHeroSwiper', {
                 loop: true,
-                speed: 500, // Lebih cepat di mobile
-                effect: 'fade', // Gunakan fade untuk tampilan mobile yang bersih
+                speed: 800, // Transisi halus
+                effect: 'slide',
+
                 autoplay: {
-                    delay: 4000,
+                    delay: 4500,
                     disableOnInteraction: false,
                 },
+                slidesPerView: 'auto',
+                spaceBetween: 16,
+                grabCursor: true,
                 pagination: {
-                    el: '.headingnews-mobile-pagination',
+                    el: '.mobile-hero-pagination',
                     clickable: true,
+                    // Matikan dynamicBullets jika jumlah slide sedikit agar posisi tetap di tengah
+                    dynamicBullets: false,
                 },
             });
 

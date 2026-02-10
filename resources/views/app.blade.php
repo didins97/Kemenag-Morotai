@@ -126,6 +126,57 @@
         .animate-soft-pulse {
             animation: soft-pulse 3s ease-in-out infinite;
         }
+
+        #backToTop {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            /* Memberikan efek transisi smooth saat muncul */
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.3s ease;
+        }
+
+        #backToTop.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        #backToTop:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Mencegah scroll saat loading */
+        body.loading {
+            overflow: hidden;
+        }
+
+        /* Animasi Progress Bar custom */
+        #preloader-bar {
+            animation: loading-progress 2s ease-in-out infinite;
+        }
+
+        @keyframes loading-progress {
+            0% {
+                width: 0%;
+                margin-left: 0%;
+            }
+
+            50% {
+                width: 70%;
+                margin-left: 15%;
+            }
+
+            100% {
+                width: 0%;
+                margin-left: 100%;
+            }
+        }
+
+        /* Transisi halus saat hilang */
+        .preloader-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 
     @yield('css')
@@ -134,8 +185,24 @@
 
 <body class="font-poppins bg-gray-50 antialiased text-gray-800 flex flex-col min-h-screen">
 
-    <div id="page-loader">
-        <div class="loader"></div>
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white transition-opacity duration-500">
+        <div class="relative flex flex-col items-center">
+            <div class="relative mb-6">
+                <div class="absolute inset-0 rounded-full bg-emerald-500/20 animate-ping"></div>
+                <img src="{{ asset('assets/img/logokemenag.png') }}" alt="Logo Kemenag"
+                    class="relative w-24 h-24 object-contain">
+            </div>
+
+            <div class="text-center">
+                <h2 class="text-lg font-bold text-slate-800 tracking-tight">KEMENAG MOROTAI</h2>
+                <p class="text-[10px] font-medium text-emerald-600 uppercase tracking-[0.3em] mt-1">Ikhlas Beramal</p>
+            </div>
+
+            <div class="w-48 h-1 bg-slate-100 rounded-full mt-8 overflow-hidden">
+                <div id="preloader-bar" class="h-full bg-emerald-600 w-0 transition-all duration-300 ease-out"></div>
+            </div>
+        </div>
     </div>
 
     {{-- Header --}}
@@ -149,10 +216,32 @@
     {{-- Footer --}}
     @include('footer')
 
+    {{-- scrool to top --}}
+    <button id="backToTop"
+        class="fixed bottom-6 right-6 z-50 hidden bg-[#006a4e] text-white w-12 h-12 rounded-full shadow-lg hover:bg-[#00523d] transition-all duration-300 flex items-center justify-center animate-bounce-slow">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    {{-- Pop-up Gratifikasi --}}
+    <div id="gratifikasiModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/70 px-4">
+        <div class="relative bg-white rounded-2xl overflow-hidden max-w-lg w-full shadow-2xl animate-soft-pulse">
+            <button onclick="closeModal()"
+                class="absolute top-3 right-3 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center text-gray-800 hover:bg-white z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <a href="https://kemenagmorotai.id/" target="_blank" onclick="closeModal()">
+                <img src="{{ asset('assets/img/ptsp.png') }}" alt="Banner Tolak Gratifikasi"
+                    class="w-full h-auto object-cover">
+            </a>
+
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="{{ asset('assets/js/banner.js') }}"></script>
     <script>
-        // Initialize AOS
+        // ==== Script untuk Modal Pop-up Gratifikasi dengan Session ====
         AOS.init({
             duration: 600,
             once: true
@@ -160,13 +249,76 @@
 
         // Page Loader
         window.addEventListener('load', function() {
-            const loader = document.getElementById('page-loader');
+            const preloader = document.getElementById('preloader');
+            const body = document.body;
+
+            // Tambahkan class loading awal
+            body.classList.add('loading');
+
+            // Beri sedikit delay agar transisi tidak terlalu kaget (opsional)
             setTimeout(() => {
-                loader.style.opacity = '0';
+                preloader.classList.add('preloader-hidden');
+                body.classList.remove('loading');
+
+                // Hapus elemen dari DOM setelah transisi selesai agar tidak berat
                 setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 300);
-            }, 500);
+                    preloader.style.display = 'none';
+                }, 500);
+            }, 1000); // 1 detik loading
+
+            const modal = document.getElementById('gratifikasiModal');
+            const storageKey = 'hasSeenGratifikasiPopUp';
+
+            // Cek apakah user sudah pernah menutup modal sebelumnya
+            const hasSeen = localStorage.getItem(storageKey);
+
+            if (!hasSeen) {
+                // Beri sedikit delay (misal 1.5 detik) agar loading page selesai dulu baru muncul pop-up
+                setTimeout(() => {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                }, 1500);
+            }
+        });
+
+        function closeModal() {
+            const modal = document.getElementById('gratifikasiModal');
+            const storageKey = 'hasSeenGratifikasiPopUp';
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+
+            // Simpan ke sesi lokal agar tidak muncul lagi di masa depan
+            localStorage.setItem(storageKey, 'true');
+        }
+
+        // Menutup modal jika klik di area hitam (overlay)
+        window.onclick = function(event) {
+            const modal = document.getElementById('gratifikasiModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        const backToTopBtn = document.getElementById("backToTop");
+
+        window.addEventListener("scroll", function() {
+            // Tombol muncul jika user scroll lebih dari 300px ke bawah
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.remove("hidden");
+                // Tambahkan delay sedikit agar class hidden hilang dulu baru opacity jalan
+                setTimeout(() => backToTopBtn.classList.add("show"), 10);
+            } else {
+                backToTopBtn.classList.remove("show");
+                setTimeout(() => backToTopBtn.classList.add("hidden"), 300);
+            }
+        });
+
+        backToTopBtn.addEventListener("click", function() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth" // Efek scroll halus ke atas
+            });
         });
     </script>
 

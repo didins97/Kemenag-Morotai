@@ -162,125 +162,118 @@
     </div>
 
     <div id="mobile-overlay"
-        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-100 hidden md:hidden transition-opacity duration-300 opacity-0">
+        class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[100] hidden md:hidden transition-opacity duration-300 opacity-0"
+        onclick="toggleMobileMenu()">
     </div>
 
     <div id="mobile-menu"
-        class="fixed top-0 left-0 w-80 max-w-[80vw] h-full
-                transform -translate-x-full transition-transform duration-500 ease-in-out
-                md:hidden z-[105] shadow-2xl bg-white overflow-y-auto">
+        class="fixed top-0 left-0 w-[80vw] max-w-[320px] h-full transform -translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] md:hidden z-[105] bg-white flex flex-col shadow-2xl">
 
-        <div class="py-4 px-4 border-b border-gray-100 bg-emerald-600">
-            <h4 class="text-lg font-bold text-white">Menu Navigasi</h4>
-            <p class="text-xs text-emerald-100">Kemenag Kabupaten Pulau Morotai</p>
+        <div class="px-6 pt-10 pb-6 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <img src="{{ asset('assets/img/logokemenag.png') }}" class="h-10 w-auto" alt="Logo Kemenag">
+                <button onclick="toggleMobileMenu()"
+                    class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div>
+                <h4 class="text-xl font-black text-slate-900 leading-none">Menu Utama</h4>
+                <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-[0.2em] mt-2">Kabupaten Pulau
+                    Morotai</p>
+            </div>
         </div>
 
-        <div class="p-4 space-y-1">
+        <div class="flex-1 overflow-y-auto px-4 pb-8">
 
-            <a href="/"
-                class="block px-3 py-2 text-gray-800 text-base font-semibold hover:bg-emerald-50 rounded-lg transition duration-150">
-                <i class="fa-solid fa-home w-4 mr-2 text-emerald-600"></i> Beranda
-            </a>
+            <div class="px-3 mb-2 mt-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Utama</div>
 
-            <div class="border-t border-gray-100 mt-2 pt-2">
-                <button
-                    class="w-full text-left px-3 py-2 text-gray-800 text-base font-semibold flex justify-between items-center hover:bg-emerald-50 rounded-lg transition duration-150"
-                    onclick="toggleMobileSubmenu('profile-mobile')">
-                    <span class="flex items-center"><i class="fa-solid fa-user-tie w-4 mr-2 text-emerald-600"></i>
-                        Profil</span>
-                    <svg class="w-4 h-4 ml-1 transform transition duration-300 text-emerald-500"
-                        id="profile-mobile-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                        </path>
-                    </svg>
-                </button>
-                <div id="profile-mobile" class="hidden pl-4 pb-2 space-y-1 bg-gray-50 rounded-b-lg">
-                    <a href="{{ route('profile.sejarah') }}"
-                        class="block px-4 py-1.5 text-sm text-gray-700 hover:bg-emerald-100 rounded transition duration-150">Sejarah</a>
-                    <a href="{{ route('profile.visi-misi') }}"
-                        class="block px-4 py-1.5 text-sm text-gray-700 hover:bg-emerald-100 rounded transition duration-150">Visi
-                        & Misi</a>
-                    <a href="{{ route('profile.tugas-fungsi') }}"
-                        class="block px-4 py-1.5 text-sm text-gray-700 hover:bg-emerald-100 rounded transition duration-150">Tugas
-                        & Fungsi</a>
-                    <a href="{{ route('profile.struktur-organisasi') }}"
-                        class="block px-4 py-1.5 text-sm text-gray-700 hover:bg-emerald-100 rounded transition duration-150">Struktur
-                        Organisasi</a>
+            <nav class="space-y-1">
+                <a href="/"
+                    class="flex items-center px-3 py-3 text-slate-700 font-bold hover:bg-slate-50 rounded-xl transition-all group">
+                    <i
+                        class="fa-solid fa-house-user w-6 text-emerald-500 group-hover:scale-110 transition-transform"></i>
+                    <span class="ml-3 text-[15px]">Beranda</span>
+                </a>
 
-                    <div class="pl-2 border-t border-gray-100 pt-1">
-                        <button
-                            class="w-full text-left px-2 py-1.5 text-sm text-gray-700 font-medium flex justify-between items-center hover:bg-emerald-100 rounded transition duration-150"
-                            onclick="toggleMobileSubmenu('unitkerja-mobile')">
-                            Unit Kerja
-                            <svg class="w-3 h-3 ml-1 transform transition duration-300 text-emerald-500"
-                                id="unitkerja-mobile-arrow" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7"></path>
-                            </svg>
+                <div class="space-y-1">
+                    <button onclick="toggleMobileSubmenu('profile-modern')"
+                        class="w-full flex items-center justify-between px-3 py-3 text-slate-700 font-bold hover:bg-slate-50 rounded-xl transition-all group">
+                        <div class="flex items-center">
+                            <i
+                                class="fa-solid fa-building-columns w-6 text-emerald-500 group-hover:scale-110 transition-transform"></i>
+                            <span class="ml-3 text-[15px]">Profil</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-300 transition-transform"
+                            id="profile-modern-arrow"></i>
+                    </button>
+                    <div id="profile-modern"
+                        class="hidden pl-10 pr-2 space-y-1 overflow-hidden transition-all duration-300">
+                        <a href="{{ route('profile.sejarah') }}"
+                            class="block py-2 text-[14px] text-slate-500 hover:text-emerald-600">Sejarah</a>
+                        <a href="{{ route('profile.visi-misi') }}"
+                            class="block py-2 text-[14px] text-slate-500 hover:text-emerald-600">Visi & Misi</a>
+
+                        <button onclick="toggleMobileSubmenu('unit-modern')"
+                            class="w-full text-left py-2 text-[14px] text-slate-700 font-bold flex items-center justify-between">
+                            Unit Kerja <i class="fa-solid fa-plus text-[8px]" id="unit-modern-arrow"></i>
                         </button>
-                        <div id="unitkerja-mobile" class="hidden pl-2 space-y-1">
+                        <div id="unit-modern" class="hidden pl-4 space-y-2 border-l border-slate-100 ml-1">
                             @foreach ($unitKerjas as $unit)
                                 <a href="{{ route('profile.unit-kerja', $unit->slug) }}"
-                                    class="block px-4 py-1 text-xs text-gray-600 hover:bg-emerald-200 rounded transition duration-150">{{ $unit->nama_unit }}</a>
+                                    class="block text-[13px] text-slate-400 hover:text-emerald-500">{{ $unit->nama_unit }}</a>
                             @endforeach
                         </div>
                     </div>
                 </div>
-            </div>
+            </nav>
 
-            <a href="{{ route('berita.index') }}"
-                class="block px-3 py-2 text-gray-800 text-base font-semibold hover:bg-emerald-50 rounded-lg transition duration-150 border-t border-gray-100 mt-2 pt-2">
-                <i class="fa-solid fa-newspaper w-4 mr-2 text-emerald-600"></i> Berita
-            </a>
+            <div class="px-3 mb-2 mt-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Informasi &
+                Layanan</div>
 
-            <div class="border-t border-gray-100 mt-2 pt-2">
-                <button
-                    class="w-full text-left px-3 py-2 text-gray-800 text-base font-semibold flex justify-between items-center hover:bg-emerald-50 rounded-lg transition duration-150"
-                    onclick="toggleMobileSubmenu('layanan-mobile')">
-                    <span class="flex items-center"><i class="fa-solid fa-headset w-4 mr-2 text-emerald-600"></i>
-                        Layanan Publik</span>
-                    <svg class="w-4 h-4 ml-1 transform transition duration-300 text-emerald-500"
-                        id="layanan-mobile-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                        </path>
-                    </svg>
+            <nav class="space-y-1">
+                <a href="{{ route('berita.index') }}"
+                    class="flex items-center px-3 py-3 text-slate-700 font-bold hover:bg-slate-50 rounded-xl transition-all group">
+                    <i
+                        class="fa-solid fa-newspaper w-6 text-emerald-500 group-hover:scale-110 transition-transform"></i>
+                    <span class="ml-3 text-[15px]">Berita</span>
+                </a>
+
+                <button onclick="toggleMobileSubmenu('layanan-modern')"
+                    class="w-full flex items-center justify-between px-3 py-3 text-slate-700 font-bold hover:bg-slate-50 rounded-xl transition-all group">
+                    <div class="flex items-center">
+                        <i
+                            class="fa-solid fa-fingerprint w-6 text-emerald-500 group-hover:scale-110 transition-transform"></i>
+                        <span class="ml-3 text-[15px]">Layanan Publik</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-300 transition-transform"
+                        id="layanan-modern-arrow"></i>
                 </button>
-                <div id="layanan-mobile" class="hidden pl-4 pb-2 space-y-1 bg-gray-50 rounded-b-lg">
+                <div id="layanan-modern" class="hidden pl-10 pr-2 space-y-1">
                     <a href="{{ route('layanan.index') }}"
-                        class="block px-4 py-1.5 text-sm text-gray-700 hover:bg-emerald-100 rounded transition duration-150">Pelayanan
-                        Terpadu Satu Pintu (PTSP)</a>
-                    <a href="#"
-                        class="block px-4 py-1.5 text-sm text-gray-700 hover:bg-emerald-100 rounded transition duration-150">Index
-                        Kepuasan Masyarakat (IKM)</a>
+                        class="block py-2 text-[14px] text-slate-500 hover:text-emerald-600">PTSP Online</a>
                 </div>
+
+                <a href="{{ route('pengaduan.index') }}"
+                    class="flex items-center px-3 py-3 text-slate-700 font-bold hover:bg-slate-50 rounded-xl transition-all group">
+                    <i
+                        class="fa-solid fa-shield-heart w-6 text-emerald-500 group-hover:scale-110 transition-transform"></i>
+                    <span class="ml-3 text-[15px]">Pengaduan</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-6 bg-slate-50 mt-auto">
+            <div class="flex justify-center gap-6 text-slate-400">
+                <a href="#" class="hover:text-emerald-600 transition-colors"><i
+                        class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-emerald-600 transition-colors"><i
+                        class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-emerald-600 transition-colors"><i
+                        class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="hover:text-emerald-600 transition-colors"><i
+                        class="fa-brands fa-whatsapp"></i></a>
             </div>
-
-            <div class="border-t border-gray-100 mt-2 pt-2">
-                <button
-                    class="w-full text-left px-3 py-2 text-gray-800 text-base font-semibold flex justify-between items-center hover:bg-emerald-50 rounded-lg transition duration-150"
-                    onclick="toggleMobileSubmenu('data-mobile')">
-                    <span class="flex items-center"><i class="fa-solid fa-database w-4 mr-2 text-emerald-600"></i>
-                        Data & Informasi</span>
-                    <svg class="w-4 h-4 ml-1 transform transition duration-300 text-emerald-500"
-                        id="data-mobile-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                        </path>
-                    </svg>
-                </button>
-                <div id="data-mobile" class="hidden pl-4 pb-2 space-y-1 bg-gray-50 rounded-b-lg">
-                    @foreach ($informasi as $info)
-                        <a href="{{ route('informasi.detail', $info->slug) }}"
-                            class="block px-4 py-1.5 text-sm text-gray-700 hover:bg-emerald-100 rounded transition duration-150">{{ $info->judul }}</a>
-                    @endforeach
-                </div>
-            </div>
-
-            <a href="{{ route('pengaduan.index') }}"
-                class="block px-3 py-2 text-gray-800 text-base font-semibold hover:bg-emerald-50 rounded-lg transition duration-150 border-t border-gray-100 mt-2 pt-2">
-                <i class="fa-solid fa-comments w-4 mr-2 text-emerald-600"></i> Pengaduan Masyarakat
-            </a>
-
         </div>
     </div>
 </nav>
