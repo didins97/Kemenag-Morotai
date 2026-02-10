@@ -22,17 +22,17 @@
                 <div>
                     <h4 class="text-yellow-400 mb-3 font-semibold text-base border-b border-emerald-600/50 pb-1 w-fit">Ikuti Kami</h4>
                     <div class="flex space-x-4 text-xl">
-                        <a href="#" class="text-emerald-200 hover:text-yellow-300 transition duration-200 hover:scale-110">
+                        <a href="https://www.facebook.com/KemenagMorotai" class="text-emerald-200 hover:text-yellow-300 transition duration-200 hover:scale-110">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="#" class="text-emerald-200 hover:text-yellow-300 transition duration-200 hover:scale-110">
+                        <a href="https://www.instagram.com/kemenagmorotai/" class="text-emerald-200 hover:text-yellow-300 transition duration-200 hover:scale-110">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="#" class="text-emerald-200 hover:text-yellow-300 transition duration-200 hover:scale-110">
+                        <a href="https://www.youtube.com/@humaskemenagmorotai?si=4LBHYiuYcAFvvmzm" class="text-emerald-200 hover:text-yellow-300 transition duration-200 hover:scale-110">
                             <i class="fab fa-youtube"></i>
                         </a>
-                        <a href="#" class="text-emerald-200 hover:text-yellow-300 transition duration-200 hover:scale-110">
-                            <i class="fab fa-twitter"></i>
+                        <a href="https://www.tiktok.com/@kemenagmorotai?_r=1&_t=ZS-92cZPyB6gmC" class="text-emerald-200 hover:text-yellow-300 transition duration-200 hover:scale-110">
+                            <i class="fab fa-tiktok"></i>
                         </a>
                     </div>
                 </div>
@@ -42,23 +42,23 @@
                 <h3 class="text-lg font-bold border-b border-emerald-500 pb-2">Navigasi Utama</h3>
                 <ul class="space-y-3 text-sm text-emerald-100">
                     <li>
-                        <a href="#" class="flex items-center gap-2 hover:text-yellow-300 transition duration-150">
+                        <a href="{{ route('beranda') }}" class="flex items-center gap-2 hover:text-yellow-300 transition duration-150">
                             <i class="fas fa-chevron-right text-xs text-yellow-400 opacity-75"></i> Beranda
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center gap-2 hover:text-yellow-300 transition duration-150">
+                        <a href="{{ route('profile.visi-misi') }}" class="flex items-center gap-2 hover:text-yellow-300 transition duration-150">
                             <i class="fas fa-chevron-right text-xs text-yellow-400 opacity-75"></i> Profil Kantor
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center gap-2 hover:text-yellow-300 transition duration-150">
+                        <a href="{{ route('berita.index') }}" class="flex items-center gap-2 hover:text-yellow-300 transition duration-150">
                             <i class="fas fa-chevron-right text-xs text-yellow-400 opacity-75"></i> Berita Terbaru
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center gap-2 hover:text-yellow-300 transition duration-150">
-                            <i class="fas fa-chevron-right text-xs text-yellow-400 opacity-75"></i> Galeri
+                        <a href="{{ route('layanan.index') }}" class="flex items-center gap-2 hover:text-yellow-300 transition duration-150">
+                            <i class="fas fa-chevron-right text-xs text-yellow-400 opacity-75"></i> Layanan Publik
                         </a>
                     </li>
                 </ul>
@@ -105,12 +105,12 @@
 
                     <li class="flex gap-3 items-center">
                         <i class="fas fa-phone-alt text-yellow-400 text-lg flex-shrink-0"></i>
-                        <span>(0921) 1234567</span>
+                        <span>0813 4216 5567</span>
                     </li>
 
                     <li class="flex gap-3 items-center">
                         <i class="fas fa-envelope text-yellow-400 text-lg flex-shrink-0"></i>
-                        <span>kemenagmorotai@go.id</span>
+                        <span>kemenagmorotai@gmail.com</span>
                     </li>
 
                     <li class="flex gap-3 items-center">

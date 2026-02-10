@@ -223,13 +223,13 @@
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
-                        <a href="/profil/visi-misi"
+                        <a href="{{ route('profile.visi-misi') }}"
                             class="group w-full sm:w-auto px-10 py-5 bg-emerald-600 text-white font-bold rounded-2xl transition-all duration-300 hover:bg-emerald-700 hover:scale-105 shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-3">
                             <span>Visi & Misi</span>
                             <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                         </a>
 
-                        <a href="/berita"
+                        <a href="{{ route('berita.index') }}"
                             class="w-full sm:w-auto px-10 py-5 bg-white text-emerald-700 font-bold rounded-2xl border border-emerald-100 hover:bg-emerald-50 hover:border-emerald-200 transition-all duration-300 shadow-sm flex items-center justify-center gap-3">
                             <i class="far fa-newspaper opacity-60"></i>
                             <span>Arsip Berita</span>

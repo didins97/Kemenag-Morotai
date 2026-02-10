@@ -305,7 +305,7 @@
                     </div>
                 </a>
 
-                <a href="/unit-kerja"
+                <a href="javascript:void(0);"
                     class="group relative bg-emerald-900 p-8 rounded-[2rem] transition-all duration-500 hover:bg-emerald-800 flex flex-col justify-center items-center text-center overflow-hidden">
                     <div class="absolute inset-0 opacity-10">
                         <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
