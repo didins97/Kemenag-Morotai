@@ -53,7 +53,7 @@
     <style>
         body {
             font-family: "Manrope", sans-serif;
-            color: #333;
+            color: #1e293b;
         }
 
         h1,
@@ -65,117 +65,34 @@
             font-family: "Manrope", sans-serif;
         }
 
-        /* Menghilangkan jeda antara tombol dan menu */
-        .dropdown-menu-wrapper {
-            padding-top: 15px;
-            /* Jembatan kursor vertikal */
-            margin-top: -5px;
-            /* Menarik area ke atas agar rapat */
-        }
-
-        .dropdown-content {
-            background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            overflow: visible;
-        }
-
-        /* Jembatan untuk Submenu Unit Kerja (Samping) */
-        .submenu-wrapper {
-            padding-left: 15px;
-            /* Jembatan kursor horizontal */
-            margin-left: -5px;
-        }
-
-        .submenu-content {
-            background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        @keyframes bounce-slow {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-        }
-
-        .animate-bounce-slow {
-            animation: bounce-slow 3s infinite;
-        }
-
-        @keyframes soft-pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        .animate-soft-pulse {
-            animation: soft-pulse 3s ease-in-out infinite;
-        }
-
-        #backToTop {
+        a {
             cursor: pointer;
-            border: none;
-            outline: none;
-            /* Memberikan efek transisi smooth saat muncul */
-            opacity: 0;
-            transition: opacity 0.4s ease, transform 0.3s ease;
         }
 
-        #backToTop.show {
-            display: flex;
-            opacity: 1;
+        @keyframes loading-bar {
+            0% {
+                width: 0%;
+                transform: translateX(-100%);
+            }
+
+            50% {
+                width: 100%;
+                transform: translateX(0);
+            }
+
+            100% {
+                width: 100%;
+                transform: translateX(100%);
+            }
         }
 
-        #backToTop:hover {
-            transform: translateY(-5px);
+        .animate-loading-bar {
+            animation: loading-bar 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
         /* Mencegah scroll saat loading */
-        body.loading {
+        body.loading-active {
             overflow: hidden;
-        }
-
-        /* Animasi Progress Bar custom */
-        #preloader-bar {
-            animation: loading-progress 2s ease-in-out infinite;
-        }
-
-        @keyframes loading-progress {
-            0% {
-                width: 0%;
-                margin-left: 0%;
-            }
-
-            50% {
-                width: 70%;
-                margin-left: 15%;
-            }
-
-            100% {
-                width: 0%;
-                margin-left: 100%;
-            }
-        }
-
-        /* Transisi halus saat hilang */
-        .preloader-hidden {
-            opacity: 0;
-            pointer-events: none;
         }
     </style>
 
@@ -183,24 +100,31 @@
 </head>
 
 
-<body class="font-poppins bg-gray-50 antialiased text-gray-800 flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen bg-gray-50 text-gray-800">
 
-    <div id="preloader"
-        class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white transition-opacity duration-500">
+    <div id="loader"
+        class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white transition-opacity duration-700">
+        <div class="absolute w-64 h-64 bg-green-primary/10 rounded-full blur-3xl animate-pulse"></div>
+
         <div class="relative flex flex-col items-center">
             <div class="relative mb-6">
-                <div class="absolute inset-0 rounded-full bg-emerald-500/20 animate-ping"></div>
                 <img src="{{ asset('assets/img/logokemenag.png') }}" alt="Logo Kemenag"
-                    class="relative w-24 h-24 object-contain">
+                    class="w-20 h-20 md:w-24 md:h-24 animate-bounce duration-[2000ms]">
+                <div
+                    class="absolute inset-[-10px] border-2 border-transparent border-t-green-primary rounded-full animate-spin">
+                </div>
             </div>
 
             <div class="text-center">
-                <h2 class="text-lg font-bold text-slate-800 tracking-tight">KEMENAG MOROTAI</h2>
-                <p class="text-[10px] font-medium text-emerald-600 uppercase tracking-[0.3em] mt-1">Ikhlas Beramal</p>
+                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-2">Mohon Tunggu</h2>
+                <div class="flex items-center gap-1">
+                    <span class="text-lg font-bold text-gray-800">Kemenag</span>
+                    <span class="text-lg font-black text-green-primary">Morotai</span>
+                </div>
             </div>
 
-            <div class="w-48 h-1 bg-slate-100 rounded-full mt-8 overflow-hidden">
-                <div id="preloader-bar" class="h-full bg-emerald-600 w-0 transition-all duration-300 ease-out"></div>
+            <div class="w-48 h-[3px] bg-gray-100 rounded-full mt-6 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-green-soft to-green-primary animate-loading-bar"></div>
             </div>
         </div>
     </div>
@@ -209,120 +133,77 @@
     @include('header')
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 flex-grow">
+    <!-- Menambahkan w-full agar layout konsisten dan bg-white dipindah ke sini jika ingin area konten berwarna putih bersih -->
+    <main class="w-full max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4 md:py-6 flex-grow bg-white">
         @yield('content')
-    </div>
+    </main>
 
     {{-- Footer --}}
     @include('footer')
 
-    {{-- scrool to top --}}
-    <button id="backToTop"
-        class="fixed bottom-6 right-6 z-50 hidden bg-[#006a4e] text-white w-12 h-12 rounded-full shadow-lg hover:bg-[#00523d] transition-all duration-300 flex items-center justify-center animate-bounce-slow">
-        <i class="fa-solid fa-arrow-up"></i>
-    </button>
-
-    {{-- Pop-up Gratifikasi --}}
-    <div id="gratifikasiModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/70 px-4">
-        <div class="relative bg-white rounded-2xl overflow-hidden max-w-lg w-full shadow-2xl animate-soft-pulse">
-            <button onclick="closeModal()"
-                class="absolute top-3 right-3 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center text-gray-800 hover:bg-white z-10">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <a href="https://kemenagmorotai.id/" target="_blank" onclick="closeModal()">
-                <img src="{{ asset('assets/img/ptsp.png') }}" alt="Banner Tolak Gratifikasi"
-                    class="w-full h-auto object-cover">
-            </a>
-
-        </div>
-    </div>
-
     <!-- Scripts -->
-    <script src="{{ asset('assets/js/banner.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+    @stack('scripts')
     <script>
-        // ==== Script untuk Modal Pop-up Gratifikasi dengan Session ====
-        AOS.init({
-            duration: 600,
-            once: true
-        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- LOGIKA MENU UTAMA (OPEN/CLOSE SIDEBAR) ---
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+            const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuContent = document.getElementById('mobileMenuContent');
 
-        // Page Loader
-        window.addEventListener('load', function() {
-            const preloader = document.getElementById('preloader');
-            const body = document.body;
-
-            // Tambahkan class loading awal
-            body.classList.add('loading');
-
-            // Beri sedikit delay agar transisi tidak terlalu kaget (opsional)
-            setTimeout(() => {
-                preloader.classList.add('preloader-hidden');
-                body.classList.remove('loading');
-
-                // Hapus elemen dari DOM setelah transisi selesai agar tidak berat
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                }, 500);
-            }, 1000); // 1 detik loading
-
-            const modal = document.getElementById('gratifikasiModal');
-            const storageKey = 'hasSeenGratifikasiPopUp';
-
-            // Cek apakah user sudah pernah menutup modal sebelumnya
-            const hasSeen = localStorage.getItem(storageKey);
-
-            if (!hasSeen) {
-                // Beri sedikit delay (misal 1.5 detik) agar loading page selesai dulu baru muncul pop-up
-                setTimeout(() => {
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
-                }, 1500);
+            function toggleMenu() {
+                mobileMenu.classList.toggle('invisible');
+                mobileMenu.classList.toggle('opacity-0');
+                mobileMenuContent.classList.toggle('translate-x-full');
+                document.body.classList.toggle('overflow-hidden');
             }
-        });
 
-        function closeModal() {
-            const modal = document.getElementById('gratifikasiModal');
-            const storageKey = 'hasSeenGratifikasiPopUp';
+            if (mobileMenuButton) mobileMenuButton.addEventListener('click', toggleMenu);
+            if (closeMobileMenu) closeMobileMenu.addEventListener('click', toggleMenu);
+            if (mobileMenuBackdrop) mobileMenuBackdrop.addEventListener('click', toggleMenu);
 
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            // --- LOGIKA ACCORDION (PROFIL & UNIT KERJA) ---
+            // Kita gunakan delegasi event agar lebih efisien
+            const menuContainer = document.getElementById('mobileMenuContent');
 
-            // Simpan ke sesi lokal agar tidak muncul lagi di masa depan
-            localStorage.setItem(storageKey, 'true');
-        }
+            menuContainer.addEventListener('click', function(e) {
+                // Cari apakah yang diklik adalah button dropdown
+                const btn = e.target.closest('.mobile-dropdown button, .mobile-dropdown-sub button');
 
-        // Menutup modal jika klik di area hitam (overlay)
-        window.onclick = function(event) {
-            const modal = document.getElementById('gratifikasiModal');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
+                if (btn) {
+                    const submenu = btn.nextElementSibling;
+                    const icon = btn.querySelector('svg');
 
-        const backToTopBtn = document.getElementById("backToTop");
-
-        window.addEventListener("scroll", function() {
-            // Tombol muncul jika user scroll lebih dari 300px ke bawah
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.remove("hidden");
-                // Tambahkan delay sedikit agar class hidden hilang dulu baru opacity jalan
-                setTimeout(() => backToTopBtn.classList.add("show"), 10);
-            } else {
-                backToTopBtn.classList.remove("show");
-                setTimeout(() => backToTopBtn.classList.add("hidden"), 300);
-            }
-        });
-
-        backToTopBtn.addEventListener("click", function() {
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth" // Efek scroll halus ke atas
+                    if (submenu) {
+                        submenu.classList.toggle('hidden');
+                        // Animasi putar icon (bawah atau samping)
+                        if (icon) icon.classList.toggle('rotate-90');
+                        if (icon) icon.classList.toggle('rotate-180');
+                    }
+                }
             });
         });
     </script>
 
-    @yield('scripts')
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+
+            // Beri jeda sedikit agar animasi terasa "bernafas"
+            setTimeout(() => {
+                loader.classList.add('opacity-0', 'pointer-events-none');
+                document.body.classList.remove('loading-active');
+
+                // Hapus dari DOM setelah transisi selesai agar tidak berat
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
+    </script>
 </body>
 
 </html>

@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'instagram' => [
+        'access_token' => env('INSTAGRAM_ACCESS_TOKEN'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

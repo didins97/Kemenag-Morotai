@@ -8,4 +8,44 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+   /* ==========================================================================
+       1. PALET HIJAU UTAMA (Pilihan Kamu)
+       ========================================================================== */
+    --color-green-primary: #059669;
+    --color-green-primary-dark: #047857;
+    --color-green-primary-light: #10b981;
+    --color-green-soft: #34d399;
+    --color-green-light-bg: #f0fdf4;
+    --color-green-border: #e6fcf0;
+
+    /* ==========================================================================
+       2. UTILITAS WARNA TEKS (Neutrals)
+       Mencegah warna hitam mati (#000), diganti dengan slate-charcoal yang modern
+       ========================================================================== */
+    --color-txt-main: #1e293b;        /* Untuk judul utama / Heading (Sangat Tegas) */
+    --color-txt-body: #475569;        /* Untuk isi paragraf / berita (Nyaman dibaca) */
+    --color-txt-muted: #64748b;       /* Untuk info tanggal, sub-informasi, teks kecil */
+    --color-txt-category: #059669;    /* Warna hijau utama untuk kategori berita, memberikan identitas yang kuat */
+    --color-txt-hover: #10b981;       /* Warna teks saat hover, memberikan feedback visual yang konsisten dengan tema hijau */
+
+    /* ==========================================================================
+       3. UTILITAS BACKGROUND GLOBAL
+       Konsep layout bersih dengan kontras yang seimbang
+       ========================================================================== */
+    --color-bg-app: #f0fdf4;          /* Latar belakang aplikasi global (bukan putih bersih) */
+    --color-bg-card: #ffffff;         /* Latar belakang putih bersih khusus untuk Card / Box */
+
+    /* ==========================================================================
+       4. WARNA AKSEN PENDUKUNG (Amber/Yellow)
+       Sangat serasi dengan hijau zamrud, cocok untuk ikon star, warning, atau highlight
+       ========================================================================== */
+    --color-accent-gold: #f59e0b;     /* Kuning emas yang matang (Pengganti text-yellow-400) */
+    --color-accent-gold-hover: #d97706;
+
+    /* ==========================================================================
+       5. UTILITY GRADIENT (Tailwind v4 style)
+       ========================================================================== */
+    --background-image-green-gradient: linear-gradient(135deg, #047857 0%, #10b981 100%);
+    --background-image-green-gradient-hover: linear-gradient(135deg, #065f46 0%, #047857 100%);
 }
