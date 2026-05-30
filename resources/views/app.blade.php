@@ -141,6 +141,31 @@
     {{-- Footer --}}
     @include('footer')
 
+
+    {{-- Modal Iklan --}}
+    <div id="adModal"
+        class="fixed inset-0 z-[9999] flex items-center justify-center invisible opacity-0 transition-all duration-500 px-6">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" id="closeAdBackdrop"></div>
+
+        <div class="relative w-auto max-w-fit transform scale-90 transition-transform duration-500 mx-auto"
+            id="adContent">
+
+            <button id="closeAdBtn"
+                class="absolute -top-4 -right-4 z-[10000] bg-white text-gray-900 w-10 h-10 rounded-full flex items-center justify-center shadow-xl hover:bg-emerald-500 hover:text-white transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 bg-white">
+                <a href="https://wa.me/6281342165567?text={{ urlencode('Halo Admin Kemenag Morotai, saya ingin bertanya terkait ...') }}" target="_blank" class="block">
+                    <img src="{{ asset('assets/img/popiklan.webp') }}" alt="Iklan"
+                        class="block w-auto h-auto max-h-[85vh] max-w-full md:max-w-[90vw] object-contain">
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
@@ -190,16 +215,57 @@
 
     <script>
         window.addEventListener('load', function() {
+            // --- DEFINISI ELEMEN ---
             const loader = document.getElementById('loader');
+            const adModal = document.getElementById('adModal');
+            const adContent = document.getElementById('adContent');
+            const closeAdBtn = document.getElementById('closeAdBtn');
+            const closeAdBackdrop = document.getElementById('closeAdBackdrop');
 
-            // Beri jeda sedikit agar animasi terasa "bernafas"
+            // --- FUNGSI TUTUP IKLAN ---
+            function closeAd() {
+                adModal.classList.add('opacity-0');
+                adContent.classList.add('scale-90');
+                setTimeout(() => {
+                    adModal.classList.add('invisible');
+                    document.body.classList.remove('overflow-hidden');
+                }, 500);
+            }
+
+            // Jalankan event listener tutup iklan segera
+            if (closeAdBtn) closeAdBtn.addEventListener('click', closeAd);
+            if (closeAdBackdrop) closeAdBackdrop.addEventListener('click', closeAd);
+
+
+            // --- LOGIKA BERANTAI (LOADER -> IKLAN) ---
+
+            // 1. Selesaikan animasi Loader dulu
             setTimeout(() => {
                 loader.classList.add('opacity-0', 'pointer-events-none');
                 document.body.classList.remove('loading-active');
 
-                // Hapus dari DOM setelah transisi selesai agar tidak berat
+                // 2. Tunggu transisi loader selesai (700ms)
                 setTimeout(() => {
                     loader.style.display = 'none';
+
+                    // 3. CEK DAN TAMPILKAN IKLAN
+                    // Hanya muncul jika belum pernah tampil di sesi ini
+                    if (!sessionStorage.getItem('adShown')) {
+
+                        // Beri jeda 1 detik setelah halaman bersih agar user tidak kaget
+                        setTimeout(() => {
+                            adModal.classList.remove('invisible');
+                            adModal.classList.add('opacity-100');
+                            adContent.classList.remove('scale-90');
+                            adContent.classList.add('scale-100');
+
+                            // Kunci scroll body agar user fokus ke iklan
+                            document.body.classList.add('overflow-hidden');
+
+                            // Tandai bahwa iklan sudah ditampilkan
+                            sessionStorage.setItem('adShown', 'true');
+                        }, 1000);
+                    }
                 }, 700);
             }, 800);
         });

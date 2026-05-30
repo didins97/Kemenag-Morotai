@@ -122,10 +122,12 @@
                                 </span>
 
                                 {{-- tracking-tighter: Agar font terlihat lebih padat dan premium seperti koran digital --}}
-                                <h2
-                                    class="text-[#1e293b] lg:text-white text-xl md:text-4xl font-black leading-tight max-w-3xl tracking-tighter">
-                                    {{ $hero->judul }}
-                                </h2>
+                                <a href="{{ route('berita.detail', $hero->slug) }}">
+                                    <h2
+                                        class="text-[#1e293b] lg:text-white text-xl md:text-4xl font-black leading-tight max-w-3xl tracking-tighter hover:text-[#10b981] lg:hover:text-[#10b981] transition-colors">
+                                        {{ $hero->judul }}
+                                    </h2>
+                                </a>
 
                                 <p
                                     class="text-slate-600 lg:text-slate-300 text-xs md:text-base line-clamp-2 max-w-xl font-medium">

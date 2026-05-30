@@ -64,4 +64,19 @@ class BeritaController extends Controller
 
         return view('berita.detail', compact('berita', 'beritasPopuler', 'beritasTerkait'));
     }
+
+    public function kategori($slug)
+    {
+        $kategori = \App\Models\Kategori::where('slug', $slug)->firstOrFail();
+
+        $beritas = Berita::with(['kategori', 'user'])
+            ->published()
+            ->where('kategori_id', $kategori->id)
+            ->terbaru()
+            ->paginate(6);
+
+        $kategories = \App\Models\Kategori::select('id', 'kategori', 'slug')->get();
+
+        return view('berita.index', compact('beritas', 'kategori', 'kategories'));
+    }
 }

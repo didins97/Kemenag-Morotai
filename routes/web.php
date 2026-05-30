@@ -19,6 +19,7 @@ Route::get('/data-informasi/{slug}', [ProfileController::class, 'informasi'])->n
 
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
 Route::get('/berita/{slug}', [BeritaController::class, 'detail'])->name('berita.detail');
+Route::get('/berita/kategori/{slug}', [BeritaController::class, 'kategori'])->name('berita.kategori');
 
 // Route::get('/opini', [OpiniController::class, 'index'])->name('opini.index');
 Route::get('/opini/{slug}', [OpiniController::class, 'detail'])->name('opini.detail');
@@ -27,47 +28,3 @@ Route::get('/layanan/ptsp', [PelayananController::class, 'index'])->name('layana
 
 Route::get('/pengaduan-masyarakat', [PengaduanController::class, 'index'])->name('pengaduan.index');
 Route::post('/pengaduan-masyarakat', [PengaduanController::class, 'store'])->name('pengaduan.store');
-
-
-
-
-
-// Route::get('/berita/1', function () {
-//     return view('berita.detail');
-// })->name('berita.detail');
-
-// Route::get('/berita', function () {
-//     return view('berita.daftar-berita');
-// })->name('berita.index');
-
-// Route::get('/sejarah', function () {
-//     return view('profile.sejarah');
-// })->name('profile.sejarah');
-
-// Route::get('/tungsi', function () {
-//     return view('profile.tugas-fungsi');
-// })->name('profile.tugas-fungsi');
-
-// Route::get('/visi-misi', function () {
-//     return view('profile.visi-misi');
-// })->name('profile.visi-misi');
-
-// Route::get('/struktur-organisasi', function () {
-//     return view('profile.struktur');
-// })->name('profile.struktur');
-
-// Route::get('/subbagian-tata-usaha', function () {
-//     return view('profile.unit-kerja.tata-usaha');
-// })->name('profile.unit-kerja.tata-usaha');
-
-// Route::get('/layanan-publik', function () {
-//     return view('layanan.index');
-// })->name('layanan.index');
-
-// Route::get('/data-informasi/{slug}', function () {
-//     return view('informasi.detail');
-// })->name('informasi.detail');
-
-// Route::get('/aduan-masyarakat', function () {
-//     return view('aduan.index');
-// })->name('aduan.index');

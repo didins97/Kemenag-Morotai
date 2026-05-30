@@ -2,10 +2,14 @@
 
 @section('head')
     <meta property="og:title" content="{{ $berita->judul }}" />
-    <meta property="og:description" content="{{ Str::limit(strip_tags($berita->isi), 150) }}" />
+    {{-- <meta property="og:description" content="{{ Str::limit(strip_tags($berita->isi), 150) }}" /> --}}
     <meta property="og:image" content="{{ asset('storage/' . $berita->gambar) }}" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ $berita->judul }}" />
+    <meta name="twitter:description" content="{{ Str::limit(strip_tags($berita->isi), 150) }}" />
+    <meta name="twitter:image" content="{{ asset('storage/' . $berita->gambar) }}" />
     <style>
         .article-body {
             font-size: 1.125rem;
@@ -130,7 +134,8 @@
                                         class="w-10 h-10 md:w-12 md:h-12 rounded-full ring-4 ring-emerald-50">
                                 </div>
                                 <div class="min-w-0">
-                                    <p class="font-bold text-gray-900 truncate">{{ $berita->user->name ?? 'Admin Kemenag' }}
+                                    <p class="font-bold text-gray-900 truncate">
+                                        {{ $berita->user->name ?? 'Admin Kemenag' }}
                                     </p>
                                     <p
                                         class="text-gray-400 text-[10px] md:text-[11px] font-bold uppercase tracking-widest leading-relaxed">
@@ -219,23 +224,44 @@
 
                             <div class="flex items-center gap-3">
                                 @php
-                                    $shareUrl = urlencode(url()->current());
-                                    $shareText = urlencode($berita->judul);
+                                    // Membersihkan isi berita agar tidak ada tag HTML yang ikut terkirim
+                                    $cleanContent = strip_tags($berita->isi);
+                                    $shortDesc = Str::limit($cleanContent, 250);
+                                    $currentUrl = url()->current();
+
+                                    $kategoriRaw = $berita->kategori->kategori ?? 'Update Terkini';
+                                    $kategori = Str::ucfirst(Str::lower($kategoriRaw));
+
+                                    // Menyusun pesan untuk WhatsApp dengan format tebal pada judul
+                                    $whatsappMessage =
+                                        '*' .
+                                        $kategori .
+                                        "*\n\n" .
+                                        $shortDesc .
+                                        "\n\n" .
+                                        "Baca selengkapnya di sini:\n" .
+                                        $currentUrl;
+
+                                    // Encoding untuk URL
+                                    $shareUrl = urlencode($currentUrl);
+                                    $shareTitle = urlencode($berita->judul);
+                                    $shareWA = urlencode($whatsappMessage);
                                 @endphp
 
                                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" target="_blank"
+                                    title="Bagikan ke Facebook"
                                     class="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-blue-200">
                                     <i class="fab fa-facebook-f text-xs"></i>
                                 </a>
 
-                                <a href="https://api.whatsapp.com/send?text={{ $shareText }}%20{{ $shareUrl }}"
-                                    target="_blank"
+                                <a href="https://api.whatsapp.com/send?text={{ $shareWA }}" target="_blank"
+                                    title="Bagikan ke WhatsApp"
                                     class="w-10 h-10 rounded-full bg-[#25D366] text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-green-200">
                                     <i class="fab fa-whatsapp text-lg"></i>
                                 </a>
 
-                                <a href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareText }}"
-                                    target="_blank"
+                                <a href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareTitle }}"
+                                    target="_blank" title="Bagikan ke X"
                                     class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-gray-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                         fill="currentColor" viewBox="0 0 16 16">

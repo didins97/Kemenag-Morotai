@@ -101,10 +101,32 @@
                     </div>
                 </div>
 
-                <a href="{{ route('berita.index') }}"
-                    class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-green-primary hover:bg-green-light-bg transition-all duration-200 rounded-lg">
-                    Berita
-                </a>
+                <!-- Dropdown Berita -->
+                <div class="relative group">
+                    <button
+                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-green-primary hover:bg-green-light-bg transition-all duration-200 rounded-lg">
+                        Berita
+                        <svg class="w-4 h-4 ml-1 transition-transform duration-300 group-hover:rotate-180 text-gray-400 group-hover:text-green-primary"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div
+                        class="absolute top-full left-0 w-56 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 z-50 pt-2">
+                        <div class="bg-white border border-green-border rounded-xl shadow-xl py-1.5">
+                            <a href="{{ route('berita.index') }}"
+                                class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-green-light-bg hover:text-green-primary transition-colors rounded-t-lg">
+                                Semua Berita
+                            </a>
+                            @foreach ($KategoriBerita as $kategori)
+                                <a href="{{ route('berita.kategori', $kategori->slug) }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-green-light-bg hover:text-green-primary transition-colors @if($loop->last)rounded-b-lg @endif">
+                                    {{ $kategori->kategori }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Dropdown Layanan -->
                 <div class="relative group">
@@ -256,10 +278,29 @@
                 </div>
             </div>
 
-            <a href="{{ route('berita.index') }}"
-                class="flex items-center px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-green-light-bg hover:text-green-primary rounded-xl transition-all">
-                Berita
-            </a>
+            <div class="mobile-dropdown">
+                <button
+                    class="w-full flex justify-between items-center px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-green-light-bg rounded-xl transition-all">
+                    <span>Berita</span>
+                    <svg class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div class="hidden pl-4 space-y-1 mt-1 pb-2">
+                    <a href="{{ route('berita.index') }}"
+                        class="block px-4 py-2.5 text-xs font-medium text-gray-500 hover:text-green-primary border-l-2 border-gray-100 ml-2">
+                        Semua Berita
+                    </a>
+                    @foreach ($KategoriBerita as $kategori)
+                        <a href="{{ route('berita.kategori', $kategori->slug) }}"
+                            class="block px-4 py-2.5 text-xs font-medium text-gray-500 hover:text-green-primary border-l-2 border-gray-100 ml-2">
+                            {{ $kategori->kategori }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
 
             <a href="{{ route('layanan.index') }}"
                 class="flex items-center px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-green-light-bg hover:text-green-primary rounded-xl transition-all">
