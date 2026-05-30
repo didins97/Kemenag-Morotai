@@ -96,7 +96,7 @@
     </section>
 
     <section class="py-16 service-gradient">
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="max-w-5xl mx-auto space-y-20">
 
                 <div class="grid lg:grid-cols-2 gap-12 items-center">

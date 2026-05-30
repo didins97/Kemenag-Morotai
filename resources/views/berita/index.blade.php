@@ -40,7 +40,7 @@
     </section>
 
     <section class="py-12 bg-gray-50 min-h-screen">
-        <div class="container mx-auto px-4 lg:px-8">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
             <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
                 <div class="w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
